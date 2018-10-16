@@ -1,6 +1,3 @@
-# Work in progress, report if any problems
-
-
 # snipsLedControl
 Provides an easy way to control your leds on a Snips install.
 
@@ -36,4 +33,11 @@ Once edited do:
 ```
 sudo systemctl daemon-reload
 sudo systemctl start snipsledcontrol
+```
+
+# Uninstall
+
+```
+sudo systemctl disable snipsledcontrol
+sudo rm -rf snipsLedControl
 ```
