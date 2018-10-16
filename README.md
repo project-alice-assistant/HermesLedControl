@@ -13,7 +13,7 @@ It is reading /etc/snips.toml on start to get the mqtt server in use as well as 
 git clone https://github.com/Psychokiller1888/snipsLedControl.git
 cd snipsLedControl
 sudo chmod +x install.sh
-sudo install.sh
+sudo ./install.sh
 ```
 
 Sudo is required to install as we download the missing packages and create a log directory
