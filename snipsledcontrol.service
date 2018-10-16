@@ -1,0 +1,13 @@
+[Unit]
+Description=Snips Led Control
+Wants=mosquitto.service snips-audio-server.service
+After=mosquitto.service snips-audio-server.service
+
+[Service]
+ExecStart=/usr/bin/python main.py google 3
+WorkingDirectory=/home/pi/snipsLedControl
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
