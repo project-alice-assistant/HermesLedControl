@@ -12,7 +12,7 @@ pip install paho-mqtt
 pip install pytoml
 
 mkdir logs
-chown _snips logs
+chown pi logs
 
 cp snipsledcontrol.service /etc/systemd/system
 systemctl enable snipsledcontrol

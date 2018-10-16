@@ -24,10 +24,13 @@ class SnipsLedControl:
 		self._mqttServer 	= 'localhost'
 		self._me 			= 'default@mqtt'
 		try:
-			self._mqttServer = self._snipsConfigs['snips-common']['mqtt']
+			self._mqttServer = self._snipsConfigs['snips-common']['mqtt'].replace(':1883', '')
 			self._me = self._snipsConfigs['snips-audio-server']['bind'].replace('@mqtt', '')
 		except:
 			pass
+
+		self._logger.info('Mqtt server set to {}'.format(self._mqttServer))
+		self._logger.info('ClientId set to {}'.format(self._me))
 
 		self._leds = Pixels(pattern='google', pixels=12)
 		self._mqttClient = self.connectMqtt()
