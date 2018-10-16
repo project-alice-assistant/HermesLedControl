@@ -26,7 +26,7 @@ sudo nano systemctl stop snipsledcontrol
 sudo nano /etc/systemd/system/snipsledcontrol.service
 ```
 
-The default ExecStart command is `ExecStart=/usr/bin/python main.py google 3` which means it will start main.py using google pattern and 3 leds. Change to suit your needs. As patterns you have the choice between "google", "alexa" and "custom".
+The default ExecStart command is `ExecStart=/usr/bin/python main.py google 3` which means it will start main.py using google pattern and 3 leds. Change to suit your needs. As patterns you have the choice between "**google**", "**alexa**" and "**custom**".
 
 You want your own pattern? Set execStart to "custom" and edit snipsLedControl/ledPatterns/CustomLedPattern.py. By default it's a copy of GoogleLedPattern
 
