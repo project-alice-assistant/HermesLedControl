@@ -2,7 +2,8 @@
 
 
 # snipsLedControl
-Provides an easy way to control your leds on a Snips install
+Provides an easy way to control your leds on a Snips install.
+
 It is reading /etc/snips.toml on start to get the mqtt server in use as well as the device's siteId. It defaults to 'localhost' and 'default' if these aren't set in snips.toml
 
 
