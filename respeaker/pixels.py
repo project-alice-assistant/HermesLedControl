@@ -16,7 +16,7 @@ from ledPatterns.GoogleLedPattern 	import GoogleHomeLedPattern
 class Pixels:
 	INSTANCE = None
 
-	def __init__(self, pattern='google', pixels=12):
+	def __init__(self, params):
 		self._logger = logging.getLogger('SnipsLedControl')
 
 		if self.INSTANCE is None:
@@ -25,16 +25,16 @@ class Pixels:
 			self._logger.error('Trying to instanciate Pixels but instance already exists')
 			raise KeyboardInterrupt
 
-		if pattern == 'google':
+		if params.pattern == 'google':
 			self._pattern = GoogleHomeLedPattern(show=self.show)
-		elif pattern == 'alexa':
+		elif params.pattern == 'alexa':
 			self._pattern = AlexaLedPattern(show=self.show)
 		else:
 			self._pattern = CustomLedPattern(show=self.show)
 
-		self._dev = apa102.APA102(num_led=pixels)
+		self._dev = apa102.APA102(num_led=params.leds)
 
-		self._pixels = pixels
+		self._pixels = params.leds
 		self._power = LED(5)
 		self._power.on()
 

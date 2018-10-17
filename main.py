@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import argparse
 from datetime 					import datetime
 import logging.handlers
 import signal
@@ -41,16 +42,21 @@ def main():
 
 	signal.signal(signal.SIGINT, stopHandler)
 
-	pattern = 'google'
-	pixels = 12
+	parser = argparse.ArgumentParser(prog='Snips Led Control')
+	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides snips.toml', type=str)
+	parser.add_argument('--mqttPort', help='Defines what port t use to connect to mqtt. Overrides snips.toml', type=str)
+	parser.add_argument('--clientId', help='Defines a client id. Overrides snips.toml', type=str)
+	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, default='google')
+	parser.add_argument('--leds', help='Number of leds to control', type=int, default=3)
+	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)
+	parser.add_argument('--idlePattern', help='Define an idle led pattern', type=str)
+	parser.add_argument('--wakeupPattern', help='Define a wakeup led pattern', type=str)
+	parser.add_argument('--talkPattern', help='Define a talk led pattern', type=str)
+	parser.add_argument('--thinkPattern', help='Define a think led pattern', type=str)
+	parser.add_argument('--listenPattern', help='Define a listen led pattern', type=str)
+	args = parser.parse_args()
 
-	try:
-		pattern = sys.argv[0]
-		pixels = sys.argv[1]
-	except:
-		pass
-
-	slc = SnipsLedControl(pattern=pattern, pixels=pixels)
+	slc = SnipsLedControl(args)
 
 	while RUNNING:
 		time.sleep(0.1)
