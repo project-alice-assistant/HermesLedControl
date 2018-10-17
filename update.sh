@@ -4,7 +4,7 @@ systemctl stop snipsledcontrol
 git stash
 git reset --hard HEAD
 git clean -f
-git checkout master
+git pull
 git stash apply
 cp snipsledcontrol.service /etc/systemd/system
 systemctl daemon-reload
