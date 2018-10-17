@@ -21,6 +21,17 @@ Sudo is required to install as we download the missing packages and create a log
 
 There's no need to edit anything
 
+
+# Update
+
+```
+cd ~
+cd snipsLedControl
+sudo chmod +x update.sh
+sudo ./update.sh
+```
+
+
 # Customize
 
 You have to/can customize the leds, depending on what respeaker you have. By default it will run for the 3 leds respeaker 2 with a Google Home assistant pattern. To change this:
@@ -30,7 +41,17 @@ sudo nano systemctl stop snipsledcontrol
 sudo nano /etc/systemd/system/snipsledcontrol.service
 ```
 
-The default ExecStart command is `ExecStart=/usr/bin/python main.py google 3` which means it will start main.py using google pattern and 3 leds. Change to suit your needs. As patterns you have the choice between "**google**", "**alexa**" and "**custom**".
+The default ExecStart command is `ExecStart=/usr/bin/python main.py --pattern=google --leds=3` which means it will start main.py using google pattern and 3 leds. Change to suit your needs. As patterns you have the choice between "**google**", "**alexa**" and "**custom**".
+
+For a full list of options:
+
+```
+cd ~
+cd snipsLedControl
+python main.py --help
+```
+
+You can set the server, port, client id and others directly via arguments
 
 You want your own pattern? Set execStart to "custom" and edit snipsLedControl/ledPatterns/CustomLedPattern.py. By default it's a copy of GoogleLedPattern
 
