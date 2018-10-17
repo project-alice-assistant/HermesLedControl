@@ -1,3 +1,4 @@
 .idea
 config.py
 *.pyc
+/ledPatterns/CustomLedPattern.py
