@@ -15,4 +15,5 @@ mkdir logs
 chown pi logs
 
 cp snipsledcontrol.service /etc/systemd/system
+systemctl daemon-reload
 systemctl enable snipsledcontrol
