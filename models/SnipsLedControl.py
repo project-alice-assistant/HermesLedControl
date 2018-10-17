@@ -7,6 +7,7 @@ import os
 import paho.mqtt.client as mqtt
 from respeaker.pixels import Pixels
 import pytoml
+import threading
 
 class SnipsLedControl:
 
@@ -37,6 +38,7 @@ class SnipsLedControl:
 		self._leds = Pixels(pattern='google', pixels=12)
 		self._mqttClient = self.connectMqtt()
 		self._leds.wakeup()
+		threading.Timer(interval=5, function=self._leds.off).start()
 		self._logger.info('Snips Led Control started')
 
 
