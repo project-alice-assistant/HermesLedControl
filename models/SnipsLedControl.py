@@ -104,7 +104,7 @@ class SnipsLedControl:
 				self._leds.think()
 		elif message.topic == self._SUB_ON_HOTWORD_TOGGLE_ON:
 			if siteId == self._me:
-				self._leds.off()
+				self._leds.idle()
 
 
 	def onStop(self):
