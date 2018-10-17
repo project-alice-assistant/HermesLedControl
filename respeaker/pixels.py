@@ -73,6 +73,10 @@ class Pixels:
 		self.put(self._pattern.speak)
 
 
+	def idle(self):
+		self.put(self._pattern.idle)
+
+
 	def off(self):
 		self.put(self._pattern.off)
 

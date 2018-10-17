@@ -89,6 +89,9 @@ class CustomLedPattern(object):
 
             brightness += step
 
+    def idle(self):
+        self.show([0] * 4 * 12)
+
     def off(self):
         self.show([0] * 4 * 12)
 
