@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import json
 import logging
 import os
@@ -23,6 +24,7 @@ class SnipsLedControl:
 
 		self._mqttServer 	= 'localhost'
 		self._me 			= 'default'
+		self._port 			= 1883
 		try:
 			self._mqttServer = self._snipsConfigs['snips-common']['mqtt'].replace(':1883', '')
 			self._me = self._snipsConfigs['snips-audio-server']['bind'].replace('@mqtt', '')
@@ -34,6 +36,7 @@ class SnipsLedControl:
 
 		self._leds = Pixels(pattern='google', pixels=12)
 		self._mqttClient = self.connectMqtt()
+		self._leds.wakeup()
 		self._logger.info('Snips Led Control started')
 
 
