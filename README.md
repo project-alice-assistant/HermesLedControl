@@ -11,6 +11,7 @@ sudo raspi-config
 
 Go to Interfacing Options -> SPI and enable it
 
+cd ~
 git clone https://github.com/Psychokiller1888/snipsLedControl.git
 cd snipsLedControl
 sudo chmod +x install.sh
@@ -37,7 +38,7 @@ sudo ./update.sh
 You have to/can customize the leds, depending on what respeaker you have. By default it will run for the 3 leds respeaker 2 with a Google Home assistant pattern. To change this:
 
 ```
-sudo nano systemctl stop snipsledcontrol
+sudo systemctl stop snipsledcontrol
 sudo nano /etc/systemd/system/snipsledcontrol.service
 ```
 
