@@ -25,6 +25,8 @@ class Pixels:
 			self._logger.error('Trying to instanciate Pixels but instance already exists')
 			raise KeyboardInterrupt
 
+		self._params = params
+
 		if params.pattern == 'google':
 			self._pattern = GoogleHomeLedPattern(show=self.show)
 		elif params.pattern == 'alexa':
@@ -50,7 +52,11 @@ class Pixels:
 		self._lastDirection = direction
 
 		def f():
-			self._pattern.wakeup(direction)
+			if self._params.wakeupPattern is None:
+				self._pattern.wakeup(direction)
+			else:
+				funct = getattr(self._pattern, self._params.wakeupPattern)
+				funct()
 
 		self.put(f)
 
@@ -58,27 +64,51 @@ class Pixels:
 	def listen(self):
 		if self._lastDirection:
 			def f():
-				self._pattern.wakeup(self._lastDirection)
+				if self._params.wakeupPattern is None:
+					self._pattern.wakeup(self._lastDirection)
+				else:
+					funct = getattr(self._pattern, self._params.wakeupPattern)
+					funct()
 
 			self.put(f)
 		else:
-			self.put(self._pattern.listen)
+			if self._params.listenPattern is None:
+				self.put(self._pattern.listen)
+			else:
+				func = getattr(self._pattern, self._params.listenPattern)
+				func()
 
 
 	def think(self):
-		self.put(self._pattern.think)
+		if self._params.thinkPattern is None:
+			self.put(self._pattern.think)
+		else:
+			funct = getattr(self._pattern, self._params.thinkPattern)
+			funct()
 
 
 	def speak(self):
-		self.put(self._pattern.speak)
+		if self._params.speakPattern is None:
+			self.put(self._pattern.speak)
+		else:
+			funct = getattr(self._pattern, self._params.speakPattern)
+			funct()
 
 
 	def idle(self):
-		self.put(self._pattern.idle)
+		if self._params.idlePattern is None:
+			self.put(self._pattern.idle)
+		else:
+			funct = getattr(self._pattern, self._params.idlePattern)
+			funct()
 
 
 	def off(self):
-		self.put(self._pattern.off)
+		if self._params.offPattern is None:
+			self.put(self._pattern.off)
+		else:
+			funct = getattr(self._pattern, self._params.offPattern)
+			funct()
 
 
 	def put(self, func):
