@@ -6,6 +6,4 @@ git reset --hard HEAD
 git clean -f
 git pull
 git stash apply
-cp snipsledcontrol.service /etc/systemd/system
-systemctl daemon-reload
 systemctl start snipsledcontrol
