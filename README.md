@@ -1,12 +1,16 @@
 # snipsLedControl
 Provides an easy way to control your leds on a Snips install.
 
-It is reading /etc/snips.toml on start to get the mqtt server in use as well as the device's siteId. It defaults to 'localhost' and 'default' if these aren't set in snips.toml
+It is reading /etc/snips.toml on start to get the mqtt server in use as well as the device's siteId. It defaults to 'localhost' and 'default' if these aren't set in snips.toml.
 
 
 # Installation
 
 ```
+sudo raspi-config
+
+Go to Interfacing Options -> SPI and enable it
+
 git clone https://github.com/Psychokiller1888/snipsLedControl.git
 cd snipsLedControl
 sudo chmod +x install.sh
@@ -14,6 +18,8 @@ sudo ./install.sh
 ```
 
 Sudo is required to install as we download the missing packages and create a log directory
+
+There's no need to edit anything
 
 # Customize
 
