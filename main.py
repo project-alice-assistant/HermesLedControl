@@ -41,6 +41,7 @@ def main():
 	_logger.info('Starting Snips Led Control')
 
 	signal.signal(signal.SIGINT, stopHandler)
+	signal.signal(signal.SIGTERM, stopHandler)
 
 	parser = argparse.ArgumentParser(prog='Snips Led Control')
 	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides snips.toml', type=str)
