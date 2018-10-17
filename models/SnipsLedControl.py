@@ -25,15 +25,22 @@ class SnipsLedControl:
 
 		self._mqttServer 	= 'localhost'
 		self._me 			= 'default'
-		self._port 			= 1883
-		try:
-			self._mqttServer = self._snipsConfigs['snips-common']['mqtt'].replace(':1883', '')
-			self._me = self._snipsConfigs['snips-audio-server']['bind'].replace('@mqtt', '')
-		except:
-			pass
+		self._port 			= 1883 # TODO dynamic port loading
 
-		self._logger.info('Mqtt server set to {}'.format(self._mqttServer))
-		self._logger.info('ClientId set to {}'.format(self._me))
+		try:
+			if 'snips-common' in self._snipsConfigs and 'mqtt' in self._snipsConfigs['snips-common']:
+				self._mqttServer = self._snipsConfigs['snips-common']['mqtt'].replace(':1883', '')
+		except:
+			self._logger.info('- Falling back to default config for mqtt server')
+
+		try:
+			if 'snips-audio-server' in self._snipsConfigs and 'bind' in self._snipsConfigs['snips-audio-server']:
+				self._me = self._snipsConfigs['snips-audio-server']['bind'].replace('@mqtt', '')
+		except:
+			self._logger.info('- Falling back to default config for client id')
+
+		self._logger.info('- Mqtt server set to {}'.format(self._mqttServer))
+		self._logger.info('- ClientId set to {}'.format(self._me))
 
 		self._leds = Pixels(pattern='google', pixels=12)
 		self._mqttClient = self.connectMqtt()
