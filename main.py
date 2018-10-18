@@ -47,7 +47,7 @@ def main():
 	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides snips.toml', type=str)
 	parser.add_argument('--mqttPort', help='Defines what port t use to connect to mqtt. Overrides snips.toml', type=str)
 	parser.add_argument('--clientId', help='Defines a client id. Overrides snips.toml', type=str)
-	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, default='google')
+	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, choices=['google', 'alexa', 'custom'], default='google')
 	parser.add_argument('--leds', help='Number of leds to control', type=int, default=3)
 	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)
 	parser.add_argument('--idlePattern', help='Define an idle led pattern', type=str)
@@ -55,6 +55,7 @@ def main():
 	parser.add_argument('--talkPattern', help='Define a talk led pattern', type=str)
 	parser.add_argument('--thinkPattern', help='Define a think led pattern', type=str)
 	parser.add_argument('--listenPattern', help='Define a listen led pattern', type=str)
+	parser.add_argument('--defaultState', help='Define if the leds should be active or not by default', type=str, choices=['on', 'off'], default='on')
 	args = parser.parse_args()
 
 	slc = SnipsLedControl(args)

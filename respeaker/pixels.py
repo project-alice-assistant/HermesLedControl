@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import respeaker.apa102 		as apa102
 import logging
 import threading
@@ -32,13 +35,15 @@ class Pixels:
 		elif params.pattern == 'alexa':
 			self._pattern = AlexaLedPattern(show=self.show)
 		else:
-			self._pattern = CustomLedPattern(show=self.show)
+			self._pattern = CustomLedPattern(show=self.show, num_leds=params.leds)
 
 		self._dev = apa102.APA102(num_led=params.leds)
 
 		self._pixels = params.leds
 		self._power = LED(5)
 		self._power.on()
+
+		self._active = True if params.defaultState == 'on' else False
 
 		self._queue = Queue.Queue()
 		self._thread = threading.Thread(target=self._run)
@@ -49,6 +54,9 @@ class Pixels:
 
 
 	def wakeup(self, direction=0):
+		if not self._active:
+			return
+
 		self._lastDirection = direction
 
 		def f():
@@ -62,6 +70,9 @@ class Pixels:
 
 
 	def listen(self):
+		if not self._active:
+			return
+
 		if self._lastDirection:
 			def f():
 				if self._params.wakeupPattern is None:
@@ -80,6 +91,9 @@ class Pixels:
 
 
 	def think(self):
+		if not self._active:
+			return
+
 		if self._params.thinkPattern is None:
 			self.put(self._pattern.think)
 		else:
@@ -88,6 +102,9 @@ class Pixels:
 
 
 	def speak(self):
+		if not self._active:
+			return
+
 		if self._params.speakPattern is None:
 			self.put(self._pattern.speak)
 		else:
@@ -96,6 +113,9 @@ class Pixels:
 
 
 	def idle(self):
+		if not self._active:
+			return
+
 		if self._params.idlePattern is None:
 			self.put(self._pattern.idle)
 		else:
@@ -104,11 +124,30 @@ class Pixels:
 
 
 	def off(self):
+		if not self._active:
+			return
+
 		if self._params.offPattern is None:
 			self.put(self._pattern.off)
 		else:
 			funct = getattr(self._pattern, self._params.offPattern)
 			funct()
+
+
+	def toggleStateOff(self):
+		self._active = False
+
+
+	def toggleStateOn(self):
+		self._active = True
+
+
+	def toggleState(self):
+		if self._active:
+			self._active = False
+			self.off()
+		else:
+			self._active = True
 
 
 	def put(self, func):

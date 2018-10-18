@@ -11,11 +11,14 @@ import threading
 
 class SnipsLedControl:
 
-	_SUB_ON_HOTWORD 			= 'hermes/hotword/default/detected'
-	_SUB_ON_SAY 				= 'hermes/tts/say'
-	_SUB_ON_THINK 				= 'hermes/asr/textCaptured'
-	_SUB_ON_LISTENING 			= 'hermes/asr/startListening'
-	_SUB_ON_HOTWORD_TOGGLE_ON 	= 'hermes/hotword/toggleOn'
+	_SUB_ON_HOTWORD 				= 'hermes/hotword/default/detected'
+	_SUB_ON_SAY 					= 'hermes/tts/say'
+	_SUB_ON_THINK 					= 'hermes/asr/textCaptured'
+	_SUB_ON_LISTENING 				= 'hermes/asr/startListening'
+	_SUB_ON_HOTWORD_TOGGLE_ON 		= 'hermes/hotword/toggleOn'
+	_SUB_ON_LEDS_TOGGLE 			= 'hermes/leds/toggle'
+	_SUB_ON_LEDS_TOGGLE_ON 			= 'hermes/leds/toggleOn'
+	_SUB_ON_LEDS_TOGGLE_OFF 		= 'hermes/leds/toggleOff'
 
 	def __init__(self, params):
 		self._logger = logging.getLogger('SnipsLedControl')
@@ -99,6 +102,9 @@ class SnipsLedControl:
 		self._mqttClient.subscribe(self._SUB_ON_THINK)
 		self._mqttClient.subscribe(self._SUB_ON_LISTENING)
 		self._mqttClient.subscribe(self._SUB_ON_HOTWORD_TOGGLE_ON)
+		self._mqttClient.subscribe(self._SUB_ON_LEDS_TOGGLE_ON)
+		self._mqttClient.subscribe(self._SUB_ON_LEDS_TOGGLE_OFF)
+		self._mqttClient.subscribe(self._SUB_ON_LEDS_TOGGLE)
 
 
 	def onMessage(self, client, userdata, message):
@@ -127,6 +133,15 @@ class SnipsLedControl:
 		elif message.topic == self._SUB_ON_HOTWORD_TOGGLE_ON:
 			if siteId == self._me:
 				self._leds.idle()
+		elif message.topic == self._SUB_ON_LEDS_TOGGLE_ON:
+			if siteId == self._me:
+				self._leds.toggleStateOn()
+		elif message.topic == self._SUB_ON_LEDS_TOGGLE_OFF:
+			if siteId == self._me:
+				self._leds.toggleStateOff()
+		elif message.topic == self._SUB_ON_LEDS_TOGGLE:
+			if siteId == self._me:
+				self._leds.toggleState()
 
 
 	def onStop(self):

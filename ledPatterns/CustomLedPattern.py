@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import numpy
+from respeaker.apa102 import APA102
 import time
 try:
     import queue as Queue
@@ -9,7 +11,8 @@ except ImportError:
 
 
 class CustomLedPattern(object):
-    def __init__(self, show=None):
+    def __init__(self, show=None, num_leds=3):
+        self._leds = APA102(num_led=num_leds)
         self.basis = numpy.array([0] * 4 * 12)
         self.basis[0 * 4 + 1] = 2
         self.basis[3 * 4 + 1] = 1
@@ -93,6 +96,4 @@ class CustomLedPattern(object):
         self.show([0] * 4 * 12)
 
     def off(self):
-        self.show([0] * 4 * 12)
-
-
+        self._leds.clear_strip()
