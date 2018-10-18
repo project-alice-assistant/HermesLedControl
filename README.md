@@ -84,7 +84,7 @@ sudo rm -rf snipsLedControl
 - --mqttServer: Defines to what mqtt server SLC should connect. Overrides snips.toml
 - --mqttPort: Defines what port t use to connect to mqtt. Overrides snips.toml
 - --clientId: Defines a client id. Overrides snips.toml
-- --pattern: The pattern to be used by SLC, choices: 'google', 'alexa', 'custom', default='google'
+- --pattern: The pattern to be used by SLC, choices: 'google', 'alexa', 'custom', default: google
 - --leds: Number of leds to control, default=3
 - --offPattern: Define an off led pattern
 - --idlePattern: Define an idle led pattern
@@ -92,4 +92,4 @@ sudo rm -rf snipsLedControl
 - --talkPattern: Define a talk led pattern
 - --thinkPattern: Define a think led pattern
 - --listenPattern: Define a listen led pattern
-- --defaultState: Define if the leds should be active or not by default, choices='on', 'off', default='on'
+- --defaultState: Define if the leds should be active or not by default, choices: 'on', 'off', default: on
