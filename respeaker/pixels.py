@@ -35,7 +35,7 @@ class Pixels:
 		elif params.pattern == 'alexa':
 			self._pattern = AlexaLedPattern(show=self.show)
 		else:
-			self._pattern = CustomLedPattern(show=self.show, num_leds=params.leds)
+			self._pattern = CustomLedPattern(pixels=self, show=self.show, num_leds=params.leds)
 
 		self._dev = apa102.APA102(num_led=params.leds)
 
@@ -51,6 +51,11 @@ class Pixels:
 		self._thread.start()
 
 		self._lastDirection = None
+
+
+	@property
+	def active(self):
+		return self._active
 
 
 	def wakeup(self, direction=0):
