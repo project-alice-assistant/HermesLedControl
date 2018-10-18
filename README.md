@@ -63,9 +63,33 @@ sudo systemctl daemon-reload
 sudo systemctl start snipsledcontrol
 ```
 
+# Special treats
+We all want to turn our lights off for the night. SLC does listen to the few mqtty topics Snips uses, so you don't have to do anything for it work. But, if you want to go a bit further, there's a few extra topics SLC listens to:
+
+- **hermes/leds/toggle**: Publish on this topic to toggle the leds state. If the current is 'off' it will change to 'on' and vice versa
+- **hermes/leds/toggleOn**: Publish on this topic to toggle the leds to on. The led pattern will show
+- **hermes/leds/toggleOff**: Publish on this topic to toggle the leds to off. No more leds will light until toggled back on
+
+
 # Uninstall
 
 ```
 sudo systemctl disable snipsledcontrol
 sudo rm -rf snipsLedControl
 ```
+
+
+# Arguments list
+
+- --mqttServer: Defines to what mqtt server SLC should connect. Overrides snips.toml
+- --mqttPort: Defines what port t use to connect to mqtt. Overrides snips.toml
+- --clientId: Defines a client id. Overrides snips.toml
+- --pattern: The pattern to be used by SLC, choices: 'google', 'alexa', 'custom', default='google'
+- --leds: Number of leds to control, default=3
+- --offPattern: Define an off led pattern
+- --idlePattern: Define an idle led pattern
+- --wakeupPattern: Define a wakeup led pattern
+- --talkPattern: Define a talk led pattern
+- --thinkPattern: Define a think led pattern
+- --listenPattern: Define a listen led pattern
+- --defaultState: Define if the leds should be active or not by default, choices='on', 'off', default='on'
