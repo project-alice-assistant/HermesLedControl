@@ -128,6 +128,28 @@ class Pixels:
 			funct()
 
 
+	def onError(self):
+		if not self._active:
+			return
+
+		if self._params.errorPattern is None:
+			self.put(self._pattern.onError)
+		else:
+			funct = getattr(self._pattern, self._params.errorPattern)
+			funct()
+
+
+	def onSuccess(self):
+		if not self._active:
+			return
+
+		if self._params.successPattern is None:
+			self.put(self._pattern.onSuccess)
+		else:
+			funct = getattr(self._pattern, self._params.successPattern)
+			funct()
+
+
 	def off(self):
 		if not self._active:
 			return

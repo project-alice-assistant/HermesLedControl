@@ -55,6 +55,8 @@ def main():
 	parser.add_argument('--talkPattern', help='Define a talk led pattern', type=str)
 	parser.add_argument('--thinkPattern', help='Define a think led pattern', type=str)
 	parser.add_argument('--listenPattern', help='Define a listen led pattern', type=str)
+	parser.add_argument('--errorPattern', help='Define an error led pattern', type=str)
+	parser.add_argument('--successPattern', help='Define a success led pattern', type=str)
 	parser.add_argument('--defaultState', help='Define if the leds should be active or not by default', type=str, choices=['on', 'off'], default='on')
 	args = parser.parse_args()
 

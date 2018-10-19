@@ -71,7 +71,7 @@ class CustomLedPattern(object):
 		brightness = 100
 		while not self.stop:
 			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 200, 0, brightness)
+				self._leds.set_pixel(i, 0, 20, 0, brightness)
 				time.sleep(0.05)
 
 			if brightness == 100:
@@ -88,10 +88,10 @@ class CustomLedPattern(object):
 		self._leds.clear_strip()
 		direction = 1
 		brightness = 0
+
 		while not self.stop:
 			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 255, 0, brightness)
-
+				self._leds.set_pixel(i, 0, 0, 40, brightness)
 			self._leds.show()
 
 			time.sleep(0.01)
@@ -103,6 +103,24 @@ class CustomLedPattern(object):
 
 			brightness += direction
 
+		self._leds.clear_strip()
+
+
+	def onError(self):
+		self._leds.clear_strip()
+		for i in range(self._numLeds):
+			self._leds.set_pixel(i, 125, 0, 0, 10)
+		self._leds.show()
+		time.sleep(0.7)
+		self._leds.clear_strip()
+
+
+	def onSuccess(self):
+		self._leds.clear_strip()
+		for i in range(self._numLeds):
+			self._leds.set_pixel(i, 0, 125, 0, 10)
+		self._leds.show()
+		time.sleep(0.7)
 		self._leds.clear_strip()
 
 

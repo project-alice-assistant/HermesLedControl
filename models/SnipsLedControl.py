@@ -19,6 +19,9 @@ class SnipsLedControl:
 	_SUB_ON_LEDS_TOGGLE 			= 'hermes/leds/toggle'
 	_SUB_ON_LEDS_TOGGLE_ON 			= 'hermes/leds/toggleOn'
 	_SUB_ON_LEDS_TOGGLE_OFF 		= 'hermes/leds/toggleOff'
+	_SUB_ON_LEDS_ON_ERROR 			= 'hermes/nlu/intentNotRecognized'
+	_SUB_ON_LEDS_ON_SUCCESS 		= 'hermes/nlu/intentParsed'
+
 
 	def __init__(self, params):
 		self._logger = logging.getLogger('SnipsLedControl')
@@ -105,6 +108,8 @@ class SnipsLedControl:
 		self._mqttClient.subscribe(self._SUB_ON_LEDS_TOGGLE_ON)
 		self._mqttClient.subscribe(self._SUB_ON_LEDS_TOGGLE_OFF)
 		self._mqttClient.subscribe(self._SUB_ON_LEDS_TOGGLE)
+		self._mqttClient.subscribe(self._SUB_ON_LEDS_ON_ERROR)
+		self._mqttClient.subscribe(self._SUB_ON_LEDS_ON_SUCCESS)
 
 
 	def onMessage(self, client, userdata, message):
@@ -142,6 +147,12 @@ class SnipsLedControl:
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE:
 			if siteId == self._me:
 				self._leds.toggleState()
+		elif message.topic == self._SUB_ON_LEDS_ON_SUCCESS:
+			if siteId == self._me:
+				self._leds.onSuccess()
+		elif message.topic == self._SUB_ON_LEDS_ON_ERROR:
+			if siteId == self._me:
+				self._leds.onError()
 
 
 	def onStop(self):
