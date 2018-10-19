@@ -16,7 +16,7 @@ class CustomLedPattern(object):
 		self.stop 		= False
 
 
-	def wakeup(self):
+	def wakeup(self, *args):
 		self._leds.clear_strip()
 		for brightness in range(101):
 			for i in range(self._numLeds):
@@ -26,7 +26,7 @@ class CustomLedPattern(object):
 			time.sleep(0.01)
 
 
-	def listen(self):
+	def listen(self, *args):
 		self._leds.clear_strip()
 		direction = 1
 		brightness = 0
@@ -50,7 +50,7 @@ class CustomLedPattern(object):
 		self._leds.clear_strip()
 
 
-	def think(self):
+	def think(self, *args):
 		self._leds.clear_strip()
 		while not self.stop:
 			for i in range(self._numLeds):
@@ -66,7 +66,7 @@ class CustomLedPattern(object):
 		self._leds.clear_strip()
 
 
-	def speak(self):
+	def speak(self, *args):
 		self._leds.clear_strip()
 		brightness = 100
 		while not self.stop:
@@ -84,7 +84,7 @@ class CustomLedPattern(object):
 		self._leds.clear_strip()
 
 
-	def idle(self):
+	def idle(self, *args):
 		self._leds.clear_strip()
 		direction = 1
 		brightness = 0
@@ -106,7 +106,7 @@ class CustomLedPattern(object):
 		self._leds.clear_strip()
 
 
-	def onError(self):
+	def onError(self, *args):
 		self._leds.clear_strip()
 		for i in range(self._numLeds):
 			self._leds.set_pixel(i, 125, 0, 0, 10)
@@ -115,7 +115,7 @@ class CustomLedPattern(object):
 		self._leds.clear_strip()
 
 
-	def onSuccess(self):
+	def onSuccess(self, *args):
 		self._leds.clear_strip()
 		for i in range(self._numLeds):
 			self._leds.set_pixel(i, 0, 125, 0, 10)
@@ -124,5 +124,5 @@ class CustomLedPattern(object):
 		self._leds.clear_strip()
 
 
-	def off(self):
+	def off(self, *args):
 		self._leds.clear_strip()

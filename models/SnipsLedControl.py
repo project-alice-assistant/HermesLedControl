@@ -157,4 +157,4 @@ class SnipsLedControl:
 
 	def onStop(self):
 		self._mqttClient.disconnect()
-		self._leds.off()
+		self._leds.onStop()

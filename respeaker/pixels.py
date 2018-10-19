@@ -195,3 +195,7 @@ class Pixels:
 
 		self._dev.show()
 
+
+	def onStop(self):
+		self._pattern.stop = True
+		self._pattern.off()
