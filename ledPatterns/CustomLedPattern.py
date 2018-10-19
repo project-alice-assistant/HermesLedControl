@@ -1,124 +1,110 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy
 from respeaker.apa102 import APA102
 import time
-try:
-    import queue as Queue
-except ImportError:
-    import Queue as Queue
 import respeaker.pixels
 
 
 class CustomLedPattern(object):
-    def __init__(self, pix, show=None, num_leds=3):
-        self._leds = APA102(num_led=num_leds)
-        self._pixels = pix #type: respeaker.pixels.Pixels
+	def __init__(self, pixels, num_leds=3):
 
-        self.basis = numpy.array([0] * 4 * 12)
-        self.basis[0 * 4 + 1] = 2
-        self.basis[3 * 4 + 1] = 1
-        self.basis[3 * 4 + 2] = 1
-        self.basis[6 * 4 + 2] = 2
-        self.basis[9 * 4 + 3] = 2
+		self._leds 		= APA102(num_led=num_leds)
+		self._pixels 	= pixels #type: respeaker.pixels.Pixels
 
-        self.pixels = self.basis * 24
+		self._numLeds 	= num_leds
+		self.stop 		= False
 
-        if not show or not callable(show):
-            def dummy(data):
-                pass
-            show = dummy
 
-        self.show = show
-        self._numLeds = num_leds
-        self.stop = False
+	def wakeup(self):
+		self._leds.clear_strip()
+		for brightness in range(101):
+			for i in range(self._numLeds):
+				self._leds.set_pixel(i, 0, 200, 0, brightness)
 
-    def wakeup(self, direction=0):
-        position = int((direction + 15) / 30) % 12
+			self._leds.show()
+			time.sleep(0.01)
 
-        basis = numpy.roll(self.basis, position * 4)
-        for i in range(1, 25):
-            pixels = basis * i
-            self.show(pixels)
-            time.sleep(0.005)
 
-        pixels =  numpy.roll(pixels, 4)
-        self.show(pixels)
-        time.sleep(0.1)
+	def listen(self):
+		self._leds.clear_strip()
+		direction = 1
+		brightness = 0
+		while not self.stop:
+			for i in range(self._numLeds):
+				self._leds.set_pixel(i, 0, 200, 0, brightness)
 
-        for i in range(2):
-            new_pixels = numpy.roll(pixels, 4)
-            self.show(new_pixels * 0.5 + pixels)
-            pixels = new_pixels
-            time.sleep(0.1)
+			self._leds.show()
+			time.sleep(0.01)
 
-        self.show(pixels)
-        self.pixels = pixels
+			if brightness <= 0:
+				direction = 1
+			elif brightness >= 100:
+				direction = -1
 
-    def listen(self):
-        pixels = self.pixels
-        for i in range(1, 25):
-            self.show(pixels * i / 24)
-            time.sleep(0.01)
+			brightness += direction
 
-    def think(self):
-        pixels = self.pixels
+		for i in range(self._numLeds):
+			self._leds.set_pixel(i, 0, 200, 0, 100)
 
-        while not self.stop:
-            pixels = numpy.roll(pixels, 4)
-            self.show(pixels)
-            time.sleep(0.2)
+		self._leds.clear_strip()
 
-        t = 0.1
-        for i in range(0, 5):
-            pixels = numpy.roll(pixels, 4)
-            self.show(pixels * (4 - i) / 4)
-            time.sleep(t)
-            t /= 2
 
-        self.pixels = pixels
+	def think(self):
+		self._leds.clear_strip()
+		while not self.stop:
+			for i in range(self._numLeds):
+				self._leds.set_pixel(i, 0, 200, 0, 100)
+				time.sleep(0.2)
 
-    def speak(self):
-        pixels = self.pixels
-        step = 1
-        brightness = 5
-        while not self.stop:
-            self.show(pixels * brightness / 24)
-            time.sleep(0.02)
+			self._leds.show()
 
-            if brightness <= 5:
-                step = 1
-                time.sleep(0.4)
-            elif brightness >= 24:
-                step = -1
-                time.sleep(0.4)
+			for i in reversed(range(self._numLeds)):
+				self._leds.set_pixel(i, 0, 200, 0, 0)
+				time.sleep(0.2)
 
-            brightness += step
+		self._leds.clear_strip()
 
-    def idle(self):
-        self._leds.clear_strip()
-        direction = 1
-        brightness = 0
-        while not self.stop:
-            for i in range(0, self._numLeds - 1):
-                self._leds.set_pixel(i, 0, 0, 40, brightness)
-                self._leds.show()
 
-            time.sleep(0.01)
+	def speak(self):
+		self._leds.clear_strip()
+		brightness = 100
+		while not self.stop:
+			for i in range(self._numLeds):
+				self._leds.set_pixel(i, 0, 200, 0, brightness)
+				time.sleep(0.05)
 
-            if brightness <= 0:
-                direction = 1
-            elif brightness >= 100:
-                direction = -1
+			if brightness == 100:
+				brightness = 0
+			else
+				brightness = 100
 
-            brightness += direction
+			self._leds.show()
 
-        for i in range(0, self._numLeds - 1):
-            self._leds.set_pixel(i, 0, 0, 40, 100)
-            self._leds.show()
+		self._leds.clear_strip()
 
-        self._leds.clear_strip()
 
-    def off(self):
-        self._leds.clear_strip()
+	def idle(self):
+		self._leds.clear_strip()
+		direction = 1
+		brightness = 0
+		while not self.stop:
+			for i in range(self._numLeds):
+				self._leds.set_pixel(i, 0, 255, 0, brightness)
+
+			self._leds.show()
+
+			time.sleep(0.01)
+
+			if brightness <= 0:
+				direction = 1
+			elif brightness >= 100:
+				direction = -1
+
+			brightness += direction
+
+		self._leds.clear_strip()
+
+
+	def off(self):
+		self._leds.clear_strip()
