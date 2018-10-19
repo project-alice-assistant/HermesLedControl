@@ -31,6 +31,7 @@ class CustomLedPattern(object):
             show = dummy
 
         self.show = show
+        self._numLeds = num_leds
         self.stop = False
 
     def wakeup(self, direction=0):
@@ -96,7 +97,28 @@ class CustomLedPattern(object):
             brightness += step
 
     def idle(self):
-        self.show([0] * 4 * 12)
+        self._leds.clear_strip()
+        direction = 1
+        brightness = 0
+        while not self.stop:
+            for i in range(0, self._numLeds - 1):
+                self._leds.set_pixel(i, 0, 0, 40, brightness)
+                self._leds.show()
+
+            time.sleep(0.01)
+
+            if brightness <= 0:
+                direction = 1
+            elif brightness >= 100:
+                direction = -1
+
+            brightness += direction
+
+        for i in range(0, self._numLeds - 1):
+            self._leds.set_pixel(i, 0, 0, 40, 100)
+            self._leds.show()
+
+        self._leds.clear_strip()
 
     def off(self):
         self._leds.clear_strip()
