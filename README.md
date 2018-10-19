@@ -92,4 +92,6 @@ sudo rm -rf snipsLedControl
 - --talkPattern: Define a talk led pattern
 - --thinkPattern: Define a think led pattern
 - --listenPattern: Define a listen led pattern
+- --errorPattern: Define an error led pattern
+- --successPattern: Define a success led pattern
 - --defaultState: Define if the leds should be active or not by default, choices: 'on', 'off', default: on
