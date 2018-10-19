@@ -37,7 +37,10 @@ class SnipsLedControl:
 
 		with open('hardware.json') as f:
 			self._hardwareReference = json.load(f)
-			print('Loaded {} hardware references'.format(len(self._hardwareReference)))
+			self._logger.info('Loaded {} hardware references'.format(len(self._hardwareReference)))
+
+		if params.hardware not in self._hardwareReference:
+			self._logger.critical('Trying to use an unsupported hardware')
 
 		if params.mqttServer is None:
 			try:

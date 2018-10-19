@@ -47,8 +47,14 @@ def main():
 	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides snips.toml', type=str)
 	parser.add_argument('--mqttPort', help='Defines what port t use to connect to mqtt. Overrides snips.toml', type=str)
 	parser.add_argument('--clientId', help='Defines a client id. Overrides snips.toml', type=str)
+	parser.add_argument('--hardware', help='Type of hardware in use', type=str, default='respeaker2',
+						choices=[
+							"respeaker2",
+							"respeaker4",
+							"respeakerMicArrayV2",
+							"neoPixels12leds"
+						])
 	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, choices=['google', 'alexa', 'custom'], default='google')
-	parser.add_argument('--leds', help='Number of leds to control', type=int, default=3)
 	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)
 	parser.add_argument('--idlePattern', help='Define an idle led pattern', type=str)
 	parser.add_argument('--wakeupPattern', help='Define a wakeup led pattern', type=str)
