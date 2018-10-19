@@ -29,10 +29,15 @@ class SnipsLedControl:
 
 		self._snipsConfigs 	= self.loadConfigs()
 
-		self._params 		= params
-		self._mqttServer 	= 'localhost'
-		self._me 			= 'default'
-		self._mqttPort 		= 1883
+		self._params 				= params
+		self._mqttServer 			= 'localhost'
+		self._me 					= 'default'
+		self._mqttPort 				= 1883
+		self._hardwareReference 	= None
+
+		with open('hardware.json') as f:
+			self._hardwareReference = json.load(f)
+			print('Loaded {} hardware references'.format(len(self._hardwareReference)))
 
 		if params.mqttServer is None:
 			try:

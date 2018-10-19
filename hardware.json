@@ -1,0 +1,18 @@
+{
+	"respeaker2": {
+		"leds": 3,
+		"interface": "spi"
+	},
+	"respeaker4": {
+		"leds": 12,
+		"interface": "spi"
+	},
+	"respeakerMicArrayV2": {
+		"leds": 12,
+		"interface": "usb"
+	},
+	"neoPixels12leds": {
+		"leds": 12,
+		"interface": "gpio"
+	}
+}
