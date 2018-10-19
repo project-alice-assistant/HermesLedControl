@@ -76,7 +76,7 @@ class CustomLedPattern(object):
 
 			if brightness == 100:
 				brightness = 0
-			else
+			else:
 				brightness = 100
 
 			self._leds.show()
