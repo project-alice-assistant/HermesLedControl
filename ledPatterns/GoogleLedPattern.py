@@ -108,6 +108,12 @@ class GoogleHomeLedPattern(object):
 	def idle(self):
 		self.show([0] * 4 * 12)
 
+	def onError(self):
+		self.show([0] * 4 * 12)
+
+	def onSuccess(self):
+		self.show([0] * 4 * 12)
+
 	def off(self):
 		self.show([0] * 4 * 12)
 
