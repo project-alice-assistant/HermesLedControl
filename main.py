@@ -14,7 +14,7 @@ formatter = logging.Formatter('%(asctime)s [%(threadName)s] - [%(levelname)s] - 
 _logger = logging.getLogger('SnipsLedControl')
 _logger.setLevel(logging.INFO)
 
-date = int(datetime.now().strftime('%Y%m%d%H%M'))
+date = int(datetime.now().strftime('%Y%m%d'))
 
 handler = logging.FileHandler(filename='logs.log', mode='w')
 rotatingHandler = logging.handlers.RotatingFileHandler(filename='./logs/{}-logs.log'.format(date), mode='a', maxBytes=100000, backupCount=5)

@@ -24,7 +24,7 @@ class LedsController:
 		self._logger = logging.getLogger('SnipsLedControl')
 		self._logger.info('Initializing leds controller')
 
-		self._mainClass: SnipsLedControl = mainClass
+		self._mainClass = mainClass # type: SnipsLedControl
 
 		if self.INSTANCE is None:
 			self.INSTANCE = self
@@ -35,9 +35,6 @@ class LedsController:
 		self._params 	= self._mainClass.params
 		self._hardware 	= self._mainClass.hardware
 		self._interface = self._hardware['interface']
-
-		self._logger.info('Hardware set to {}'.format(self._hardware['name']))
-
 
 		if self._params.pattern == 'google':
 			self._pattern = GoogleHomeLedPattern(self)
@@ -61,10 +58,10 @@ class LedsController:
 			self._power.on()
 			self._interface = RespeakerMicArrayV2(numLeds=self._hardware['numberOfLeds'], vid=self._hardware['vid'], pid=self._hardware['pid'])
 
-			if self._interface is None:
-				self._logger.fatal("Couldn't start hardware")
-				self._mainClass.onStop()
-				return
+		if self._interface is None:
+			self._logger.fatal("Couldn't start hardware")
+			self._mainClass.onStop()
+			return
 
 		self._running = False
 
@@ -90,8 +87,10 @@ class LedsController:
 
 	def wakeup(self):
 		if self._params.wakeupPattern is None:
+			print('ici')
 			self.put(self._pattern.wakeup)
 		else:
+			print('la')
 			func = getattr(self._pattern, self._params.wakeupPattern)
 			self.put(func)
 

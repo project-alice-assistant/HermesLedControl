@@ -7,8 +7,9 @@ import threading
 
 
 class CustomLedPattern(LedPattern):
+
 	def __init__(self, controller):
-		super(CustomLedPattern, self).__init__(self._controller)
+		super().__init__(controller)
 		self._animation = threading.Event()
 
 

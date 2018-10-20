@@ -6,5 +6,5 @@ git reset --hard HEAD
 git clean -f
 git pull
 git stash apply
-chown -R pi logs
+chown -R pi ~/snipsLedControl
 systemctl start snipsledcontrol

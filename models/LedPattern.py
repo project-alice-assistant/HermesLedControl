@@ -3,10 +3,10 @@
 
 from models.LedsController import *
 
-class LedPattern:
+class LedPattern(object):
 
 	def __init__(self, controller):
-		self._controller: LedsController = controller
+		self._controller = controller # type: LedsController
 		self._numLeds = self._controller.hardware['numberOfLeds']
 
 

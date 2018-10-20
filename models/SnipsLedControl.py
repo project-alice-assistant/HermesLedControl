@@ -79,7 +79,7 @@ class SnipsLedControl:
 		self._logger.info('- Client id set to {}'.format(self._me))
 		self._logger.info('- Hardware set to {}'.format(self._hardware['name']))
 
-		string = '- Using {} as pattern with {}'
+		string = '- Using {} as pattern with {} leds'
 		if params.leds is not None:
 			self._logger.info(string.format(params.pattern, params.leds))
 			self._hardware['numberOfLeds'] = params.leds
@@ -130,7 +130,7 @@ class SnipsLedControl:
 			mqttClient = mqtt.Client()
 			mqttClient.on_connect = self.onConnect
 			mqttClient.on_message = self.onMessage
-			mqttClient.connect(self._mqttServer, self._mqttPort)
+			mqttClient.connect(self._mqttServer, int(self._mqttPort))
 			mqttClient.loop_start()
 			return mqttClient
 		except:
@@ -162,7 +162,9 @@ class SnipsLedControl:
 			siteId = None
 
 		if message.topic == self._SUB_ON_HOTWORD:
+			print('la')
 			if siteId == self._me:
+				print('here')
 				self._ledsController.wakeup()
 		elif message.topic == self._SUB_ON_LISTENING:
 			if siteId == self._me:

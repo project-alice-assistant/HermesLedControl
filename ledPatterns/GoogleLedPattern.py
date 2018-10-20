@@ -17,7 +17,6 @@
 
 
 from models.LedPattern import LedPattern
-import numpy
 import time
 import threading
 try:
@@ -27,9 +26,11 @@ except ImportError:
 
 
 class GoogleHomeLedPattern(LedPattern):
+
 	def __init__(self, controller):
-		super(GoogleHomeLedPattern, self).__init__(controller)
-		self.basis = numpy.array([0] * 4 * 12)
+		super().__init__(controller)
+
+		self.basis = [0] * 4 * 12
 		self.basis[0 * 4 + 1] = 2
 		self.basis[3 * 4 + 1] = 1
 		self.basis[3 * 4 + 2] = 1
@@ -40,6 +41,7 @@ class GoogleHomeLedPattern(LedPattern):
 		self._animation = threading.Event()
 
 	def wakeup(self, direction=0):
+		return
 		position = int((direction + 15) / 30) % 12
 
 		basis = numpy.roll(self.basis, position * 4)
@@ -62,12 +64,14 @@ class GoogleHomeLedPattern(LedPattern):
 		self.pixels = pixels
 
 	def listen(self):
+		return
 		pixels = self.pixels
 		for i in range(1, 25):
 			self._controller.showData(pixels * i / 24)
 			time.sleep(0.01)
 
 	def think(self):
+		return
 		pixels = self.pixels
 
 		self._animation.set()
@@ -86,6 +90,7 @@ class GoogleHomeLedPattern(LedPattern):
 		self.pixels = pixels
 
 	def speak(self):
+		return
 		pixels = self.pixels
 		step = 1
 		brightness = 5
