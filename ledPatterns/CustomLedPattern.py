@@ -1,40 +1,49 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from respeaker.apa102 import APA102
+import models.LedsController 	as ledsController
+from models.LedPattern 			import LedPattern
 import time
-import respeaker.pixels
+import threading
 
 
-class CustomLedPattern(object):
-	def __init__(self, pixels, num_leds=3):
+class CustomLedPattern(LedPattern):
+	def __init__(self, controller, numLeds):
 
-		self._leds 		= APA102(num_led=num_leds)
-		self._pixels 	= pixels #type: respeaker.pixels.Pixels
+		self._controller: ledsController.LedsController = controller
+		self._numLeds 									= numLeds
 
-		self._numLeds 	= num_leds
-		self.stop 		= False
+		self._animation 								= threading.Event()
+
+		super(CustomLedPattern, self).__init__(numLeds, self._controller)
+
+
+	@property
+	def animation(self):
+		return self._animation
 
 
 	def wakeup(self, *args):
-		self._leds.clear_strip()
 		for brightness in range(101):
 			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 200, 0, brightness)
+				self._controller.setLed(i, 0, 200, 0, brightness)
 
-			self._leds.show()
+			self._controller.show()
 			time.sleep(0.01)
 
 
 	def listen(self, *args):
-		self._leds.clear_strip()
 		direction = 1
 		brightness = 0
-		while not self.stop:
-			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 200, 0, brightness)
 
-			self._leds.show()
+		self._animation.set()
+		while self._animation.isSet():
+			for i in range(self._numLeds):
+				if not self._animation.isSet():
+					break
+				self._controller.setLed(i, 0, 200, 0, brightness)
+
+			self._controller.show()
 			time.sleep(0.01)
 
 			if brightness <= 0:
@@ -45,33 +54,38 @@ class CustomLedPattern(object):
 			brightness += direction
 
 		for i in range(self._numLeds):
-			self._leds.set_pixel(i, 0, 200, 0, 100)
-
-		self._leds.clear_strip()
+			if not self._animation.isSet():
+				break
+			self._controller.setLed(i, 0, 200, 0, 100)
 
 
 	def think(self, *args):
-		self._leds.clear_strip()
-		while not self.stop:
+		self._animation.set()
+		while self._animation.isSet():
 			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 200, 0, 100)
+				if not self._animation.isSet():
+					break
+				self._controller.setLed(i, 0, 200, 0, 100)
 				time.sleep(0.2)
 
-			self._leds.show()
+			self._controller.show()
 
 			for i in reversed(range(self._numLeds)):
-				self._leds.set_pixel(i, 0, 200, 0, 0)
+				if not self._animation.isSet():
+					break
+				self._controller.setLed(i, 0, 200, 0, 0)
 				time.sleep(0.2)
-
-		self._leds.clear_strip()
 
 
 	def speak(self, *args):
-		self._leds.clear_strip()
 		brightness = 100
-		while not self.stop:
+
+		self._animation.set()
+		while self._animation.isSet():
 			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 20, 0, brightness)
+				if not self._animation.isSet():
+					break
+				self._controller.setLed(i, 0, 20, 0, brightness)
 				time.sleep(0.05)
 
 			if brightness == 100:
@@ -79,20 +93,20 @@ class CustomLedPattern(object):
 			else:
 				brightness = 100
 
-			self._leds.show()
-
-		self._leds.clear_strip()
+			self._controller.show()
 
 
 	def idle(self, *args):
-		self._leds.clear_strip()
 		direction = 1
 		brightness = 0
 
-		while not self.stop:
+		self._animation.set()
+		while self._animation.isSet():
 			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 0, 40, brightness)
-			self._leds.show()
+				if not self._animation.isSet():
+					break
+				self._controller.setLed(i, 0, 0, 40, brightness)
+			self._controller.show()
 
 			time.sleep(0.01)
 
@@ -103,26 +117,26 @@ class CustomLedPattern(object):
 
 			brightness += direction
 
-		self._leds.clear_strip()
-
 
 	def onError(self, *args):
-		self._leds.clear_strip()
 		for i in range(self._numLeds):
-			self._leds.set_pixel(i, 125, 0, 0, 10)
-		self._leds.show()
+			self._controller.setLed(i, 125, 0, 0, 10)
+		self._controller.show()
 		time.sleep(0.7)
-		self._leds.clear_strip()
 
 
 	def onSuccess(self, *args):
-		self._leds.clear_strip()
 		for i in range(self._numLeds):
-			self._leds.set_pixel(i, 0, 125, 0, 10)
-		self._leds.show()
+			self._controller.setLed(i, 0, 125, 0, 10)
+		self._controller.show()
 		time.sleep(0.7)
-		self._leds.clear_strip()
 
 
-	def off(self, *args):
-		self._leds.clear_strip()
+	def onStart(self, *args):
+		self.wakeup()
+		time.sleep(3)
+		self.off()
+	
+	
+	def onStop(self, *args):
+		super(CustomLedPattern, self).onStop()

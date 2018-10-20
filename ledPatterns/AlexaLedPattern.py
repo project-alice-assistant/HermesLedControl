@@ -18,6 +18,7 @@
 
 import numpy
 import time
+import threading
 
 
 class AlexaLedPattern(object):

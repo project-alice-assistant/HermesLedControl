@@ -51,7 +51,7 @@ def main():
 						choices=[
 							"respeaker2",
 							"respeaker4",
-							"respeakerMicArrayV2",
+							#"respeakerMicArrayV2",
 							"neoPixels12leds"
 						])
 	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, choices=['google', 'alexa', 'custom'], default='google')
@@ -64,9 +64,11 @@ def main():
 	parser.add_argument('--errorPattern', help='Define an error led pattern', type=str)
 	parser.add_argument('--successPattern', help='Define a success led pattern', type=str)
 	parser.add_argument('--defaultState', help='Define if the leds should be active or not by default', type=str, choices=['on', 'off'], default='on')
+	parser.add_argument('--gpioPin', help='Define the gpio pin wiring number to use when your leds use gpio ', type=int)
 	args = parser.parse_args()
 
 	slc = SnipsLedControl(args)
+	slc.onStart()
 
 	while RUNNING:
 		time.sleep(0.1)

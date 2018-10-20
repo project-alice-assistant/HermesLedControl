@@ -3,11 +3,10 @@
 
 import json
 import logging
+from models.LedsController import LedsController
 import os
 import paho.mqtt.client as mqtt
-from respeaker.pixels import Pixels
 import pytoml
-import threading
 
 class SnipsLedControl:
 
@@ -34,13 +33,15 @@ class SnipsLedControl:
 		self._me 					= 'default'
 		self._mqttPort 				= 1883
 		self._hardwareReference 	= None
+		self._mqttClient 			= None
 
 		with open('hardware.json') as f:
 			self._hardwareReference = json.load(f)
 			self._logger.info('Loaded {} hardware references'.format(len(self._hardwareReference)))
 
 		if params.hardware not in self._hardwareReference:
-			self._logger.critical('Trying to use an unsupported hardware')
+			self._logger.fatal('Trying to use an unsupported hardware')
+			self.onStop()
 
 		if params.mqttServer is None:
 			try:
@@ -51,6 +52,7 @@ class SnipsLedControl:
 		else:
 			self._mqttServer = params.mqttServer
 
+
 		if params.clientId is None:
 			try:
 				if 'snips-audio-server' in self._snipsConfigs and 'bind' in self._snipsConfigs['snips-audio-server']:
@@ -60,10 +62,11 @@ class SnipsLedControl:
 		else:
 			self._me = params.clientId
 
+
 		if params.mqttPort is None:
 			try:
 				if 'snips-common' in self._snipsConfigs and 'mqtt' in self._snipsConfigs['snips-common']:
-					port = self._snipsConfigs['snips-common']['mqtt'].split(':')[1]
+					self._mqttPort = self._snipsConfigs['snips-common']['mqtt'].split(':')[1]
 			except:
 				self._logger.info('- Falling back to default config for mqtt port')
 		else:
@@ -74,12 +77,19 @@ class SnipsLedControl:
 		self._logger.info('- Client id set to {}'.format(self._me))
 		self._logger.info('- Using {} as pattern with {} leds'.format(params.pattern, params.leds))
 
-		self._leds = Pixels(params)
-		self._mqttClient = self.connectMqtt()
-		self._leds.wakeup()
+		self._ledsController = LedsController(self)
 
-		threading.Timer(interval=5, function=self._leds.idle).start()
+
+	def onStart(self):
+		self._mqttClient = self.connectMqtt()
+		self._ledsController.onStart()
+
 		self._logger.info('Snips Led Control started')
+
+
+	def onStop(self):
+		self._mqttClient.disconnect()
+		self._ledsController.onStop()
 
 
 	def loadConfigs(self):
@@ -90,7 +100,7 @@ class SnipsLedControl:
 				configs = pytoml.load(confFile)
 				return configs
 
-		self._logger.error('Error loading configurations')
+		self._logger.fatal('Error loading configurations')
 		self.onStop()
 		return None
 
@@ -104,7 +114,7 @@ class SnipsLedControl:
 			mqttClient.loop_start()
 			return mqttClient
 		except:
-			self._logger.error("Couldn't connect to mqtt, aborting")
+			self._logger.fatal("Couldn't connect to mqtt, aborting")
 			self.onStop()
 
 	def onConnect(self, client, userdata, flags, rc):
@@ -133,36 +143,40 @@ class SnipsLedControl:
 
 		if message.topic == self._SUB_ON_HOTWORD:
 			if siteId == self._me:
-				self._leds.wakeup()
+				self._ledsController.wakeup()
 		elif message.topic == self._SUB_ON_LISTENING:
 			if siteId == self._me:
-				self._leds.listen()
+				self._ledsController.listen()
 		elif message.topic == self._SUB_ON_SAY:
 			if siteId == self._me:
-				self._leds.speak()
+				self._ledsController.speak()
 		elif message.topic == self._SUB_ON_THINK:
 			if siteId == self._me:
-				self._leds.think()
+				self._ledsController.think()
 		elif message.topic == self._SUB_ON_HOTWORD_TOGGLE_ON:
 			if siteId == self._me:
-				self._leds.idle()
+				self._ledsController.idle()
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE_ON:
 			if siteId == self._me:
-				self._leds.toggleStateOn()
+				self._ledsController.toggleStateOn()
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE_OFF:
 			if siteId == self._me:
-				self._leds.toggleStateOff()
+				self._ledsController.toggleStateOff()
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE:
 			if siteId == self._me:
-				self._leds.toggleState()
+				self._ledsController.toggleState()
 		elif message.topic == self._SUB_ON_LEDS_ON_SUCCESS:
 			if siteId == self._me:
-				self._leds.onSuccess()
+				self._ledsController.onSuccess()
 		elif message.topic == self._SUB_ON_LEDS_ON_ERROR:
 			if siteId == self._me:
-				self._leds.onError()
+				self._ledsController.onError()
 
 
-	def onStop(self):
-		self._mqttClient.disconnect()
-		self._leds.onStop()
+	@property
+	def params(self):
+		return self._params
+
+	@property
+	def hardwareReference(self):
+		return self._hardwareReference

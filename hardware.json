@@ -1,18 +1,23 @@
 {
 	"respeaker2": {
-		"leds": 3,
-		"interface": "spi"
+		"name": "ReSpeaker 2",
+		"numberOfLeds": 3,
+		"interface": "apa102"
 	},
 	"respeaker4": {
-		"leds": 12,
-		"interface": "spi"
+		"name": "ReSpeaker 4",
+		"numberOfLeds": 12,
+		"interface": "apa102"
 	},
 	"respeakerMicArrayV2": {
-		"leds": 12,
+		"name": "ReSpeaker Mic array v2",
+		"numberOfLeds": 12,
 		"interface": "usb"
 	},
 	"neoPixels12leds": {
-		"leds": 12,
-		"interface": "gpio"
+		"name": "Adafruit NeoPixels ring 12 leds",
+		"numberOfLeds": 12,
+		"interface": "neopixels",
+		"gpioPin": 10
 	}
 }
