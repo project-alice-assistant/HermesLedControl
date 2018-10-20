@@ -94,6 +94,9 @@ class SnipsLedControl:
 			else:
 				self._logger.info(string.format(self._hardware['gpioPin']))
 
+		if 'vid' in self._hardware and params.vid is not None:
+			self._hardware['vid'] = params.vid
+
 		self._ledsController = LedsController(self)
 
 

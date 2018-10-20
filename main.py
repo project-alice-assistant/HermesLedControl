@@ -51,7 +51,7 @@ def main():
 						choices=[
 							"respeaker2",
 							"respeaker4",
-							#"respeakerMicArrayV2",
+							"respeakerMicArrayV2",
 							"neoPixels12leds"
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
@@ -65,7 +65,9 @@ def main():
 	parser.add_argument('--errorPattern', help='Define an error led pattern', type=str)
 	parser.add_argument('--successPattern', help='Define a success led pattern', type=str)
 	parser.add_argument('--defaultState', help='Define if the leds should be active or not by default', type=str, choices=['on', 'off'], default='on')
-	parser.add_argument('--gpioPin', help='Define the gpio pin wiring number to use when your leds use gpio ', type=int)
+	parser.add_argument('--gpioPin', help='Define the gpio pin wiring number to use when your leds use gpio', type=int)
+	parser.add_argument('--vid', help='Define the vid pin wiring number to use when your leds use usb', type=str)
+	parser.add_argument('--pid', help='Define the pid pin wiring number to use when your leds use usb', type=str)
 	args = parser.parse_args()
 
 	slc = SnipsLedControl(args)

@@ -46,17 +46,26 @@ class LedsController:
 		else:
 			self._pattern = CustomLedPattern(self)
 
-
+		self._power = None
 		if self._interface == Interfaces.APA102:
 			from interfaces.apa102 import APA102
+			self._power = LED(5)
+			self._power.on()
 			self._interface = APA102(num_led=self._hardware['numberOfLeds'])
 		elif self._interface == Interfaces.NEOPIXELS:
 			from interfaces.neopixels import Neopixels
 			self._interface = Neopixels(numLeds=self._hardware['numberOfLeds'], pin=self._hardware['pin'])
+		elif self._interface == Interfaces.RESPEAKER_MIC_ARRAY_V2:
+			from interfaces.respeakerMicArrayV2 import RespeakerMicArrayV2
+			self._power = LED(5)
+			self._power.on()
+			self._interface = RespeakerMicArrayV2(numLeds=self._hardware['numberOfLeds'], vid=self._hardware['vid'], pid=self._hardware['pid'])
 
+			if self._interface is None:
+				self._logger.fatal("Couldn't start hardware")
+				self._mainClass.onStop()
+				return
 
-		self._power = LED(5)
-		self._power.on()
 		self._running = False
 
 		self._active = True if self._params.defaultState == 'on' else False
@@ -209,3 +218,6 @@ class LedsController:
 
 		self._running = False
 		self._thread.join()
+
+		if self._power is not None:
+			self._power.off()
