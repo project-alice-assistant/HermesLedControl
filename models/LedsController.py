@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from models.Interfaces 			import Interfaces
-import models.SnipsLedControl 	as slc
+from models.SnipsLedControl 	import *
 import logging
 import threading
 from gpiozero 					import LED
@@ -24,7 +24,7 @@ class LedsController:
 		self._logger = logging.getLogger('SnipsLedControl')
 		self._logger.info('Initializing leds controller')
 
-		self._mainClass: slc.SnipsLedControl = mainClass
+		self._mainClass: SnipsLedControl = mainClass
 
 		if self.INSTANCE is None:
 			self.INSTANCE = self
@@ -33,7 +33,7 @@ class LedsController:
 			self._mainClass.onStop()
 
 		self._params 	= self._mainClass.params
-		self._hardware 	= self._mainClass.hardwareReference[self._params.hardware]
+		self._hardware 	= self._mainClass.hardware
 		self._interface = self._hardware['interface']
 
 		self._logger.info('Hardware set to {}'.format(self._hardware['name']))
@@ -44,7 +44,8 @@ class LedsController:
 		elif self._params.pattern == 'alexa':
 			self._pattern = AlexaLedPattern(self)
 		else:
-			self._pattern = CustomLedPattern(self, self._hardware['numberOfLeds'])
+			self._pattern = CustomLedPattern(self)
+
 
 		if self._interface == Interfaces.APA102:
 			from interfaces.apa102 import APA102
@@ -52,6 +53,7 @@ class LedsController:
 		elif self._interface == Interfaces.NEOPIXELS:
 			from interfaces.neopixels import Neopixels
 			self._interface = Neopixels(numLeds=self._hardware['numberOfLeds'], pin=self._hardware['pin'])
+
 
 		self._power = LED(5)
 		self._power.on()
@@ -70,6 +72,11 @@ class LedsController:
 	@property
 	def active(self):
 		return self._active
+
+
+	@property
+	def hardware(self):
+		return self._hardware
 
 
 	def wakeup(self):
@@ -170,23 +177,24 @@ class LedsController:
 
 
 	def setLed(self, ledNum, red, green, blue, brightness=100):
-		if self._interface == Interfaces.APA102:
-			self._interface.set_pixel(ledNum, red, green, blue, brightness)
+		self._interface.set_pixel(ledNum, red, green, blue, brightness)
 
 
 	def setLedRGB(self, ledNum, rgb, brightness=100):
-		if self._interface == Interfaces.APA102:
-			self._interface.set_pixel_rgb(ledNum, rgb, brightness)
+		self._interface.set_pixel_rgb(ledNum, rgb, brightness)
 
 
 	def clearLeds(self):
-		if self._interface == Interfaces.APA102:
-			self._interface.clear_strip()
+		self._interface.clear_strip()
+
+
+	def showData(self, data):
+		for i in range(self._hardware['numberOfLeds']):
+			self.setLed(i, int(data[4 * i + 1]), int(data[4 * i + 2]), int(data[4 * i + 3]))
 
 
 	def show(self):
-		if self._interface == Interfaces.APA102:
-			self._interface.show()
+		self._interface.show()
 
 
 	def onStart(self):

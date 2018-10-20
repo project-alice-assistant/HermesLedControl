@@ -42,6 +42,8 @@ class SnipsLedControl:
 		if params.hardware not in self._hardwareReference:
 			self._logger.fatal('Trying to use an unsupported hardware')
 			self.onStop()
+		else:
+			self._hardware = self._hardwareReference[self._params.hardware]
 
 		if params.mqttServer is None:
 			try:
@@ -75,7 +77,22 @@ class SnipsLedControl:
 		self._logger.info('- Mqtt server set to {}'.format(self._mqttServer))
 		self._logger.info('- Mqtt port set to {}'.format(self._mqttPort))
 		self._logger.info('- Client id set to {}'.format(self._me))
-		self._logger.info('- Using {} as pattern with {} leds'.format(params.pattern, params.leds))
+		self._logger.info('- Hardware set to {}'.format(self._hardware['name']))
+
+		string = '- Using {} as pattern with {}'
+		if params.leds is not None:
+			self._logger.info(string.format(params.pattern, params.leds))
+			self._hardware['numberOfLeds'] = params.leds
+		else:
+			self._logger.info(string.format(params.pattern, self._hardware['numberOfLeds']))
+
+		if 'gpioPin' in self._hardware:
+			string = 'Using pin #{}'
+			if params.gpioPin is not None:
+				self._logger.info(string.format(params.gpioPin))
+				self._hardware['gpioPin'] = params.gpioPin
+			else:
+				self._logger.info(string.format(self._hardware['gpioPin']))
 
 		self._ledsController = LedsController(self)
 
@@ -177,6 +194,12 @@ class SnipsLedControl:
 	def params(self):
 		return self._params
 
+
 	@property
 	def hardwareReference(self):
 		return self._hardwareReference
+
+
+	@property
+	def hardware(self):
+		return self._hardware

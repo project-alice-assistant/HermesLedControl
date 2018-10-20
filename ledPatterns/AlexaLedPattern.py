@@ -16,51 +16,47 @@
 # limitations under the License.
 
 
-import numpy
+from models.LedPattern import LedPattern
 import time
 import threading
 
 
-class AlexaLedPattern(object):
-	def __init__(self, show=None, number=12):
-		self.pixels_number = number
-		self.pixels = [0] * 4 * number
+class AlexaLedPattern(LedPattern):
+	def __init__(self, controller):
+		super(AlexaLedPattern, self).__init__(controller)
+		self.pixels = [0] * 4 * self._numLeds
 
-		if not show or not callable(show):
-			def dummy(data):
-				pass
-			show = dummy
-
-		self.show = show
-		self.stop = False
+		self._animation = threading.Event()
 
 	def wakeup(self, direction=0):
-		position = int((direction + 15) / (360 / self.pixels_number)) % self.pixels_number
+		position = int((direction + 15) / (360 / self._numLeds)) % self._numLeds
 
-		pixels = [0, 0, 0, 24] * self.pixels_number
+		pixels = [0, 0, 0, 24] * self._numLeds
 		pixels[position * 4 + 2] = 48
 
-		self.show(pixels)
+		self._controller.showData(pixels)
 
 	def listen(self):
-		pixels = [0, 0, 0, 24] * self.pixels_number
+		pixels = [0, 0, 0, 24] * self._numLeds
 
-		self.show(pixels)
+		self._controller.showData(pixels)
 
 	def think(self):
-		pixels  = [0, 0, 12, 12, 0, 0, 0, 24] * self.pixels_number
+		pixels  = [0, 0, 12, 12, 0, 0, 0, 24] * self._numLeds
 
-		while not self.stop:
-			self.show(pixels)
+		self._animation.set()
+		while self._animation.isSet():
+			self._controller.showData(pixels)
 			time.sleep(0.2)
 			pixels = pixels[-4:] + pixels[:-4]
 
 	def speak(self):
 		step = 1
 		position = 12
-		while not self.stop:
-			pixels  = [0, 0, position, 24 - position] * self.pixels_number
-			self.show(pixels)
+		self._animation.set()
+		while self._animation.isSet():
+			pixels  = [0, 0, position, 24 - position] * self._numLeds
+			self._controller.showData(pixels)
 			time.sleep(0.01)
 			if position <= 0:
 				step = 1
@@ -72,13 +68,13 @@ class AlexaLedPattern(object):
 			position += step
 
 	def idle(self):
-		self.show([0] * 4 * 12)
+		self._controller.showData([0] * 4 * 12)
 
 	def onError(self):
-		self.show([0] * 4 * 12)
+		self._controller.showData([0] * 4 * 12)
 
 	def onSuccess(self):
-		self.show([0] * 4 * 12)
+		self._controller.showData([0] * 4 * 12)
 
 	def off(self):
-		self.show([0] * 4 * 12)
+		self._controller.showData([0] * 4 * 12)

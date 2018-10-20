@@ -54,6 +54,7 @@ def main():
 							#"respeakerMicArrayV2",
 							"neoPixels12leds"
 						])
+	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
 	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, choices=['google', 'alexa', 'custom'], default='google')
 	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)
 	parser.add_argument('--idlePattern', help='Define an idle led pattern', type=str)

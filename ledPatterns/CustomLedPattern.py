@@ -1,21 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import models.LedsController 	as ledsController
 from models.LedPattern 			import LedPattern
 import time
 import threading
 
 
 class CustomLedPattern(LedPattern):
-	def __init__(self, controller, numLeds):
-
-		self._controller: ledsController.LedsController = controller
-		self._numLeds 									= numLeds
-
-		self._animation 								= threading.Event()
-
-		super(CustomLedPattern, self).__init__(numLeds, self._controller)
+	def __init__(self, controller):
+		super(CustomLedPattern, self).__init__(self._controller)
+		self._animation = threading.Event()
 
 
 	@property
