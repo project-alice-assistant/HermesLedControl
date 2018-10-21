@@ -4,8 +4,8 @@ apt-get update
 apt-get install -y python-pip
 apt-get install -y mosquitto
 apt-get install -y mosquitto-clients
-apt-get install -y python-numpy
 
+pip install RPi.GPIO
 pip install spidev
 pip install gpiozero
 pip install paho-mqtt
