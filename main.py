@@ -59,7 +59,7 @@ def main():
 	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)
 	parser.add_argument('--idlePattern', help='Define an idle led pattern', type=str)
 	parser.add_argument('--wakeupPattern', help='Define a wakeup led pattern', type=str)
-	parser.add_argument('--talkPattern', help='Define a talk led pattern', type=str)
+	parser.add_argument('--speakPattern', help='Define a speak led pattern', type=str)
 	parser.add_argument('--thinkPattern', help='Define a think led pattern', type=str)
 	parser.add_argument('--listenPattern', help='Define a listen led pattern', type=str)
 	parser.add_argument('--errorPattern', help='Define an error led pattern', type=str)
