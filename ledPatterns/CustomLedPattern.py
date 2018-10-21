@@ -17,11 +17,7 @@ class CustomLedPattern(LedPattern):
 	def animation(self):
 		return self._animation
 
-	def wakeup(self, direction=0, *args):
-		self._leds.clear_strip()
-		for brightness in range(101):
-			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 200, 0, brightness)
+
 	def breathLeds(self, duration=1.0, color=None, leds=None):  # smootly light up and down, all or specified leds by numbers
 		if leds is None:
 			leds = []
