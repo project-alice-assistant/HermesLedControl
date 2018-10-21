@@ -24,7 +24,6 @@ try:
 except ImportError:
 	import Queue as Queue
 
-
 class GoogleHomeLedPattern(LedPattern):
 
 	def __init__(self, controller):

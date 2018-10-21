@@ -98,10 +98,10 @@ class SnipsLedControl:
 			self._hardware['vid'] = params.vid
 
 		self._ledsController = LedsController(self)
+		self._mqttClient = self.connectMqtt()
 
 
 	def onStart(self):
-		self._mqttClient = self.connectMqtt()
 		self._ledsController.onStart()
 
 		self._logger.info('Snips Led Control started')
@@ -130,6 +130,7 @@ class SnipsLedControl:
 			mqttClient = mqtt.Client()
 			mqttClient.on_connect = self.onConnect
 			mqttClient.on_message = self.onMessage
+			res = mqttClient.on_subscribe = self.onSubscribe
 			mqttClient.connect(self._mqttServer, int(self._mqttPort))
 			mqttClient.loop_start()
 			return mqttClient
@@ -137,17 +138,26 @@ class SnipsLedControl:
 			self._logger.fatal("Couldn't connect to mqtt, aborting")
 			self.onStop()
 
+
 	def onConnect(self, client, userdata, flags, rc):
-		self._mqttClient.subscribe(self._SUB_ON_HOTWORD)
-		self._mqttClient.subscribe(self._SUB_ON_SAY)
-		self._mqttClient.subscribe(self._SUB_ON_THINK)
-		self._mqttClient.subscribe(self._SUB_ON_LISTENING)
-		self._mqttClient.subscribe(self._SUB_ON_HOTWORD_TOGGLE_ON)
-		self._mqttClient.subscribe(self._SUB_ON_LEDS_TOGGLE_ON)
-		self._mqttClient.subscribe(self._SUB_ON_LEDS_TOGGLE_OFF)
-		self._mqttClient.subscribe(self._SUB_ON_LEDS_TOGGLE)
-		self._mqttClient.subscribe(self._SUB_ON_LEDS_ON_ERROR)
-		self._mqttClient.subscribe(self._SUB_ON_LEDS_ON_SUCCESS)
+		if self._mqttClient.subscribe([
+			(self._SUB_ON_HOTWORD, 0),
+			(self._SUB_ON_SAY, 0),
+			(self._SUB_ON_THINK, 0),
+			(self._SUB_ON_LISTENING, 0),
+			(self._SUB_ON_HOTWORD_TOGGLE_ON, 0),
+			(self._SUB_ON_LEDS_TOGGLE_ON, 0),
+			(self._SUB_ON_LEDS_TOGGLE_OFF, 0),
+			(self._SUB_ON_LEDS_TOGGLE, 0),
+			(self._SUB_ON_LEDS_ON_ERROR, 0),
+			(self._SUB_ON_LEDS_ON_SUCCESS, 0)
+		]) == mqtt.MQTT_ERR_SUCCESS:
+			self._logger.fatal("Couldn't subscribe to mqtt topics, aborting")
+			self.onStop()
+
+
+	def onSubscribe(self, client, userdata, granted_qos):
+		self._logger.info('Subscribed to {} topic'.format(userdata))
 
 
 	def onMessage(self, client, userdata, message):
@@ -162,7 +172,7 @@ class SnipsLedControl:
 			siteId = None
 
 		if message.topic == self._SUB_ON_HOTWORD:
-			print('la')
+			print(siteId)
 			if siteId == self._me:
 				print('here')
 				self._ledsController.wakeup()
