@@ -7,122 +7,167 @@ import respeaker.pixels
 
 
 class CustomLedPattern(object):
-	def __init__(self, pixels, num_leds=3):
+    def __init__(self, pixels, num_leds=3, show=False):
 
-		self._leds 		= APA102(num_led=num_leds)
-		self._pixels 	= pixels #type: respeaker.pixels.Pixels
+        self._leds      = APA102(num_led=num_leds)
+        self._pixels    = pixels #type: respeaker.pixels.Pixels
 
-		self._numLeds 	= num_leds
-		self.stop 		= False
+        self._numLeds   = num_leds
+        self.stop       = False
 
+    #_________________animation functions to use in states functions:
+    def breathLeds(self, duration=1, color=[0,0,40], leds=[]): #smootly light up and down, all or specified leds by numbers. By KiboOst
+        if len(leds) == 0:
+            leds = [i for i in range(self._numLeds)]
 
-	def wakeup(self, direction=0, *args):
-		self._leds.clear_strip()
-		for brightness in range(101):
-			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 200, 0, brightness)
+        pause = float(duration/200.00)
+        direction = 1
+        brightness = 0
 
-			self._leds.show()
-			time.sleep(0.01)
+        frame = 0
+        while frame < duration:
+            if self.stop: return
+            for l in leds:
+                self._leds.set_pixel(l, color[0], color[1], color[2], brightness)
+            self._leds.show()
 
+            time.sleep(pause)
 
-	def listen(self, *args):
-		self._leds.clear_strip()
-		direction = 1
-		brightness = 0
-		while not self.stop:
-			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 200, 0, brightness)
+            if brightness <= 0:
+                direction = 1
+            elif brightness >= 100:
+                direction = -1
 
-			self._leds.show()
-			time.sleep(0.01)
+            brightness += direction
+            frame += pause
+    #
 
-			if brightness <= 0:
-				direction = 1
-			elif brightness >= 100:
-				direction = -1
+    def tailTranslate(self, duration=0.5, color=[0,0,40,0], invert=False): #progressive translation of all leds. By KiboOst
+        pause = float(duration / (self._numLeds*2))
+        step = int(100/self._numLeds+1)
 
-			brightness += direction
+        for i in range(self._numLeds):
+            self._leds.set_pixel(i, color[0], color[1], color[2], 0)
+        self._leds.show()
 
-		for i in range(self._numLeds):
-			self._leds.set_pixel(i, 0, 200, 0, 100)
+        refs = [0 for i in range(self._numLeds)]
+        refs[0] = 100
 
-		self._leds.clear_strip()
+        for i in range(self._numLeds):
+            if self.stop: return
+            for j in range(i, 0, -1):
+                if refs[j] >= step:
+                    refs[j-1] = refs[j] - step
+                else:
+                    refs[j-1] = 0
 
+            if invert: refs = list(reversed(refs))
+            for l in range(self._numLeds):
+                self._leds.set_pixel(l, color[0], color[1], color[2], refs[l])
+            self._leds.show()
+            if invert: refs = list(reversed(refs))
+            time.sleep(pause)
+            refs.pop()
+            refs.insert(0, 0)
 
-	def think(self, *args):
-		self._leds.clear_strip()
-		while not self.stop:
-			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 200, 0, 100)
-				time.sleep(0.2)
+        for i in range(self._numLeds):
+            if self.stop: return
+            if invert: refs = list(reversed(refs))
+            for l in range(self._numLeds):
+                self._leds.set_pixel(l, color[0], color[1], color[2], refs[l])
+            self._leds.show()
+            if invert: refs = list(reversed(refs))
+            refs.pop()
+            refs.insert(0, 0)
+            time.sleep(pause)
+    #
 
-			self._leds.show()
+    def translate(self, duration=0.5, color=[0,0,40,0], leds=[], invert=False): #translation of specified leds. By KiboOst
+        if len(leds) == 0:
+            leds = [int(self._numLeds/2)]
 
-			for i in reversed(range(self._numLeds)):
-				self._leds.set_pixel(i, 0, 200, 0, 0)
-				time.sleep(0.2)
+        pause = float(duration / (self._numLeds+1))
+        refs = [0 for i in range(self._numLeds)]
 
-		self._leds.clear_strip()
+        for i in range(self._numLeds):
+            if i in leds:
+                refs[i] = 100
 
+        for i in range(self._numLeds+1):
+            if self.stop: return
+            if invert: refs = list(reversed(refs))
+            for l in range(self._numLeds):
+                self._leds.set_pixel(l, color[0], color[1], color[2], refs[l])
+            self._leds.show()
+            if invert: refs = list(reversed(refs))
+            time.sleep(pause)
+            refs.pop()
+            refs.insert(0, 0)
+    #
 
-	def speak(self, *args):
-		self._leds.clear_strip()
-		brightness = 100
-		while not self.stop:
-			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 20, 0, brightness)
-				time.sleep(0.05)
+    #_________________states functions:
+    def wakeup(self, direction=0, *args):
+        self._leds.clear_strip()
+        self.tailTranslate(0.3, [100,0,0])
+        self.tailTranslate(0.3, [100,0,0], True)
+        self._leds.clear_strip()
 
-			if brightness == 100:
-				brightness = 0
-			else:
-				brightness = 100
+    def listen(self, *args):
+        self._leds.clear_strip()
+        while not self.stop:
+            self.tailTranslate(0.5, [0,0,100])
+            self.tailTranslate(0.5, [0,0,100], True)
 
-			self._leds.show()
-
-		self._leds.clear_strip()
-
-
-	def idle(self, *args):
-		self._leds.clear_strip()
-		direction = 1
-		brightness = 0
-
-		while not self.stop:
-			for i in range(self._numLeds):
-				self._leds.set_pixel(i, 0, 0, 40, brightness)
-			self._leds.show()
-
-			time.sleep(0.01)
-
-			if brightness <= 0:
-				direction = 1
-			elif brightness >= 100:
-				direction = -1
-
-			brightness += direction
-
-		self._leds.clear_strip()
-
-
-	def onError(self, *args):
-		self._leds.clear_strip()
-		for i in range(self._numLeds):
-			self._leds.set_pixel(i, 125, 0, 0, 10)
-		self._leds.show()
-		time.sleep(0.7)
-		self._leds.clear_strip()
-
-
-	def onSuccess(self, *args):
-		self._leds.clear_strip()
-		for i in range(self._numLeds):
-			self._leds.set_pixel(i, 0, 125, 0, 10)
-		self._leds.show()
-		time.sleep(0.7)
-		self._leds.clear_strip()
+        self._leds.clear_strip()
 
 
-	def off(self, *args):
-		self._leds.clear_strip()
+    def think(self, *args):
+        self._leds.clear_strip()
+        while not self.stop:
+            self.tailTranslate(0.3, [100,60,5])
+            self.tailTranslate(0.3, [100,60,5], True)
+
+        self._leds.clear_strip()
+
+
+    def speak(self, *args):
+        self._leds.clear_strip()
+
+        leds = [i for i in range(self._numLeds)]
+        del leds[int(self._numLeds/2)]
+        while not self.stop:
+            #self.breathLeds(0.3, [0,0,90], leds)
+            self.tailTranslate(0.5, [0,100,0])
+            self.tailTranslate(0.5, [0,100,0], True)
+
+        self._leds.clear_strip()
+
+
+    def idle(self, *args):
+        self._leds.clear_strip()
+
+        while not self.stop:
+            self.breathLeds(1, [0,0,60])
+
+        self._leds.clear_strip()
+
+    def onError(self, *args):
+        self._leds.clear_strip()
+        for i in range(self._numLeds):
+            self._leds.set_pixel(i, 120, 0, 0, 100)
+        self._leds.show()
+        time.sleep(0.5)
+        self._leds.clear_strip()
+
+
+    def onSuccess(self, *args):
+        self._leds.clear_strip()
+        for i in range(self._numLeds):
+            self._leds.set_pixel(i, 0, 120, 0, 100)
+        self._leds.show()
+        time.sleep(0.5)
+        self._leds.clear_strip()
+
+
+    def off(self, *args):
+        self._leds.clear_strip()
