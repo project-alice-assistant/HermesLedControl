@@ -35,7 +35,7 @@ class Pixels:
 		elif params.pattern == 'alexa':
 			self._pattern = AlexaLedPattern(show=self.show)
 		else:
-			self._pattern = CustomLedPattern(pix=self, show=self.show, num_leds=params.leds)
+			self._pattern = CustomLedPattern(pixels=self, num_leds=params.leds)
 
 		self._dev = apa102.APA102(num_led=params.leds)
 
