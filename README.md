@@ -85,8 +85,9 @@ sudo rm -rf snipsLedControl
 - --mqttServer: Defines to what mqtt server SLC should connect. Overrides snips.toml
 - --mqttPort: Defines what port t use to connect to mqtt. Overrides snips.toml
 - --clientId: Defines a client id. Overrides snips.toml
-- --pattern: The pattern to be used by SLC, choices: 'google', 'alexa', 'custom', default: google
+- --Hardware: Type of hardware in use, default: respeaker2, choices: respeaker2, respeaker4, respeakerMicArrayV2, neoPixels12leds, matrixvoice
 - --leds: Number of leds to control, default=3
+- --pattern: The pattern to be used by SLC, choices: 'google', 'alexa', 'custom', default: google
 - --offPattern: Define an off led pattern
 - --idlePattern: Define an idle led pattern
 - --wakeupPattern: Define a wakeup led pattern
@@ -96,3 +97,6 @@ sudo rm -rf snipsLedControl
 - --errorPattern: Define an error led pattern
 - --successPattern: Define a success led pattern
 - --defaultState: Define if the leds should be active or not by default, choices: 'on', 'off', default: on
+- --gpioPin: Define the gpio pin wiring number to use when your leds use gpio
+- --vid: Define the vid pin wiring number to use when your leds use usb
+- --pid: Define the pid pin wiring number to use when your leds use usb
