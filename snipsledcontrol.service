@@ -4,7 +4,7 @@ Wants=mosquitto.service snips-audio-server.service
 After=mosquitto.service snips-audio-server.service
 
 [Service]
-ExecStart=/usr/bin/python3 main.py
+ExecStart=/usr/bin/python main.py
 WorkingDirectory=/home/pi/snipsLedControl
 Restart=always
 RestartSec=5
