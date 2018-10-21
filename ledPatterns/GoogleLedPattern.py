@@ -118,5 +118,3 @@ class GoogleHomeLedPattern(LedPattern):
 
 	def off(self):
 		self._controller.showData([0] * 4 * 12)
-
-

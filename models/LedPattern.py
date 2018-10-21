@@ -10,40 +10,18 @@ class LedPattern(object):
 		self._numLeds = self._controller.hardware['numberOfLeds']
 
 
-	def wakeup(self, *args):
-		pass
+	def wakeup(self, *args)		: pass
+	def listen(self, *args)		: pass
+	def think(self, *args)		: pass
+	def speak(self, *args)		: pass
+	def idle(self, *args)		: pass
+	def off(self, *args)		: self._controller.clearLeds()
+	def onError(self, *args)	: pass
+	def onSuccess(self, *args)	: pass
+	def onStart(self, *args)	: pass
+	def onStop(self, *args)		: self.off()
 
 
-	def listen(self, *args):
-		pass
-
-
-	def think(self, *args):
-		pass
-
-
-	def speak(self, *args):
-		pass
-
-
-	def idle(self, *args):
-		pass
-
-
-	def off(self, *args):
-		self._controller.clearLeds()
-
-
-	def onError(self, *args):
-		pass
-
-
-	def onSuccess(self, *args):
-		pass
-
-	def onStart(self, *args):
-		pass
-
-
-	def onStop(self, *args):
-		self.off()
+	@staticmethod
+	def color(red, green, blue, white=0):
+		return (white << 24) | (red << 16) | (green << 8) | blue

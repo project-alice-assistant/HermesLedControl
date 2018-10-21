@@ -52,7 +52,8 @@ def main():
 							"respeaker2",
 							"respeaker4",
 							"respeakerMicArrayV2",
-							"neoPixels12leds"
+							"neoPixels12leds",
+							"matrixvoice"
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
 	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, choices=['google', 'alexa', 'custom'], default='google')

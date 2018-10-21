@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from models.LedPattern 			import LedPattern
+from models.LedPattern import LedPattern
 import time
 import threading
 
@@ -37,6 +37,7 @@ class CustomLedPattern(LedPattern):
 				if not self._animation.isSet():
 					break
 				self._controller.setLed(i, 0, 200, 0, brightness)
+
 
 			self._controller.show()
 			time.sleep(0.01)
@@ -131,7 +132,3 @@ class CustomLedPattern(LedPattern):
 		self.wakeup()
 		time.sleep(3)
 		self.off()
-	
-	
-	def onStop(self, *args):
-		super(CustomLedPattern, self).onStop()

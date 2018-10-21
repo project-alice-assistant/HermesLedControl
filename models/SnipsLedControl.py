@@ -172,9 +172,7 @@ class SnipsLedControl:
 			siteId = None
 
 		if message.topic == self._SUB_ON_HOTWORD:
-			print(siteId)
 			if siteId == self._me:
-				print('here')
 				self._ledsController.wakeup()
 		elif message.topic == self._SUB_ON_LISTENING:
 			if siteId == self._me:

@@ -1,38 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from neopixel import *
+from models.Interface 	import Interface
+from libraries.neopixel import *
 
 try:
-	import rpi_ws281x as ws
+	import rpi_ws281x 	as ws
 except ImportError:
-	import _rpi_ws281x as ws
+	import _rpi_ws281x 	as ws
 
-class Neopixels:
+class Neopixels(Interface):
 
 	def __init__(self, numLeds, pin):
-		self._numLeds 	= numLeds
-		self._pin 		= pin
-		self._leds 		= Adafruit_NeoPixel(num=numLeds, pin=pin, brightness=100, strip_type=ws.SK6812_STRIP_RGBW)
+		super().__init__(numLeds)
+
+		self._pin 	= pin
+		self._leds 	= Adafruit_NeoPixel(num=numLeds, pin=pin, brightness=100, strip_type=ws.SK6812_STRIP_RGBW)
 		self._leds.begin()
 
 
-	def set_pixel(self, ledNum, red, green, blue, brightness):
-		self._leds.setBrightness = brightness
-		self._leds.setPixelColor(ledNum, green, red, blue)
+	def setPixel(self, ledNum, red, green, blue, brightness):
+		self._leds.setPixelColorRGB(ledNum, red, green, blue, brightness)
 
 
-	def set_pixel_rgb(self, ledNum, rgb, brightness):
-		self._leds.setBrightness = brightness
-		self._leds.setPixelColorRGB(ledNum, rgb)
+	def setPixelRgb(self, ledNum, color, brightness=None):
+		self._leds.setPixelColor(ledNum, color)
 
 
-	def clear_strip(self):
+	def clearStrip(self):
 		for i in range(self._numLeds):
-			self.set_pixel(i, 0, 0, 0, 0)
+			self.setPixel(i, 0, 0, 0, 0)
 
 		self.show()
-
-
-	def show(self):
-		self._leds.show()
