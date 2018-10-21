@@ -67,19 +67,19 @@ class LedsController:
 
 
 	def initHardware(self):
-		if Interfaces(self._hardware['interface']) is Interfaces.APA102:
+		if self._hardware['interface'] == Interfaces.APA102:
 			from interfaces.apa102 import APA102
 			self._interface = APA102(numLed=self._hardware['numberOfLeds'])
 
-		elif Interfaces(self._hardware['interface']) is Interfaces.NEOPIXELS:
+		elif self._hardware['interface'] == Interfaces.NEOPIXELS:
 			from interfaces.neopixels import Neopixels
 			self._interface = Neopixels(numLeds=self._hardware['numberOfLeds'], pin=self._hardware['pin'])
 
-		elif Interfaces(self._hardware['interface']) is Interfaces.RESPEAKER_MIC_ARRAY_V2:
+		elif self._hardware['interface'] == Interfaces.RESPEAKER_MIC_ARRAY_V2:
 			from interfaces.respeakerMicArrayV2 import RespeakerMicArrayV2
 			self._interface = RespeakerMicArrayV2(numLeds=self._hardware['numberOfLeds'], vid=self._hardware['vid'], pid=self._hardware['pid'])
 
-		elif Interfaces(self._hardware['interface']) is Interfaces.MATRIX_VOICE:
+		elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
 			from interfaces.matrixvoice import MatrixVoice
 			self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'])
 
