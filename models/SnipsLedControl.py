@@ -136,7 +136,6 @@ class SnipsLedControl:
 			mqttClient = mqtt.Client()
 			mqttClient.on_connect = self.onConnect
 			mqttClient.on_message = self.onMessage
-			res = mqttClient.on_subscribe = self.onSubscribe
 			mqttClient.connect(self._mqttServer, int(self._mqttPort))
 			mqttClient.loop_start()
 			return mqttClient
@@ -146,7 +145,7 @@ class SnipsLedControl:
 
 
 	def onConnect(self, client, userdata, flags, rc):
-		if self._mqttClient.subscribe([
+		self._mqttClient.subscribe([
 			(self._SUB_ON_HOTWORD, 0),
 			(self._SUB_ON_SAY, 0),
 			(self._SUB_ON_THINK, 0),
@@ -157,13 +156,7 @@ class SnipsLedControl:
 			(self._SUB_ON_LEDS_TOGGLE, 0),
 			(self._SUB_ON_LEDS_ON_ERROR, 0),
 			(self._SUB_ON_LEDS_ON_SUCCESS, 0)
-		]) == mqtt.MQTT_ERR_SUCCESS:
-			self._logger.fatal("Couldn't subscribe to mqtt topics, aborting")
-			self.onStop()
-
-
-	def onSubscribe(self, client, userdata, granted_qos):
-		self._logger.info('Subscribed to {} topic'.format(userdata))
+		])
 
 
 	def onMessage(self, client, userdata, message):

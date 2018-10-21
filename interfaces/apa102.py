@@ -8,7 +8,7 @@ from models.Interface 	import Interface
 class APA102(Interface):
 
 	def __init__(self, numLed, global_brightness=AAPA102.MAX_BRIGHTNESS, order='rgb', bus=0, device=1, max_speed_hz=8000000):
-		super().__init__(numLed)
+		super(APA102, self).__init__(numLed)
 		self._leds  = AAPA102(numLed, global_brightness=global_brightness, order=order, bus=bus, device=device, max_speed_hz=max_speed_hz)
 		self._power = LED(5)
 
@@ -26,5 +26,5 @@ class APA102(Interface):
 
 
 	def onStop(self):
-		super().onStop()
+		super(APA102, self).onStop()
 		self._leds.cleanup()

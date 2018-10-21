@@ -73,11 +73,14 @@ def main():
 	slc = SnipsLedControl(args)
 	slc.onStart()
 
-	while RUNNING:
-		time.sleep(0.1)
-
-	_logger.info('Shutting down Snips Led Control')
-	slc.onStop()
+	try:
+		while RUNNING:
+			time.sleep(0.1)
+	except KeyboardInterrupt:
+		pass
+	finally:
+		_logger.info('Shutting down Snips Led Control')
+		slc.onStop()
 
 if __name__ == '__main__':
 	RUNNING = True

@@ -12,7 +12,7 @@ except ImportError:
 class Neopixels(Interface):
 
 	def __init__(self, numLeds, pin):
-		super().__init__(numLeds)
+		super(Neopixels, self).__init__(numLeds)
 
 		self._pin 	= pin
 		self._leds 	= Adafruit_NeoPixel(num=numLeds, pin=pin, brightness=100, strip_type=ws.SK6812_STRIP_RGBW)

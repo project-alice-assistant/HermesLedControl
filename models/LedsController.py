@@ -236,6 +236,7 @@ class LedsController:
 
 		self._running = True
 		self._interface.onStart()
+		self._pattern.onStart()
 		self._thread.start()
 
 

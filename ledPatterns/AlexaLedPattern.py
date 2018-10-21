@@ -23,7 +23,7 @@ import threading
 
 class AlexaLedPattern(LedPattern):
 	def __init__(self, controller):
-		super().__init__(controller)
+		super(AlexaLedPattern, self).__init__(controller)
 
 		self.pixels = [0] * 4 * self._numLeds
 		self._animation = threading.Event()

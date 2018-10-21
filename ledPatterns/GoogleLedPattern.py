@@ -27,7 +27,7 @@ except ImportError:
 class GoogleHomeLedPattern(LedPattern):
 
 	def __init__(self, controller):
-		super().__init__(controller)
+		super(GoogleHomeLedPattern, self).__init__(controller)
 
 		self.basis = [0] * 4 * 12
 		self.basis[0 * 4 + 1] = 2

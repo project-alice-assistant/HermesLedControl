@@ -7,7 +7,7 @@ from models.Interface 	import Interface
 class MatrixVoice(Interface):
 
 	def __init__(self, numLeds, vid, pid):
-		super().__init__(numLeds)
+		super(MatrixVoice, self).__init__(numLeds)
 
 		self._leds 		= Everloop(numLeds)
 

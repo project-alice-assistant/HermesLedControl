@@ -8,7 +8,7 @@ from models.Interface 	import Interface
 class RespeakerMicArrayV2(Interface):
 
 	def __init__(self, numLeds, vid, pid):
-		super().__init__(numLeds)
+		super(RespeakerMicArrayV2, self).__init__(numLeds)
 
 		self._leds 		= pixel_ring.find(vid=vid, pid=pid)
 		self._power 	= LED(5)
