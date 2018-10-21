@@ -17,6 +17,7 @@ class CustomLedPattern(LedPattern):
 	def animation(self):
 		return self._animation
 
+
 	def breathLeds(self, duration=1.0, color=None, leds=None):  # smootly light up and down, all or specified leds by numbers
 		if leds is None:
 			leds = []
