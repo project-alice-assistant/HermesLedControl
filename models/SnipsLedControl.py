@@ -7,6 +7,7 @@ from models.LedsController import LedsController
 import os
 import paho.mqtt.client as mqtt
 import pytoml
+import sys
 
 class SnipsLedControl:
 
@@ -34,6 +35,7 @@ class SnipsLedControl:
 		self._mqttPort 				= 1883
 		self._hardwareReference 	= None
 		self._mqttClient 			= None
+		self._ledsController 		= None
 
 		with open('hardware.json') as f:
 			self._hardwareReference = json.load(f)
@@ -103,13 +105,17 @@ class SnipsLedControl:
 
 	def onStart(self):
 		self._ledsController.onStart()
-
 		self._logger.info('Snips Led Control started')
 
 
 	def onStop(self):
-		self._mqttClient.disconnect()
-		self._ledsController.onStop()
+		if self._mqttClient is not None:
+			self._mqttClient.disconnect()
+
+		if self._ledsController is not None:
+			self._ledsController.onStop()
+
+		sys.exit(0)
 
 
 	def loadConfigs(self):

@@ -45,7 +45,6 @@ class LedsController:
 		else:
 			self._pattern = CustomLedPattern(self)
 
-
 		if not self.initHardware():
 			self._logger.fatal("Couldn't start hardware")
 			self._mainClass.onStop()
@@ -68,15 +67,15 @@ class LedsController:
 
 
 	def initHardware(self):
-		if self._hardware['interface'] == Interfaces.APA102:
+		if Interfaces(self._hardware['interface']) is Interfaces.APA102:
 			from interfaces.apa102 import APA102
 			self._interface = APA102(numLed=self._hardware['numberOfLeds'])
 
-		elif self._hardware['interface'] == Interfaces.NEOPIXELS:
+		elif Interfaces(self._hardware['interface']) is Interfaces.NEOPIXELS:
 			from interfaces.neopixels import Neopixels
 			self._interface = Neopixels(numLeds=self._hardware['numberOfLeds'], pin=self._hardware['pin'])
 
-		elif self._hardware['interface'] == Interfaces.RESPEAKER_MIC_ARRAY_V2:
+		elif Interfaces(self._hardware['interface']) is Interfaces.RESPEAKER_MIC_ARRAY_V2:
 			from interfaces.respeakerMicArrayV2 import RespeakerMicArrayV2
 			self._interface = RespeakerMicArrayV2(numLeds=self._hardware['numberOfLeds'], vid=self._hardware['vid'], pid=self._hardware['pid'])
 
@@ -232,6 +231,9 @@ class LedsController:
 
 
 	def onStart(self):
+		if self._interface is None:
+			return
+
 		self._running = True
 		self._interface.onStart()
 		self._thread.start()
@@ -241,9 +243,7 @@ class LedsController:
 		self._pattern.animation.clear()
 		self._pattern.onStop()
 
-		self._queue.empty()
-
 		self._running = False
-		self._thread.join()
-
 		self._interface.onStop()
+
+		self._thread.join(timeout=2)
