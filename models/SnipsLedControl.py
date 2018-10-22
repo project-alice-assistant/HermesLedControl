@@ -21,6 +21,8 @@ class SnipsLedControl:
 	_SUB_ON_LEDS_TOGGLE_OFF 		= 'hermes/leds/toggleOff'
 	_SUB_ON_LEDS_ON_ERROR 			= 'hermes/nlu/intentNotRecognized'
 	_SUB_ON_LEDS_ON_SUCCESS 		= 'hermes/nlu/intentParsed'
+	_SUB_ON_PLAY_FINISHED 			= 'hermes/audioServer/{}/playFinished'
+	_SUB_ON_TTS_FINISHED 			= 'hermes/tts/sayFinished'
 
 
 	def __init__(self, params):
@@ -65,6 +67,9 @@ class SnipsLedControl:
 				self._logger.info('- Falling back to default config for client id')
 		else:
 			self._me = params.clientId
+
+
+		self._SUB_ON_PLAY_FINISHED = self._SUB_ON_PLAY_FINISHED.format(self._me)
 
 
 		if params.mqttPort is None:
@@ -155,7 +160,9 @@ class SnipsLedControl:
 			(self._SUB_ON_LEDS_TOGGLE_OFF, 0),
 			(self._SUB_ON_LEDS_TOGGLE, 0),
 			(self._SUB_ON_LEDS_ON_ERROR, 0),
-			(self._SUB_ON_LEDS_ON_SUCCESS, 0)
+			(self._SUB_ON_LEDS_ON_SUCCESS, 0),
+			(self._SUB_ON_PLAY_FINISHED, 0),
+			(self._SUB_ON_TTS_FINISHED, 0)
 		])
 
 
@@ -183,6 +190,12 @@ class SnipsLedControl:
 			if siteId == self._me:
 				self._ledsController.think()
 		elif message.topic == self._SUB_ON_HOTWORD_TOGGLE_ON:
+			if siteId == self._me:
+				self._ledsController.idle()
+		elif message.topic == self._SUB_ON_TTS_FINISHED:
+			if siteId == self._me:
+				self._ledsController.idle()
+		elif message.topic == self._SUB_ON_PLAY_FINISHED:
 			if siteId == self._me:
 				self._ledsController.idle()
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE_ON:
