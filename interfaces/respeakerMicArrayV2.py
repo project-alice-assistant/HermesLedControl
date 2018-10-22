@@ -10,7 +10,7 @@ class RespeakerMicArrayV2(Interface):
 	def __init__(self, numLeds, vid, pid):
 		super(RespeakerMicArrayV2, self).__init__(numLeds)
 
-		self._leds 		= pixel_ring.find(vid=vid, pid=pid)
+		self._leds 		= pixel_ring.find(vid=hex(int(vid, 16)), pid=hex(int(pid, 16)))
 		if self._leds is None:
 			self._logger.critical('Respeaker Mic Array V2 not found using pid={} and vid={}'.format(pid, vid))
 			raise KeyboardInterrupt
