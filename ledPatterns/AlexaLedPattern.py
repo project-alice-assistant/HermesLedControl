@@ -13,6 +13,11 @@ class AlexaLedPattern(LedPattern):
 		self._animation = threading.Event()
 
 
+	@property
+	def animation(self):
+		return self._animation
+
+
 	def wakeup(self, direction=0):
 		raise NotImplementedError()
 
