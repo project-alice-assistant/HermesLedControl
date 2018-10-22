@@ -18,7 +18,14 @@ class CustomLedPattern(LedPattern):
 		return self._animation
 
 
-	def breathLeds(self, duration=1.0, color=None, leds=None):  # smootly light up and down, all or specified leds by numbers
+	def breathLeds(self, duration=1.0, color=None, leds=None):
+		"""
+		Smooth light up and down, all or specified leds
+		duration in seconds
+		color as array [r,g,b]
+		leds as array of index
+		github.com/KiboOst
+		"""
 		if leds is None:
 			leds = []
 		if color is None:
@@ -33,6 +40,7 @@ class CustomLedPattern(LedPattern):
 
 		frame = 0
 		while frame < duration:
+			if not self._animation.isSet(): return
 			for l in leds:
 				self._controller.setLed(l, color[0], color[1], color[2], brightness)
 
@@ -49,7 +57,15 @@ class CustomLedPattern(LedPattern):
 			frame += pause
 
 
-	def tailTranslate(self, duration=0.5, color=None, invert=False):  # progressive translation of all leds
+	def tailTranslate(self, duration=0.5, color=None, invert=False):
+		"""
+		Progressive translation of all leds.
+		duration in seconds
+		color as array [r,g,b]
+		invert as boolean
+		for a ping-pong effect call it twice, second call with invert True
+		github.com/KiboOst
+		"""
 		if color is None:
 			color = [0, 0, 40, 0]
 
@@ -64,6 +80,7 @@ class CustomLedPattern(LedPattern):
 		refs[0] = 100
 
 		for i in range(self._numLeds):
+			if not self._animation.isSet(): return
 			for j in range(i, 0, -1):
 				if refs[j] >= step:
 					refs[j - 1] = refs[j] - step
@@ -83,6 +100,7 @@ class CustomLedPattern(LedPattern):
 			refs.insert(0, 0)
 
 		for i in range(self._numLeds):
+			if not self._animation.isSet(): return
 			if invert: refs = list(reversed(refs))
 			for l in range(self._numLeds):
 				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
@@ -93,7 +111,14 @@ class CustomLedPattern(LedPattern):
 			time.sleep(pause)
 
 
-	def translate(self, duration=0.5, color=None, leds=None, invert=False):  # translation of specified leds
+	def translate(self, duration=0.5, color=None, leds=None, invert=False):
+		"""
+		Translation of all or specified leds
+		duration in seconds
+		color as array [r,g,b]
+		leds as array of index
+		github.com/KiboOst
+		"""
 		if leds is None:
 			leds = []
 		if color is None:
@@ -110,6 +135,7 @@ class CustomLedPattern(LedPattern):
 				refs[i] = 100
 
 		for i in range(self._numLeds + 1):
+			if not self._animation.isSet(): return
 			if invert: refs = list(reversed(refs))
 			for l in range(self._numLeds):
 				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
@@ -122,32 +148,32 @@ class CustomLedPattern(LedPattern):
 
 	def wakeup(self, *args):
 		self._controller.clearLeds()
-		self.tailTranslate(0.5, [100, 0, 0])
-		self.tailTranslate(0.5, [100, 0, 0], True)
+		self.tailTranslate(0.3, [100, 0, 0])
+		self.tailTranslate(0.3, [100, 0, 0], True)
 
 
 	def listen(self, *args):
 		self._controller.clearLeds()
 		self._animation.set()
 		while self._animation.isSet():
-			self.breathLeds(0.5, [0, 0, 90])
+			self.tailTranslate(0.5, [0,0,100])
+            		self.tailTranslate(0.5, [0,0,100], True)
 
 
 	def think(self, *args):
 		self._controller.clearLeds()
 		self._animation.set()
 		while self._animation.isSet():
-			self.tailTranslate(0.5, [180, 140, 60])
-			self.tailTranslate(0.5, [180, 140, 60], True)
+			self.tailTranslate(0.3, [100,60,5])
+            		self.tailTranslate(0.3, [100,60,5], True)
 
 
 	def speak(self, *args):
 		self._controller.clearLeds()
-		leds = [i for i in range(self._numLeds)]
-		del leds[int(self._numLeds / 2)]
 		self._animation.set()
 		while self._animation.isSet():
-			self.breathLeds(0.5, [0, 0, 90], leds)
+			self.tailTranslate(0.5, [0,100,0])
+            		self.tailTranslate(0.5, [0,100,0], True)
 
 
 	def idle(self, *args):
