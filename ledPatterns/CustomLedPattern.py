@@ -40,7 +40,7 @@ class CustomLedPattern(LedPattern):
 
 		frame = 0
 		while frame < duration:
-			if not self._animation.isSet(): return
+			if not self._animation.isSet(): break
 			for l in leds:
 				self._controller.setLed(l, color[0], color[1], color[2], brightness)
 
@@ -80,7 +80,7 @@ class CustomLedPattern(LedPattern):
 		refs[0] = 100
 
 		for i in range(self._numLeds):
-			if not self._animation.isSet(): return
+			if not self._animation.isSet(): break
 			for j in range(i, 0, -1):
 				if refs[j] >= step:
 					refs[j - 1] = refs[j] - step
@@ -100,7 +100,7 @@ class CustomLedPattern(LedPattern):
 			refs.insert(0, 0)
 
 		for i in range(self._numLeds):
-			if not self._animation.isSet(): return
+			if not self._animation.isSet(): break
 			if invert: refs = list(reversed(refs))
 			for l in range(self._numLeds):
 				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
@@ -135,7 +135,7 @@ class CustomLedPattern(LedPattern):
 				refs[i] = 100
 
 		for i in range(self._numLeds + 1):
-			if not self._animation.isSet(): return
+			if not self._animation.isSet(): break
 			if invert: refs = list(reversed(refs))
 			for l in range(self._numLeds):
 				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
