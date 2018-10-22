@@ -8,198 +8,195 @@ import threading
 
 class CustomLedPattern(LedPattern):
 
-	def __init__(self, controller):
-		super(CustomLedPattern, self).__init__(controller)
-		self._animation = threading.Event()
+    def __init__(self, controller):
+        super(CustomLedPattern, self).__init__(controller)
+        self._animation = threading.Event()
 
 
-	@property
-	def animation(self):
-		return self._animation
+    @property
+    def animation(self):
+        return self._animation
 
 
-	def breathLeds(self, duration=1.0, color=None, leds=None):
-		"""
-		Smooth light up and down, all or specified leds
-		duration in seconds
-		color as array [r,g,b]
-		leds as array of index
-		github.com/KiboOst
-		"""
-		if leds is None:
-			leds = []
-		if color is None:
-			color = [0, 0, 40]
+    def breathLeds(self, duration=1.0, color=None, leds=None):
+        """
+        Smooth light up and down, all or specified leds
+        duration in seconds
+        color as array [r,g,b]
+        leds as array of index
+        github.com/KiboOst
+        """
+        if leds is None:
+            leds = []
+        if color is None:
+            color = [0, 0, 40]
 
-		if len(leds) == 0:
-			leds = [i for i in range(self._numLeds)]
+        if len(leds) == 0:
+            leds = [i for i in range(self._numLeds)]
 
-		pause = float(duration / 200.00)
-		direction = 1
-		brightness = 0
+        pause = float(duration / 200.00)
+        direction = 1
+        brightness = 0
 
-		frame = 0
-		while self._animation.isSet():
-			while frame < duration:
-				if not self._animation.isSet(): break
-				for l in leds:
-					self._controller.setLed(l, color[0], color[1], color[2], brightness)
+        frame = 0
+        while frame < duration:
+            if not self._animation.isSet(): break
+            for l in leds:
+                self._controller.setLed(l, color[0], color[1], color[2], brightness)
 
-				self._controller.show()
+            self._controller.show()
 
-				time.sleep(pause)
+            time.sleep(pause)
 
-				if brightness <= 0:
-					direction = 1
-				elif brightness >= 100:
-					direction = -1
+            if brightness <= 0:
+                direction = 1
+            elif brightness >= 100:
+                direction = -1
 
-				brightness += direction
-				frame += pause
-
-
-	def tailTranslate(self, duration=0.5, color=None, invert=False):
-		"""
-		Progressive translation of all leds.
-		duration in seconds
-		color as array [r,g,b]
-		invert as boolean
-		for a ping-pong effect call it twice, second call with invert True
-		github.com/KiboOst
-		"""
-		if color is None:
-			color = [0, 0, 40, 0]
-
-		pause = float(duration / (self._numLeds * 2))
-		step = int(100 / self._numLeds + 1)
-
-		for i in range(self._numLeds):
-			self._controller.setLed(i, color[0], color[1], color[2], 0)
-			self._controller.show()
-
-		refs = [0 for i in range(self._numLeds)]
-		refs[0] = 100
-
-		while self._animation.isSet():
-			for i in range(self._numLeds):
-				if not self._animation.isSet(): break
-				for j in range(i, 0, -1):
-					if refs[j] >= step:
-						refs[j - 1] = refs[j] - step
-					else:
-						refs[j - 1] = 0
-
-				if invert: refs = list(reversed(refs))
-
-				for l in range(self._numLeds):
-					self._controller.setLed(l, color[0], color[1], color[2], refs[l])
-					self._controller.show()
-
-				if invert: refs = list(reversed(refs))
-
-				time.sleep(pause)
-				refs.pop()
-				refs.insert(0, 0)
-
-			for i in range(self._numLeds):
-				if not self._animation.isSet(): break
-				if invert: refs = list(reversed(refs))
-				for l in range(self._numLeds):
-					self._controller.setLed(l, color[0], color[1], color[2], refs[l])
-					self._controller.show()
-				if invert: refs = list(reversed(refs))
-				refs.pop()
-				refs.insert(0, 0)
-				time.sleep(pause)
+            brightness += direction
+            frame += pause
 
 
-	def translate(self, duration=0.5, color=None, leds=None, invert=False):
-		"""
-		Translation of all or specified leds
-		duration in seconds
-		color as array [r,g,b]
-		leds as array of index
-		github.com/KiboOst
-		"""
-		if leds is None:
-			leds = []
-		if color is None:
-			color = [0, 0, 40, 0]
+    def tailTranslate(self, duration=0.5, color=None, invert=False):
+        """
+        Progressive translation of all leds.
+        duration in seconds
+        color as array [r,g,b]
+        invert as boolean
+        for a ping-pong effect call it twice, second call with invert True
+        github.com/KiboOst
+        """
+        if color is None:
+            color = [0, 0, 40, 0]
 
-		if len(leds) == 0:
-			leds = [int(self._numLeds / 2)]
+        pause = float(duration / (self._numLeds * 2))
+        step = int(100 / self._numLeds + 1)
 
-		pause = float(duration / (self._numLeds + 1))
-		refs = [0 for i in range(self._numLeds)]
-		
-		while self._animation.isSet():
-			for i in range(self._numLeds):
-				if i in leds:
-					refs[i] = 100
+        for i in range(self._numLeds):
+            self._controller.setLed(i, color[0], color[1], color[2], 0)
+            self._controller.show()
 
-			for i in range(self._numLeds + 1):
-				if not self._animation.isSet(): break
-				if invert: refs = list(reversed(refs))
-				for l in range(self._numLeds):
-					self._controller.setLed(l, color[0], color[1], color[2], refs[l])
-					self._controller.show()
-				if invert: refs = list(reversed(refs))
-				time.sleep(pause)
-				refs.pop()
-				refs.insert(0, 0)
+        refs = [0 for i in range(self._numLeds)]
+        refs[0] = 100
 
+        for i in range(self._numLeds):
+            if not self._animation.isSet(): break
+            for j in range(i, 0, -1):
+                if refs[j] >= step:
+                    refs[j - 1] = refs[j] - step
+                else:
+                    refs[j - 1] = 0
 
-	def wakeup(self, *args):
-		self._controller.clearLeds()
-		self.tailTranslate(0.3, [100, 0, 0])
-		self.tailTranslate(0.3, [100, 0, 0], True)
+            if invert: refs = list(reversed(refs))
 
+            for l in range(self._numLeds):
+                self._controller.setLed(l, color[0], color[1], color[2], refs[l])
+                self._controller.show()
 
-	def listen(self, *args):
-		self._controller.clearLeds()
-		self._animation.set()
-		while self._animation.isSet():
-			self.tailTranslate(0.5, [0,0,100])
-            		self.tailTranslate(0.5, [0,0,100], True)
+            if invert: refs = list(reversed(refs))
 
+            time.sleep(pause)
+            refs.pop()
+            refs.insert(0, 0)
 
-	def think(self, *args):
-		self._controller.clearLeds()
-		self._animation.set()
-		while self._animation.isSet():
-			self.tailTranslate(0.3, [100,60,5])
-            		self.tailTranslate(0.3, [100,60,5], True)
+        for i in range(self._numLeds):
+            if not self._animation.isSet(): break
+            if invert: refs = list(reversed(refs))
+            for l in range(self._numLeds):
+                self._controller.setLed(l, color[0], color[1], color[2], refs[l])
+                self._controller.show()
+            if invert: refs = list(reversed(refs))
+            refs.pop()
+            refs.insert(0, 0)
+            time.sleep(pause)
 
 
-	def speak(self, *args):
-		self._controller.clearLeds()
-		self._animation.set()
-		while self._animation.isSet():
-			self.tailTranslate(0.5, [0,100,0])
-            		self.tailTranslate(0.5, [0,100,0], True)
+    def translate(self, duration=0.5, color=None, leds=None, invert=False):
+        """
+        Translation of all or specified leds
+        duration in seconds
+        color as array [r,g,b]
+        leds as array of index
+        github.com/KiboOst
+        """
+        if leds is None:
+            leds = []
+        if color is None:
+            color = [0, 0, 40, 0]
+
+        if len(leds) == 0:
+            leds = [int(self._numLeds / 2)]
+
+        pause = float(duration / (self._numLeds + 1))
+        refs = [0 for i in range(self._numLeds)]
+
+        for i in range(self._numLeds):
+            if i in leds:
+                refs[i] = 100
+
+        for i in range(self._numLeds + 1):
+            if not self._animation.isSet(): break
+            if invert: refs = list(reversed(refs))
+            for l in range(self._numLeds):
+                self._controller.setLed(l, color[0], color[1], color[2], refs[l])
+                self._controller.show()
+            if invert: refs = list(reversed(refs))
+            time.sleep(pause)
+            refs.pop()
+            refs.insert(0, 0)
 
 
-	def idle(self, *args):
-		self._controller.clearLeds()
-		self._animation.set()
-		while self._animation.isSet():
-			self.breathLeds(1, [0, 0, 60])
+    def wakeup(self, *args):
+        self._controller.clearLeds()
+        self.tailTranslate(0.3, [100, 0, 0])
+        self.tailTranslate(0.3, [100, 0, 0], True)
 
 
-	def onError(self, *args):
-		self._controller.clearLeds()
-		for i in range(self._numLeds):
-			self._controller.setLed(i, 120, 0, 0, 100)
-		self._controller.show()
-		time.sleep(0.7)
+    def listen(self, *args):
+        self._controller.clearLeds()
+        self._animation.set()
+        while self._animation.isSet():
+            self.tailTranslate(0.5, [0,0,100])
+            self.tailTranslate(0.5, [0,0,100], True)
 
 
-	def onSuccess(self, *args):
-		for i in range(self._numLeds):
-			self._controller.setLed(i, 0, 120, 0, 100)
-		self._controller.show()
-		time.sleep(0.7)
+    def think(self, *args):
+        self._controller.clearLeds()
+        self._animation.set()
+        while self._animation.isSet():
+            self.tailTranslate(0.3, [100,60,5])
+            self.tailTranslate(0.3, [100,60,5], True)
 
 
-	def onStart(self, *args):
-		self.wakeup()
+    def speak(self, *args):
+        self._controller.clearLeds()
+        self._animation.set()
+        while self._animation.isSet():
+            self.tailTranslate(0.5, [0,100,0])
+            self.tailTranslate(0.5, [0,100,0], True)
+
+
+    def idle(self, *args):
+        self._controller.clearLeds()
+        self._animation.set()
+        while self._animation.isSet():
+            self.breathLeds(1, [0, 0, 60])
+
+
+    def onError(self, *args):
+        self._controller.clearLeds()
+        for i in range(self._numLeds):
+            self._controller.setLed(i, 120, 0, 0, 100)
+        self._controller.show()
+        time.sleep(0.7)
+
+
+    def onSuccess(self, *args):
+        for i in range(self._numLeds):
+            self._controller.setLed(i, 0, 120, 0, 100)
+        self._controller.show()
+        time.sleep(0.7)
+
+
+    def onStart(self, *args):
+        self.wakeup()
