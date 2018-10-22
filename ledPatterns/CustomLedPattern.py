@@ -39,22 +39,23 @@ class CustomLedPattern(LedPattern):
 		brightness = 0
 
 		frame = 0
-		while frame < duration:
-			if not self._animation.isSet(): break
-			for l in leds:
-				self._controller.setLed(l, color[0], color[1], color[2], brightness)
+		while self._animation.isSet():
+			while frame < duration:
+				if not self._animation.isSet(): break
+				for l in leds:
+					self._controller.setLed(l, color[0], color[1], color[2], brightness)
 
-			self._controller.show()
+				self._controller.show()
 
-			time.sleep(pause)
+				time.sleep(pause)
 
-			if brightness <= 0:
-				direction = 1
-			elif brightness >= 100:
-				direction = -1
+				if brightness <= 0:
+					direction = 1
+				elif brightness >= 100:
+					direction = -1
 
-			brightness += direction
-			frame += pause
+				brightness += direction
+				frame += pause
 
 
 	def tailTranslate(self, duration=0.5, color=None, invert=False):
@@ -79,36 +80,37 @@ class CustomLedPattern(LedPattern):
 		refs = [0 for i in range(self._numLeds)]
 		refs[0] = 100
 
-		for i in range(self._numLeds):
-			if not self._animation.isSet(): break
-			for j in range(i, 0, -1):
-				if refs[j] >= step:
-					refs[j - 1] = refs[j] - step
-				else:
-					refs[j - 1] = 0
+		while self._animation.isSet():
+			for i in range(self._numLeds):
+				if not self._animation.isSet(): break
+				for j in range(i, 0, -1):
+					if refs[j] >= step:
+						refs[j - 1] = refs[j] - step
+					else:
+						refs[j - 1] = 0
 
-			if invert: refs = list(reversed(refs))
+				if invert: refs = list(reversed(refs))
 
-			for l in range(self._numLeds):
-				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
-				self._controller.show()
+				for l in range(self._numLeds):
+					self._controller.setLed(l, color[0], color[1], color[2], refs[l])
+					self._controller.show()
 
-			if invert: refs = list(reversed(refs))
+				if invert: refs = list(reversed(refs))
 
-			time.sleep(pause)
-			refs.pop()
-			refs.insert(0, 0)
+				time.sleep(pause)
+				refs.pop()
+				refs.insert(0, 0)
 
-		for i in range(self._numLeds):
-			if not self._animation.isSet(): break
-			if invert: refs = list(reversed(refs))
-			for l in range(self._numLeds):
-				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
-				self._controller.show()
-			if invert: refs = list(reversed(refs))
-			refs.pop()
-			refs.insert(0, 0)
-			time.sleep(pause)
+			for i in range(self._numLeds):
+				if not self._animation.isSet(): break
+				if invert: refs = list(reversed(refs))
+				for l in range(self._numLeds):
+					self._controller.setLed(l, color[0], color[1], color[2], refs[l])
+					self._controller.show()
+				if invert: refs = list(reversed(refs))
+				refs.pop()
+				refs.insert(0, 0)
+				time.sleep(pause)
 
 
 	def translate(self, duration=0.5, color=None, leds=None, invert=False):
@@ -129,21 +131,22 @@ class CustomLedPattern(LedPattern):
 
 		pause = float(duration / (self._numLeds + 1))
 		refs = [0 for i in range(self._numLeds)]
+		
+		while self._animation.isSet():
+			for i in range(self._numLeds):
+				if i in leds:
+					refs[i] = 100
 
-		for i in range(self._numLeds):
-			if i in leds:
-				refs[i] = 100
-
-		for i in range(self._numLeds + 1):
-			if not self._animation.isSet(): break
-			if invert: refs = list(reversed(refs))
-			for l in range(self._numLeds):
-				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
-				self._controller.show()
-			if invert: refs = list(reversed(refs))
-			time.sleep(pause)
-			refs.pop()
-			refs.insert(0, 0)
+			for i in range(self._numLeds + 1):
+				if not self._animation.isSet(): break
+				if invert: refs = list(reversed(refs))
+				for l in range(self._numLeds):
+					self._controller.setLed(l, color[0], color[1], color[2], refs[l])
+					self._controller.show()
+				if invert: refs = list(reversed(refs))
+				time.sleep(pause)
+				refs.pop()
+				refs.insert(0, 0)
 
 
 	def wakeup(self, *args):
