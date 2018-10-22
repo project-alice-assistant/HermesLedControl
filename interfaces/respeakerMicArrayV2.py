@@ -13,7 +13,7 @@ class RespeakerMicArrayV2(Interface):
 		self._leds 		= pixel_ring.find(vid=vid, pid=pid)
 		if self._leds is None:
 			self._logger.critical('Respeaker Mic Array V2 not found using pid={} and vid={}'.format(pid, vid))
-			return
+			raise KeyboardInterrupt
 
 		self._power 	= LED(5)
 		self._colors 	= self._newArray()
