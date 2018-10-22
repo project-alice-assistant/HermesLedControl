@@ -35,15 +35,15 @@ sudo ./update.sh
 
 # Customize
 
-You have to/can customize the leds, depending on what leds hardware you have. By default it will run for the 3 leds respeaker 2 with a Google Home assistant pattern. To change this:
+You have to/can customize the leds, depending on what leds hardware you have. By default it will run for the 3 leds respeaker 2 with a custom pattern. To change this:
 
 ```
 sudo systemctl stop snipsledcontrol
 sudo nano /etc/systemd/system/snipsledcontrol.service
 ```
 
-The default ExecStart command is `ExecStart=/usr/bin/python3 main.py`. You can use and add as many arguments as needed here.
-The full list of arguments can be found here:
+The default ExecStart command is `ExecStart=/usr/bin/python main.py`. You can use and add as many arguments as needed here.
+The full list of arguments can be found as follow:
 
 ```
 cd ~
@@ -55,14 +55,11 @@ Or at the end of the page
 
 You can set the server, port, client id and others directly via arguments
 
-You want your own pattern? Set the pattern to "custom" and edit snipsLedControl/ledPatterns/CustomLedPattern.py.
+You want to have a Google Home like effect on your respeaker 4? Simply change the ExecStart command to `python main.py --hardware=respeaker4 --pattern=google`
 
-Once edited do:
+You want your own pattern? Edit snipsLedControl/ledPatterns/CustomLedPattern.py.
 
-```
-sudo systemctl daemon-reload
-sudo systemctl start snipsledcontrol
-```
+Dont forget to `sudo systemctl daemon-reload` if you make any changes to snipsledcontrol.service and to `sudo systemctl restart snipsledcontrol` if you made any changes to CustomLedPattern.py
 
 # Special treats
 We all want to turn our lights off for the night. SLC does listen to the few mqtty topics Snips uses, so you don't have to do anything for it work. But, if you want to go a bit further, there's a few extra topics SLC listens to:
