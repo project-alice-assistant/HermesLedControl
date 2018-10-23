@@ -14,7 +14,7 @@ class APA102(Interface):
 
 
 	def setPixel(self, ledNum, red, green, blue, brightness):
-		self._leds.set_pixel(ledNum, green, red, blue, brightness)
+		self._leds.set_pixel(ledNum, red, green, blue, brightness)
 
 
 	def setPixelRgb(self, ledNum, color, brightness):
