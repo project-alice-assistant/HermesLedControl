@@ -37,10 +37,13 @@ class GoogleHomeLedPattern(LedPattern):
 		ledIndex = 0
 		colors = list(self._colors)
 		for i in range(4):
-			self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
-			ledIndex += step
+			if not self._animation.isSet():
+				break
 
-		self._controller.show()
+			self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
+			self._controller.show()
+			ledIndex += step
+			time.sleep(0.1)
 
 
 	def listen(self):
