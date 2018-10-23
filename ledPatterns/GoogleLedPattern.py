@@ -19,10 +19,10 @@ class GoogleHomeLedPattern(LedPattern):
 		self._animation = threading.Event()
 
 		self._colors = {
-			'blue': [23, 107, 239],
-			'red': [255, 62, 48],
-			'yellow': [247, 181, 41],
-			'green': [23, 156, 82]
+			'blue': [0, 0, 255, 15],
+			'red': [255, 0, 0, 15],
+			'yellow': [255, 255, 0, 15],
+			'green': [0, 255, 0, 15]
 		}
 
 
@@ -37,7 +37,7 @@ class GoogleHomeLedPattern(LedPattern):
 		ledIndex = 0
 		colors = list(self._colors)
 		for i in range(4):
-			self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], 100)
+			self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
 			ledIndex += step
 
 		self._controller.show()
@@ -55,7 +55,7 @@ class GoogleHomeLedPattern(LedPattern):
 			colors = list(self._colors)
 			random.shuffle(colors)
 			for i in range(4):
-				self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], 100)
+				self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
 				ledIndex += step
 				if ledIndex >= 12:
 					ledIndex -= 12
@@ -75,18 +75,38 @@ class GoogleHomeLedPattern(LedPattern):
 
 			colors = list(self._colors)
 			for i in range(4):
-				self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], 100)
+				self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
 				ledIndex += step
 				if ledIndex >= 12:
 					ledIndex -= 12
 
 			self._controller.show()
-			time.sleep(0.01)
+			time.sleep(0.1)
 
 
 	def speak(self):
-		raise NotImplementedError()
+		step = int(math.ceil(self._numLeds / 4))
+		colors = list(self._colors)
+		direction = 1
+
+		self._animation.set()
+		while self._animation.isSet():
+			direction *= -1
+			for i in range(1, 20):
+				ledIndex = 0
+				for j in range(4):
+					self._controller.setLed(ledIndex, self._colors[colors[j - 1]][0], self._colors[colors[j - 1]][1], self._colors[colors[j - 1]][2], self._colors[colors[j - 1]][3] - i * direction)
+					ledIndex += step
+
+				self._controller.show()
+				time.sleep(0.025)
 
 
 	def off(self):
+		self._controller.clearLeds()
+
+
+	def onStart(self, *args):
+		self.wakeup()
+		time.sleep(1)
 		self._controller.clearLeds()
