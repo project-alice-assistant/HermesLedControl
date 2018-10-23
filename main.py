@@ -68,6 +68,8 @@ def main():
 	parser.add_argument('--gpioPin', help='Define the gpio pin wiring number to use when your leds use gpio', type=int)
 	parser.add_argument('--vid', help='Define the vid pin wiring number to use when your leds use usb', type=str)
 	parser.add_argument('--pid', help='Define the pid pin wiring number to use when your leds use usb', type=str)
+	parser.add_argument('--matrixIp', help='[Matrix Voice] - Define the ip of your matrix voice', type=str, default='127.0.0.1')
+	parser.add_argument('--everloopPort', help='[Matrix Voice] - Define the everloop port', type=int, default=20021)
 	args = parser.parse_args()
 
 	slc = SnipsLedControl(args)

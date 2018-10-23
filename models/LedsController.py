@@ -81,7 +81,7 @@ class LedsController:
 
 		elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
 			from interfaces.matrixvoice import MatrixVoice
-			self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'])
+			self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'], matrixIp=self._hardware['matrixIp'], everloopPort=self._hardware['everloopPort'])
 
 		if self._interface is None:
 			return False

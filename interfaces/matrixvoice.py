@@ -6,13 +6,13 @@ from models.Interface 	import Interface
 
 class MatrixVoice(Interface):
 
-	def __init__(self, numLeds):
+	def __init__(self, numLeds, matrixIp, everloopPort):
 		super(MatrixVoice, self).__init__(numLeds)
 
 		try:
-			self._leds = Everloop(numLeds)
-		except FileNotFoundError:
-			self._logger.error("Matrix Voice Everloop doesn't seem to be installed")
+			self._leds = Everloop(numLeds, matrixIp, everloopPort)
+		except:
+			self._logger.error("Couldn't initialize everloop")
 			raise KeyboardInterrupt
 
 
