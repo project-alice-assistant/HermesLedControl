@@ -4,6 +4,14 @@ Provides an easy way to control your leds on a Snips install.
 It is reading /etc/snips.toml on start to get the mqtt server in use as well as the device's siteId. It defaults to 'localhost' and 'default' if these aren't set in snips.toml.
 
 
+# Supported hardware (for now, will add more and more)
+- Respeaker 2
+- Respeaker 4
+- Respeaker Mic Array V2
+- NeoPixels ring
+- Matrix Voice
+
+
 # Installation
 
 ```
