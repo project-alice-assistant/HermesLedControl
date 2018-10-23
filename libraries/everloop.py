@@ -9,7 +9,7 @@ class Everloop:
 		self._numLeds 	= numLeds
 
 		if not os.path.isfile('/dev/matrixio_everloop'):
-			raise FileNotFoundError("Matrix Voice Everloop doesn't seem to be installed")
+			raise FileNotFoundError
 
 		self._colors = self._newArray()
 
