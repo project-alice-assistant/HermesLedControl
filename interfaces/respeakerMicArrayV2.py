@@ -22,30 +22,29 @@ class RespeakerMicArrayV2(Interface):
 
 
 	def setPixel(self, ledNum, red, green, blue, brightness):
-		self._leds.set_brightness = brightness
-		self._leds.customize([red, green, blue, ledNum] * self._numLeds)
+		if ledNum < 0 or ledNum >= self._numLeds:
+			self._logger.warning('Trying to access a led index out of reach')
+			return
+
+		index = ledNum * 4
+		self._colors[index] = red
+		self._colors[index + 1] = green
+		self._colors[index + 2] = blue
+		self._colors[index + 3] = brightness
 
 
 	def setPixelRgb(self, ledNum, color, brightness):
-		self._logger.warning('SetPixelRgb is not available for RespeakerMicArrayV2 interface')
-		pass
+		self.setPixel(ledNum, color[0], color[1], color[2], brightness)
 
 
 	def clearStrip(self):
-		self._leds.write(6)
+		self._colors = self._newArray()
+		self.show()
 
 
 	def show(self):
-		arr = bytearray()
-		for ledColor in self._colors:
-			arr += bytearray(ledColor)
-
-		self._leds.show(arr)
+		self._leds.customize(self._colors)
 
 
 	def _newArray(self):
-		arr = []
-		for i in range(0, self._numLeds):
-			arr.append([0, 0, 0, 0])
-
-		return arr
+		return [0, 0, 0, 0] * self._numLeds
