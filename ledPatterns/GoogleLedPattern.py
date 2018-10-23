@@ -85,17 +85,20 @@ class GoogleHomeLedPattern(LedPattern):
 
 
 	def speak(self):
+		self._controller.clearLeds()
 		step = int(math.ceil(self._numLeds / 4))
 		colors = list(self._colors)
 		direction = 1
+		bright = -20
 
 		self._animation.set()
 		while self._animation.isSet():
 			direction *= -1
-			for i in range(1, 20):
+			bright *= direction
+			for i in range(bright):
 				ledIndex = 0
 				for j in range(4):
-					self._controller.setLed(ledIndex, self._colors[colors[j - 1]][0], self._colors[colors[j - 1]][1], self._colors[colors[j - 1]][2], self._colors[colors[j - 1]][3] - i * direction)
+					self._controller.setLed(ledIndex, self._colors[colors[j - 1]][0], self._colors[colors[j - 1]][1], self._colors[colors[j - 1]][2], self._colors[colors[j - 1]][3] + i * direction)
 					ledIndex += step
 
 				self._controller.show()
