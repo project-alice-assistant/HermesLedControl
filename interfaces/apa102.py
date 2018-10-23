@@ -29,4 +29,3 @@ class APA102(Interface):
 		super(APA102, self).onStop()
 		self.clearStrip()
 		self._leds.cleanup()
-

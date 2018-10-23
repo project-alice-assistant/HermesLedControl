@@ -16,13 +16,14 @@ class GoogleHomeLedPattern(LedPattern):
 
 	def __init__(self, controller):
 		super(GoogleHomeLedPattern, self).__init__(controller)
-		self._animation = threading.Event()
+		self._animation 		= threading.Event()
 
-		self._colors = {
-			'blue': [0, 0, 255, 15],
-			'red': [255, 0, 0, 15],
-			'yellow': [255, 255, 0, 15],
-			'green': [0, 255, 0, 15]
+		self._cardinalSteps 	= int(math.ceil(self._numLeds / 4))
+		self._colors 			= {
+			'blue'		: [0, 0, 255, 15],
+			'red'		: [255, 0, 0, 15],
+			'yellow'	: [255, 255, 0, 15],
+			'green'		: [0, 255, 0, 15]
 		}
 
 
@@ -31,23 +32,42 @@ class GoogleHomeLedPattern(LedPattern):
 		return self._animation
 
 
-	def wakeup(self, direction=0):
-		step = int(math.ceil(self._numLeds / 4))
+	def rotate(self, direction, rounds):
+		pass
 
+
+	def wakeup(self):
 		ledIndex = 0
 		colors = list(self._colors)
-		for i in range(4):
-			if not self._animation.isSet():
-				break
 
+		for i in range(4):
 			self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
+			ledIndex += self._cardinalSteps
+			if ledIndex >= self._numLeds:
+				ledIndex -= self._numLeds
+
+		self._controller.show()
+
+		ledIndex = 7
+		for i in range(self._numLeds * int(round(0.5))):
+			self._controller.clearLeds()
+			ledIndex += 1
+			if ledIndex >= self._numLeds:
+				ledIndex = 0
+
+			pos = ledIndex
+			for j in range(4):
+				self._controller.setLed(pos, self._colors[colors[j - 1]][0], self._colors[colors[j - 1]][1], self._colors[colors[j - 1]][2], self._colors[colors[j - 1]][3])
+				pos += self._cardinalSteps
+				if pos >= self._numLeds:
+					pos -= self._numLeds
+
 			self._controller.show()
-			ledIndex += step
-			time.sleep(0.1)
+			time.sleep(0.025)
 
 
 	def listen(self):
-		step = int(math.ceil(self._numLeds / 4))
+		self._controller.clearLeds()
 		ledIndex = 0
 
 		self._animation.set()
@@ -59,12 +79,12 @@ class GoogleHomeLedPattern(LedPattern):
 			random.shuffle(colors)
 			for i in range(4):
 				self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
-				ledIndex += step
-				if ledIndex >= 12:
-					ledIndex -= 12
+				ledIndex += self._cardinalSteps
+				if ledIndex >= self._numLeds:
+					ledIndex -= self._numLeds
 
 			self._controller.show()
-			time.sleep(0.3)
+			time.sleep(0.15)
 
 
 	def think(self):
@@ -80,11 +100,11 @@ class GoogleHomeLedPattern(LedPattern):
 			for i in range(4):
 				self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
 				ledIndex += step
-				if ledIndex >= 12:
-					ledIndex -= 12
+				if ledIndex >= self._numLeds:
+					ledIndex -= self._numLeds
 
 			self._controller.show()
-			time.sleep(0.1)
+			time.sleep(0.03)
 
 
 	def speak(self):
@@ -107,6 +127,8 @@ class GoogleHomeLedPattern(LedPattern):
 				self._controller.show()
 				time.sleep(0.025)
 
+		self._controller.clearLeds()
+
 
 	def off(self):
 		self._controller.clearLeds()
@@ -114,5 +136,4 @@ class GoogleHomeLedPattern(LedPattern):
 
 	def onStart(self, *args):
 		self.wakeup()
-		time.sleep(1)
 		self._controller.clearLeds()
