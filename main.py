@@ -56,7 +56,12 @@ def main():
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
 	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, choices=['google', 'alexa', 'custom'], default='custom')
-	parser.add_argument('--offListener', help='Allows you to define which topics will trigger the off pattern', type=str, choices=['hermes/hotword/toggleOn', 'hermes/tts/sayFinished', 'hermes/audioServer/{}/playFinished'], default='hermes/hotword/toggleOn')
+	parser.add_argument('--offListener', help='Allows you to define which topics will trigger the off pattern', type=str, default='hermes/hotword/toggleOn',
+						choices=[
+							'hermes/hotword/toggleOn',
+							'hermes/tts/sayFinished',
+							'hermes/audioServer/{}/playFinished'
+						])
 	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)
 	parser.add_argument('--idlePattern', help='Define an idle led pattern', type=str)
 	parser.add_argument('--wakeupPattern', help='Define a wakeup led pattern', type=str)

@@ -90,9 +90,10 @@ sudo rm -rf snipsLedControl
 - --mqttServer: Defines to what mqtt server SLC should connect. Overrides snips.toml
 - --mqttPort: Defines what port t use to connect to mqtt. Overrides snips.toml
 - --clientId: Defines a client id. Overrides snips.toml
-- --hardware: Type of hardware in use, default: respeaker2, choices: respeaker2, respeaker4, respeakerMicArrayV2, neoPixels12leds, matrixvoice
+- --hardware: Type of hardware in use, choices: respeaker2, choices: respeaker2, respeaker4, respeakerMicArrayV2, neoPixels12leds, matrixvoice, default: respeaker2
 - --leds: Number of leds to control, default=3
 - --pattern: The pattern to be used by SLC, choices: 'google', 'alexa', 'custom', default: google
+- --offListener: Allows you to define which topics will trigger the off pattern, choices: hermes/hotword/toggleOn, hermes/tts/sayFinished, hermes/audioServer/{}/playFinished, default: hermes/hotword/toggleOn
 - --offPattern: Define an off led pattern
 - --idlePattern: Define an idle led pattern
 - --wakeupPattern: Define a wakeup led pattern
@@ -105,3 +106,5 @@ sudo rm -rf snipsLedControl
 - --gpioPin: Define the gpio pin wiring number to use when your leds use gpio
 - --vid: Define the vid pin wiring number to use when your leds use usb
 - --pid: Define the pid pin wiring number to use when your leds use usb
+- --matrixIp: [Matrix Voice] - Define the ip of your matrix voice, default: 127.0.0.1
+- --everloopPort: [Matrix Voice] - Define the everloop port, default: 20021
