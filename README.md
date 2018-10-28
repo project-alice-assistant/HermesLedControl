@@ -93,7 +93,7 @@ sudo rm -rf snipsLedControl
 - --hardware: Type of hardware in use, choices: respeaker2, choices: respeaker2, respeaker4, respeakerMicArrayV2, neoPixels12leds, matrixvoice, default: respeaker2
 - --leds: Number of leds to control, default=3
 - --pattern: The pattern to be used by SLC, choices: 'google', 'alexa', 'custom', default: google
-- --offListener: Allows you to define which topics will trigger the off pattern, choices: hermes/hotword/toggleOn, hermes/tts/sayFinished, hermes/audioServer/{}/playFinished, default: hermes/hotword/toggleOn
+- --offListener: Allows you to define which topics will trigger the off pattern, choices: hermes/hotword/toggleOn, hermes/tts/sayFinished, hermes/audioServer/playFinished, default: hermes/hotword/toggleOn
 - --offPattern: Define an off led pattern
 - --idlePattern: Define an idle led pattern
 - --wakeupPattern: Define a wakeup led pattern

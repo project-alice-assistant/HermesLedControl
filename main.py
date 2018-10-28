@@ -60,7 +60,7 @@ def main():
 						choices=[
 							'hermes/hotword/toggleOn',
 							'hermes/tts/sayFinished',
-							'hermes/audioServer/{}/playFinished'
+							'hermes/audioServer/playFinished'
 						])
 	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)
 	parser.add_argument('--idlePattern', help='Define an idle led pattern', type=str)
