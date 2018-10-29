@@ -17,8 +17,6 @@ And if you are a private person, I can implement your hardware with your help. F
 
 # Installation
 
-If your device uses SPI (like respeakers): `sudo raspi-config nonint do_spi 1`
-
 ```
 cd ~
 git clone https://github.com/Psychokiller1888/snipsLedControl.git
@@ -26,6 +24,8 @@ cd snipsLedControl
 sudo chmod +x install.sh
 sudo ./install.sh
 ```
+
+Of course you should have your device installed and working
 
 Sudo is required to install as we download the missing packages and create a log directory
 
