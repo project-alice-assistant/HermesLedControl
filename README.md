@@ -17,9 +17,7 @@ And if you are a private person, I can implement your hardware with your help. F
 
 # Installation
 
-If your device uses SPI (like respeakers)
-
-`sudo raspi-config nonint do_spi 1`
+If your device uses SPI (like respeakers): `sudo raspi-config nonint do_spi 1`
 
 ```
 cd ~
