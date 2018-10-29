@@ -17,11 +17,11 @@ And if you are a private person, I can implement your hardware with your help. F
 
 # Installation
 
+If your device uses SPI (like respeakers)
+
+`sudo raspi-config nonint do_spi 1`
+
 ```
-sudo raspi-config
-
-Go to Interfacing Options -> SPI and enable it
-
 cd ~
 git clone https://github.com/Psychokiller1888/snipsLedControl.git
 cd snipsLedControl
