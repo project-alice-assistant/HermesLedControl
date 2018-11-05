@@ -63,7 +63,8 @@ class LedsController:
 			RPi.GPIO.setmode(RPi.GPIO.BCM)
 			for button in self._hardware['extras']['buttons']:
 				RPi.GPIO.setup(int(self._hardware['extras']['buttons'][button]['bcm_gpio']), RPi.GPIO.IN)
-			self._buttonsThread = threading.Thread(target=self._buttonThread)
+
+			self._buttonsThread = threading.Thread(target=self._runButtons)
 			self._buttonsThread.setDaemon(True)
 
 
@@ -259,17 +260,20 @@ class LedsController:
 		self._interface.show()
 
 
-	def _buttonThread(self):
+	def _runButtons(self):
 		while self._running:
-			for button in self._hardware['extras']['buttons']:
-				state = RPi.GPIO.input(self._hardware['extras']['buttons'][button]['bcm_gpio'])
-				if state:
-					try:
-						func = getattr(self._pattern, self._hardware['extras']['buttons'][button]['function'])
-						func()
-					except AttributeError:
-						self._logger.error("Function {} couldn't be found in pattern")
-			time.sleep(1)
+			try:
+				for button in self._hardware['extras']['buttons']:
+					state = GPIO.input(self._hardware['extras']['buttons'][button]['bcm_gpio'])
+					if not state:
+						try:
+							func = getattr(self._pattern, self._hardware['extras']['buttons'][button]['function'])
+							func()
+						except AttributeError:
+							self._logger.error("Function {} couldn't be found in pattern")
+				time.sleep(0.25)
+			except:
+				import RPi.GPIO as GPIO
 
 
 	def onStart(self):
@@ -279,8 +283,8 @@ class LedsController:
 		self._running = True
 		self._interface.onStart()
 		self._pattern.onStart()
-		self._animationThread.start()
 		self._buttonsThread.start()
+		self._animationThread.start()
 
 
 	def onStop(self):
@@ -293,4 +297,3 @@ class LedsController:
 		self._animationThread.join(timeout=2)
 		if self._buttonsThread is not None:
 			self._buttonsThread.join(timeout=2)
-

@@ -183,17 +183,15 @@ class CustomLedPattern(LedPattern):
 		while self._animation.isSet():
 			self.breathLeds(1, [0, 0, 75])
 
+
+	########## DO NEVER CALL CustomLedPattern functions past this line ###########
 	def onError(self, *args):
-		#self.off()
-		#self._animation.set()
 		for i in range(self._numLeds):
 			self._controller.setLed(i, 120, 0, 0, 100)
 		self._controller.show()
 		time.sleep(0.5)
 
 	def onSuccess(self, *args):
-		#self.off()
-		#self._animation.set()
 		for i in range(self._numLeds):
 			self._controller.setLed(i, 0, 120, 0, 100)
 		self._controller.show()
@@ -203,5 +201,5 @@ class CustomLedPattern(LedPattern):
 		self._controller.toggleState()
 
 	def onStart(self, *args):
-		self.wakeup()
-		self.idle()
+		self._controller.wakeup()
+		self._controller.idle()

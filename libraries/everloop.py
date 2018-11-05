@@ -3,14 +3,12 @@
 
 
 import logging
-import os
 import zmq
 import time
 from random import randint
-import sys
 from matrix_io.proto.malos.v1 import driver_pb2
 from matrix_io.proto.malos.v1 import io_pb2
-from multiprocessing import Process, Manager, Value
+from multiprocessing import Process
 from zmq.eventloop import ioloop, zmqstream
 from utils import register_error_callback
 
