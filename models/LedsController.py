@@ -184,14 +184,14 @@ class LedsController:
 
 	def toggleStateOn(self):
 		self._active = True
+		self._pattern.onStart()
 
 
 	def toggleState(self):
 		if self._active:
-			self.off()
-			self._active = False
+			self.toggleStateOff()
 		else:
-			self._active = True
+			self.toggleStateOn()
 
 
 	def _put(self, func):
