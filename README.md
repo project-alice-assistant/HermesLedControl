@@ -17,10 +17,16 @@ And if you are a private person, I can implement your hardware with your help. F
 
 # Installation
 
-Download and unzip the latest release. Do not use master unless you know what you are doing!
+Download the latest release. Do not use master unless you know what you are doing!
+```
+curl https://api.github.com/repos/Psychokiller1888/snipsLedControl/releases/latest | grep "zipball_url" | sed -E 's/.*"([^"]+)".*/\1/' | wget -qi -
+```
+
+Unzip it and install! Don't forget to change the version number in the command lines
 
 ```
-cd snipsLedControl
+unzip slc_v1.0
+cd slc_v1.0
 sudo ./install.sh
 ```
 
