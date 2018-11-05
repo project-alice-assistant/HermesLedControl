@@ -283,8 +283,10 @@ class LedsController:
 		self._running = True
 		self._interface.onStart()
 		self._pattern.onStart()
-		self._buttonsThread.start()
 		self._animationThread.start()
+
+		if self._buttonsThread is not None:
+			self._buttonsThread.start()
 
 
 	def onStop(self):
