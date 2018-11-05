@@ -2,7 +2,15 @@
 	"respeaker2": {
 		"name": "ReSpeaker 2",
 		"numberOfLeds": 3,
-		"interface": "apa102"
+		"interface": "apa102",
+		"extras": {
+			"buttons": {
+				"button1": {
+					"bcm_gpio": 17,
+					"function": "onButton1"
+				}
+			}
+		}
 	},
 	"respeaker4": {
 		"name": "ReSpeaker 4",

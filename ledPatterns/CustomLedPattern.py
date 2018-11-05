@@ -199,6 +199,9 @@ class CustomLedPattern(LedPattern):
 		self._controller.show()
 		time.sleep(0.5)
 
+	def onButton1(self, *args):
+		self._controller.toggleState()
+
 	def onStart(self, *args):
 		self.wakeup()
 		self.idle()

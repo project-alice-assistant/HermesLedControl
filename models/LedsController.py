@@ -35,7 +35,6 @@ class LedsController:
 		self._hardware 	= self._mainClass.hardware
 		self._interface = None
 		self._running 	= False
-		#self._active 	= True if self._params.defaultState == 'on' else False
 
 		self._active = threading.Event()
 		if self._params.defaultState == 'on':
@@ -57,9 +56,17 @@ class LedsController:
 			return
 
 
+		self._buttonsThread = None
+		if 'extras' in self._hardware and 'buttons' in self.hardware['extras']:
+			import RPi.GPIO as GPIO
+			GPIO.setmode(GPIO.BCM)
+			for button in self._hardware['extras']['buttons']:
+				GPIO.setup(button['bcm_gpio'], GPIO.IN)
+			self._buttonsThread = threading.Thread(target=self._buttonThread, daemon=True)
+
+
 		self._queue = Queue.Queue()
-		self._thread = threading.Thread(target=self._run)
-		self._thread.daemon = True
+		self._animationThread = threading.Thread(target=self._runAnimation, daemon=True)
 
 
 	@property
@@ -218,7 +225,7 @@ class LedsController:
 		self._queue.put(func)
 
 
-	def _run(self):
+	def _runAnimation(self):
 		while self._running:
 			self._pattern.animation.clear()
 			func = self._queue.get()
@@ -249,6 +256,18 @@ class LedsController:
 		self._interface.show()
 
 
+	def _buttonThread(self):
+		while self._running:
+			for button in self._hardware['extras']['buttons']:
+				state = GPIO.input(button['bcm_gpio'])
+				if state:
+					try:
+						func = getattr(self._pattern, button['function'])
+						func()
+					except AttributeError:
+						self._logger.error("Function {} couldn't be found in pattern")
+
+
 	def onStart(self):
 		if self._interface is None:
 			return
@@ -256,7 +275,8 @@ class LedsController:
 		self._running = True
 		self._interface.onStart()
 		self._pattern.onStart()
-		self._thread.start()
+		self._animationThread.start()
+		self._buttonsThread.start()
 
 
 	def onStop(self):
@@ -266,4 +286,7 @@ class LedsController:
 		self._running = False
 		self._interface.onStop()
 
-		self._thread.join(timeout=2)
+		self._animationThread.join(timeout=2)
+		if self._buttonsThread is not None:
+			self._buttonsThread.join(timeout=2)
+

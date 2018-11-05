@@ -20,6 +20,12 @@ class LedPattern(object):
 	def off(self, *args)		: self._controller.clearLeds()
 	def onError(self, *args)	: pass
 	def onSuccess(self, *args)	: pass
+	def onButton1(self, *args)	: self._logger.warning('Button 1 not implemented, override it in CustomLedPattern')
+	def onButton2(self, *args)	: self._logger.warning('Button 2 not implemented, override it in CustomLedPattern')
+	def onButton3(self, *args)	: self._logger.warning('Button 3 not implemented, override it in CustomLedPattern')
+	def onButton4(self, *args)	: self._logger.warning('Button 4 not implemented, override it in CustomLedPattern')
+	def onButton5(self, *args)	: self._logger.warning('Button 5 not implemented, override it in CustomLedPattern')
+	def onButton6(self, *args)	: self._logger.warning('Button 6 not implemented, override it in CustomLedPattern')
 	def onStart(self, *args)	: pass
 	def onStop(self, *args)		: self.off()
 
