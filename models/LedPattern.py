@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging
 from models.LedsController import *
 
 class LedPattern(object):
 
 	def __init__(self, controller):
-		self._controller = controller # type: LedsController
-		self._numLeds = self._controller.hardware['numberOfLeds']
+		self._logger 		= logging.getLogger('SnipsLedControl')
+		self._controller 	= controller # type: LedsController
+		self._numLeds 		= self._controller.hardware['numberOfLeds']
 
 
 	def wakeup(self, *args)		: pass

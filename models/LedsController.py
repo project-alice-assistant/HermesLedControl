@@ -185,12 +185,16 @@ class LedsController:
 
 	def toggleStateOff(self):
 		self.off()
+		threading.Timer(interval=0.5, function=self.clear).start()
+
+
+	def clear(self):
 		self._active.clear()
 
 
 	def toggleStateOn(self):
 		self._active.set()
-		self._pattern.onStart()
+		threading.Timer(interval=0.5, function=self._pattern.onStart).start()
 
 
 	def toggleState(self):

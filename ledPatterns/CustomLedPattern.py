@@ -4,7 +4,6 @@
 from models.LedPattern import LedPattern
 import time
 import threading
-import datetime
 
 class CustomLedPattern(LedPattern):
 
@@ -146,27 +145,27 @@ class CustomLedPattern(LedPattern):
 			refs.insert(0, 0)
 
 	def wakeup(self, *args):
-		self._controller.clearLeds()
+		self.off()
 		self._animation.set()
 		self.tailTranslate(0.3, [100, 0, 0])
 		self.tailTranslate(0.3, [100, 0, 0], True)
 
 	def listen(self, *args):
-		self._controller.clearLeds()
+		self.off()
 		self._animation.set()
 		while self._animation.isSet():
 			self.tailTranslate(0.5, [0,0,100])
 			self.tailTranslate(0.5, [0,0,100], True)
 
 	def think(self, *args):
-		self._controller.clearLeds()
+		self.off()
 		self._animation.set()
 		while self._animation.isSet():
 			self.tailTranslate(0.3, [100,60,5])
 			self.tailTranslate(0.3, [100,60,5], True)
 
 	def speak(self, *args):
-		self._controller.clearLeds()
+		self.off()
 		self._animation.set()
 		#break for tts without siteid
 		i = 0
@@ -179,13 +178,13 @@ class CustomLedPattern(LedPattern):
 				break
 
 	def idle(self, *args):
-		self._controller.clearLeds()
+		self.off()
 		self._animation.set()
 		while self._animation.isSet():
 			self.breathLeds(1, [0, 0, 75])
 
 	def onError(self, *args):
-		#self._controller.clearLeds()
+		#self.off()
 		#self._animation.set()
 		for i in range(self._numLeds):
 			self._controller.setLed(i, 120, 0, 0, 100)
@@ -193,7 +192,7 @@ class CustomLedPattern(LedPattern):
 		time.sleep(0.5)
 
 	def onSuccess(self, *args):
-		#self._controller.clearLeds()
+		#self.off()
 		#self._animation.set()
 		for i in range(self._numLeds):
 			self._controller.setLed(i, 0, 120, 0, 100)
@@ -202,5 +201,4 @@ class CustomLedPattern(LedPattern):
 
 	def onStart(self, *args):
 		self.wakeup()
-		time.sleep(1)
 		self.idle()
