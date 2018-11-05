@@ -168,11 +168,11 @@ class LedsController:
 
 	def off(self):
 		if self._params.offPattern is None:
-			self._put(self._pattern.off)
+			self._put(self._pattern.off, True)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.offPattern)
-				self._put(func)
+				self._put(func, True)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.offPattern))
 
@@ -194,11 +194,14 @@ class LedsController:
 			self.toggleStateOn()
 
 
-	def _put(self, func):
+	def _put(self, func, flush=False):
 		self._pattern.animation.clear()
 
 		if not self._active:
 			return
+
+		if flush:
+			self._queue.empty()
 
 		self._queue.put(func)
 
