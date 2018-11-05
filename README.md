@@ -17,11 +17,10 @@ And if you are a private person, I can implement your hardware with your help. F
 
 # Installation
 
+Download and unzip the latest release. Do not use master unless you know what you are doing!
+
 ```
-cd ~
-git clone https://github.com/Psychokiller1888/snipsLedControl.git
 cd snipsLedControl
-sudo chmod +x install.sh
 sudo ./install.sh
 ```
 
