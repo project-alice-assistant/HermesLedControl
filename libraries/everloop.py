@@ -71,7 +71,7 @@ class Everloop:
 
 
 	def everloopErrorCallback(self, error):
-		self._logger.error('{0'.format(error))
+		self._logger.error('{0}'.format(error))
 
 
 	def updateLedCount(self, data):
