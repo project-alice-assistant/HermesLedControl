@@ -34,7 +34,7 @@
 		"name": "Matrix Voice",
 		"numberOfLeds": 18,
 		"interface": "matrixvoice",
-		"matrixId": "127.0.0.1",
+		"matrixIp": "127.0.0.1",
 		"everloopPort": 20021
 	}
 }
