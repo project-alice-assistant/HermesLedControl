@@ -5,6 +5,7 @@ from models.Interfaces 				import Interfaces
 from models.SnipsLedControl 		import *
 import logging
 import threading
+import time
 
 try:
 	import queue 					as Queue
@@ -266,6 +267,7 @@ class LedsController:
 						func()
 					except AttributeError:
 						self._logger.error("Function {} couldn't be found in pattern")
+			time.sleep(1)
 
 
 	def onStart(self):
