@@ -35,7 +35,13 @@ class LedsController:
 		self._hardware 	= self._mainClass.hardware
 		self._interface = None
 		self._running 	= False
-		self._active 	= True if self._params.defaultState == 'on' else False
+		#self._active 	= True if self._params.defaultState == 'on' else False
+
+		self._active = threading.Event()
+		if self._params.defaultState == 'on':
+			self._active.set()
+		else:
+			self._active.clear()
 
 
 		if self._params.pattern == 'google':
@@ -58,7 +64,7 @@ class LedsController:
 
 	@property
 	def active(self):
-		return self._active
+		return self._active.isSet()
 
 
 	@property
@@ -179,16 +185,16 @@ class LedsController:
 
 	def toggleStateOff(self):
 		self.off()
-		self._active = False
+		self._active.clear()
 
 
 	def toggleStateOn(self):
-		self._active = True
+		self._active.set()
 		self._pattern.onStart()
 
 
 	def toggleState(self):
-		if self._active:
+		if self.active:
 			self.toggleStateOff()
 		else:
 			self.toggleStateOn()
@@ -197,7 +203,7 @@ class LedsController:
 	def _put(self, func, flush=False):
 		self._pattern.animation.clear()
 
-		if not self._active:
+		if not self.active:
 			return
 
 		if flush:
