@@ -8,6 +8,7 @@ from matrix_io.proto.malos.v1 import driver_pb2
 from matrix_io.proto.malos.v1 import io_pb2
 from multiprocessing import Process
 from zmq.eventloop import ioloop, zmqstream
+import time
 
 class Everloop:
 
@@ -24,7 +25,9 @@ class Everloop:
 		self._colors 		= []
 
 		ioloop.install()
-		Process(target=self.register_error_callback, args=(self.everloopErrorCallback, self._matrixIp, self._everloopPort)).start()
+		self._process = Process(target=self.register_error_callback, args=(self.everloopErrorCallback, self._matrixIp, self._everloopPort))
+		self._process.daemon = True
+		self._process.start()
 		self.pingSocket()
 		self.updateSocket()
 		self.connectSocket()
@@ -91,6 +94,11 @@ class Everloop:
 		self._driver = driver_pb2.DriverConfig()
 		self._driver.image.led.extend(self._colors)
 		self._socket.send(self._driver.SerializeToString())
+
+
+	def onStop(self):
+		if self._process is not None:
+			self._process.join(timeout=2)
 
 
 	@staticmethod
