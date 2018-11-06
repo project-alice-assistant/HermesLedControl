@@ -99,6 +99,18 @@ sudo rm -rf snipsLedControl
 
 # Arguments list
 
+The arguments are totally optional
+By default, SLC will start using a respeaker 2 on a custom led pattern
+Arguments are meant to change the default behaviors.
+
+Want to use SLC with your matrix voice using a Google like pattern?
+
+`python snipsLedControl.py --hardware=matrixvoice --pattern=google`
+
+Or maybe use your respeaker 4 on alexa pattern, but using only 4 leds and without idle pattern?
+
+`python snipsLedControl.py --hardware=respeaker4 --pattern=alexa --leds=4 --idlePattern=off`
+
 - --mqttServer: Defines to what mqtt server SLC should connect. Overrides snips.toml
 - --mqttPort: Defines what port t use to connect to mqtt. Overrides snips.toml
 - --clientId: Defines a client id. Overrides snips.toml
@@ -120,3 +132,16 @@ sudo rm -rf snipsLedControl
 - --pid: Define the pid pin wiring number to use when your leds use usb
 - --matrixIp: [Matrix Voice] - Define the ip of your matrix voice, default: 127.0.0.1
 - --everloopPort: [Matrix Voice] - Define the everloop port, default: 20021
+
+
+**Every** patterns have these default pattern types:
+- wakeup
+- listen
+- think
+- speak
+- idle
+- off
+- onSuccess
+- onError
+
+You can easily add others by editing *ledPatterns/CustomLedPattern*
