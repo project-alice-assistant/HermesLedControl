@@ -14,6 +14,8 @@ pip install pytoml
 mkdir logs
 chown pi logs
 
+chown +x ./installers/matrixvoice.sh
+
 cp snipsledcontrol.service /etc/systemd/system
 systemctl daemon-reload
 systemctl enable snipsledcontrol
