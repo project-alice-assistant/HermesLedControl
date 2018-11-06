@@ -25,53 +25,49 @@ class Everloop:
 		self._colors 		= []
 
 		ioloop.install()
-		Process(target=register_error_callback, args=(self.everloopErrorCallback, self._matrixIp, self._everloopPort)).start()
-		self.pingSocket()
-		self.updateSocket()
-		self.connectSocket()
+		self._process = Process(target=register_error_callback, args=(self._everloopErrorCallback, self._matrixIp, self._everloopPort))
+		self._process.daemon = True
+		self._process.start()
+
+		self._pingSocket()
+		self._updateSocket()
+		self._connectSocket()
 		self.clear()
 
 
-	def pingSocket(self):
+	def _pingSocket(self):
 		self._socket.connect('tcp://{0}:{1}'.format(self._matrixIp, self._everloopPort + 1))
 		self._socket.send_string('')
 
 
-	def updateSocket(self):
+	def _updateSocket(self):
 		context = zmq.Context()
 		socket = context.socket(zmq.SUB)
 		socket.connect('tcp://{0}:{1}'.format(self._matrixIp, self._everloopPort + 3))
 		socket.setsockopt(zmq.SUBSCRIBE, b'')
 		stream = zmqstream.ZMQStream(socket)
-		stream.on_recv(self.updateLedCount)
+		stream.on_recv(self._updateLedCount)
 
 		self._logger.info('Connected to data publisher with port {0}'.format(self._everloopPort + 3))
 		ioloop.IOLoop.instance().start()
 
 
-	def connectSocket(self):
+	def _connectSocket(self):
 		self._socket.connect('tcp://{0}:{1}'.format(self._matrixIp, self._everloopPort))
 
 
-	def everloopErrorCallback(self, error):
+	def _everloopErrorCallback(self, error):
 		self._logger.error('{0}'.format(error))
 
 
-	def updateLedCount(self, data):
-		self._numLeds = io_pb2.LedValue().FromString(data[0]).green
-		self._logger.info('Counted {} leds on device'.format(self._numLeds))
-		if self._numLeds > 0:
+	def _updateLedCount(self, data):
+		numLeds = io_pb2.LedValue().FromString(data[0]).green
+		self._logger.info('Counted {} leds on device'.format(numLeds))
+		if numLeds != self._numLeds:
+			self._logger.info(''.format(self._everloopPort + 3))
+		else:
 			self._logger.info('LED count obtained. Disconnecting from data publisher {0}'.format(self._everloopPort + 3))
-			ioloop.IOLoop.instance().stop()
-
-
-	def setPixel(self, ledNum, red, green, blue, white):
-		ledValue = io_pb2.LedValue()
-		ledValue.red   = red
-		ledValue.green = green
-		ledValue.blue  = blue
-		ledValue.white = white
-		self._colors[ledNum] = ledValue
+		ioloop.IOLoop.instance().stop()
 
 
 	def _newArray(self):
@@ -83,6 +79,15 @@ class Everloop:
 		self._colors = [ledValue] * self._numLeds
 
 
+	def setPixel(self, ledNum, red, green, blue, white):
+		ledValue = io_pb2.LedValue()
+		ledValue.red   = red
+		ledValue.green = green
+		ledValue.blue  = blue
+		ledValue.white = white
+		self._colors[ledNum] = ledValue
+
+
 	def clear(self):
 		self._newArray()
 		self.show()
@@ -92,3 +97,8 @@ class Everloop:
 		self._driver = driver_pb2.DriverConfig()
 		self._driver.image.led.extend(self._colors)
 		self._socket.send(self._driver.SerializeToString())
+
+
+	def onStop(self):
+		if self._process is not None:
+			self._process.join(timeout=2)
