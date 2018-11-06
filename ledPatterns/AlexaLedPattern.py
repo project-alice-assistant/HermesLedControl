@@ -19,20 +19,38 @@ class AlexaLedPattern(LedPattern):
 
 
 	def wakeup(self, direction=0):
-		raise NotImplementedError()
+		for i in range(int(round(self._numLeds / 2)) + 1):
+			self._controller.setLed(i, 255, 255, 255, 5 + (i * 2))
+			self._controller.setLed(self._numLeds - i, 255, 255, 255, 5 + (i * 2))
+
+			if i > 1:
+				self._controller.setLed(i - 2, 0, 0, 255, 5 + (i * 2))
+				self._controller.setLed(self._numLeds - i + 2, 0, 0, 255, 5 + (i * 2))
+
+			self._controller.show()
+			time.sleep(0.02)
 
 
 	def listen(self):
-		raise NotImplementedError()
+		pass
 
 
 	def think(self):
-		raise NotImplementedError()
+		for i in range(self._numLeds):
+			self._controller.setLed(i, 255, 255, 255, 50)
+		self._controller.show()
 
 
 	def speak(self):
 		raise NotImplementedError()
 
 
-	def off(self):
-		self._controller.showData([0] * 4 * self._numLeds)
+	def onButton1(self, *args):
+		# When mic mute button pressed
+		for i in range(self._numLeds):
+			self._controller.setLed(i, 60, 0, 0)
+		self._controller.show()
+
+
+	def onStart(self, *args):
+		self._controller.wakeup()
