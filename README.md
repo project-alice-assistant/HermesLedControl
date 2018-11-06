@@ -77,6 +77,13 @@ We all want to turn our lights off for the night. SLC does listen to the few mqt
 - **hermes/leds/toggleOn**: Publish on this topic to toggle the leds to on. The led pattern will show
 - **hermes/leds/toggleOff**: Publish on this topic to toggle the leds to off. No more leds will light until toggled back on
 
+Exemple (change default if necessary):
+
+```
+mosquitto_pub -p 1883 -t 'hermes/leds/toggleOff' -m '{"siteId" : "default"}'
+mosquitto_pub -p 1883 -t 'hermes/leds/toggleOn' -m '{"siteId" : "default"}'
+```
+
 
 # Uninstall
 
