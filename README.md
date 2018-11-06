@@ -39,12 +39,7 @@ There's no need to edit anything
 
 # Update
 
-```
-cd ~
-cd snipsLedControl
-sudo chmod +x update.sh
-sudo ./update.sh
-```
+Follow the same instructions as the install
 
 
 # Customize
