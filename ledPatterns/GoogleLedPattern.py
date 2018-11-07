@@ -17,7 +17,7 @@ class GoogleHomeLedPattern(LedPattern):
 	def __init__(self, controller):
 		super(GoogleHomeLedPattern, self).__init__(controller)
 
-		self._cardinalSteps 	= int(math.ceil(self._numLeds / 4))
+		self._cardinalSteps 	= int(math.ceil(self._numLeds / 4.00))
 		self._colors 			= {
 			'blue'		: [0, 0, 255, self._controller.defaultBrightness],
 			'red'		: [255, 0, 0, self._controller.defaultBrightness],
