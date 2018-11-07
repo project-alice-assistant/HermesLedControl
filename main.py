@@ -55,6 +55,7 @@ def main():
 							"matrixvoice"
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
+	parser.add_argument('--defaultBrightness', help='Set a default brightness for your leds', type=int, default=50)
 	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, choices=['google', 'alexa', 'custom'], default='custom')
 	parser.add_argument('--offListener', help='Allows you to define which topics will trigger the off pattern', type=str, default='hermes/hotword/toggleOn',
 						choices=[

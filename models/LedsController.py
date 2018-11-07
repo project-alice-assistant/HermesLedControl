@@ -32,10 +32,11 @@ class LedsController:
 			self._logger.fatal('Trying to instanciate LedsController but instance already exists')
 			self._mainClass.onStop()
 
-		self._params 	= self._mainClass.params
-		self._hardware 	= self._mainClass.hardware
-		self._interface = None
-		self._running 	= False
+		self._params 			= self._mainClass.params
+		self._hardware 			= self._mainClass.hardware
+		self._interface 		= None
+		self._running 			= False
+		self._defaultBrightness = self._params.defaultBrightness
 
 		self._active = threading.Event()
 		if self._params.defaultState == 'on':
@@ -81,6 +82,11 @@ class LedsController:
 	@property
 	def hardware(self):
 		return self._hardware
+
+
+	@property
+	def defaultBrightness(self):
+		return self._defaultBrightness
 
 
 	def initHardware(self):
@@ -236,11 +242,19 @@ class LedsController:
 			func()
 
 
-	def setLed(self, ledNum, red, green, blue, brightness=100):
+	def setLed(self, ledNum, red, green, blue, brightness=-1):
+		if brightness == -1:
+			brightness = self.defaultBrightness
 		self._interface.setPixel(ledNum, red, green, blue, brightness)
 
 
-	def setLedRGB(self, ledNum, color, brightness=100):
+	def setLedRGB(self, ledNum, color, brightness=-1):
+		if brightness == -1:
+			brightness = self.defaultBrightness
+
+		if len(color) > 3:
+			brightness = color[3]
+
 		self.setLed(ledNum, color[0], color[1], color[2], brightness)
 
 
@@ -282,11 +296,12 @@ class LedsController:
 
 		self._running = True
 		self._interface.onStart()
-		self._pattern.onStart()
-		self._animationThread.start()
 
+		self._animationThread.start()
 		if self._buttonsThread is not None:
 			self._buttonsThread.start()
+
+		threading.Timer(interval=0.5, function=self._pattern.onStart).start()
 
 
 	def onStop(self):

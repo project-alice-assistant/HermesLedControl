@@ -16,124 +16,150 @@ class GoogleHomeLedPattern(LedPattern):
 
 	def __init__(self, controller):
 		super(GoogleHomeLedPattern, self).__init__(controller)
-		self._animation 		= threading.Event()
 
 		self._cardinalSteps 	= int(math.ceil(self._numLeds / 4))
 		self._colors 			= {
-			'blue'		: [0, 0, 255, 15],
-			'red'		: [255, 0, 0, 15],
-			'yellow'	: [255, 255, 0, 15],
-			'green'		: [0, 255, 0, 15]
+			'blue'		: [0, 0, 255, self._controller.defaultBrightness],
+			'red'		: [255, 0, 0, self._controller.defaultBrightness],
+			'yellow'	: [255, 255, 0, self._controller.defaultBrightness],
+			'green'		: [0, 255, 0, self._controller.defaultBrightness]
 		}
+		self._colorRefs 		= ('blue', 'red', 'yellow', 'green')
+		self._image 			= []
 
 
-	@property
-	def animation(self):
-		return self._animation
+	def _newImage(self):
+		# Drawing the Google color scheme by default
+		j = 0
+		for i in range(self._numLeds):
+			if i % self._cardinalSteps == 0:
+				self._image.append(self._colors[self._colorRefs[j]])
+				j += 1
+			else:
+				self._image.append([0, 0, 0, 0])
 
 
-	def rotate(self, direction, rounds):
-		pass
+	def _rotateImage(self, angle):
+		if angle == 0 or 360 % angle != 0:
+			self._logger.error('Cannot rotate by {}'.format(angle))
+			return
+
+		degreesPerLed = 360 / self._numLeds
+		steps = int(math.ceil(angle / degreesPerLed))
+
+		if steps < 0:
+			for i in range(0, steps, -1):
+				insertBack = self._image.pop(0)
+				self._image.insert(len(self._image), insertBack)
+		else:
+			for i in range(steps):
+				insertBack = self._image.pop()
+				self._image.insert(0, insertBack)
 
 
-	def wakeup(self):
-		ledIndex = 0
-		colors = list(self._colors)
-
-		for i in range(4):
-			self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
-			ledIndex += self._cardinalSteps
-			if ledIndex >= self._numLeds:
-				ledIndex -= self._numLeds
+	def _displayImage(self):
+		for i, led in enumerate(self._image):
+			self._controller.setLedRGB(i, led)
 
 		self._controller.show()
 
-		ledIndex = 7
-		for i in range(self._numLeds * int(round(0.5))):
-			self._controller.clearLeds()
-			ledIndex += 1
-			if ledIndex >= self._numLeds:
-				ledIndex = 0
 
-			pos = ledIndex
-			for j in range(4):
-				self._controller.setLed(pos, self._colors[colors[j - 1]][0], self._colors[colors[j - 1]][1], self._colors[colors[j - 1]][2], self._colors[colors[j - 1]][3])
-				pos += self._cardinalSteps
-				if pos >= self._numLeds:
-					pos -= self._numLeds
+	def wakeup(self):
+		self._newImage()
+		self._rotateImage(-90)
+		self._displayImage()
 
-			self._controller.show()
-			time.sleep(0.025)
+		time.sleep(0.05)
+
+		degreesPerLed = 360 / self._numLeds
+		steps = int(math.ceil(90 / degreesPerLed))
+		for i in range(steps):
+			self._rotateImage(degreesPerLed)
+			self._displayImage()
+			time.sleep(0.02)
+
+		time.sleep(0.5)
 
 
 	def listen(self):
-		self._controller.clearLeds()
-		ledIndex = 0
-
+		self._newImage()
+		direction = 1
+		brightness = self._controller.defaultBrightness
 		self._animation.set()
 		while self._animation.isSet():
-			self._controller.clearLeds()
-			ledIndex += 1
+			brightness -= direction
+			for i, led in enumerate(self._image):
+				self._image[i][3] = brightness
+			self._displayImage()
 
-			colors = list(self._colors)
-			random.shuffle(colors)
-			for i in range(4):
-				self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
-				ledIndex += self._cardinalSteps
-				if ledIndex >= self._numLeds:
-					ledIndex -= self._numLeds
+			if brightness <= 10 or brightness >= self._controller.defaultBrightness:
+				direction *= -1
 
-			self._controller.show()
-			time.sleep(0.15)
+			time.sleep(0.005)
 
 
 	def think(self):
-		step = int(math.ceil(self._numLeds / 4))
-		ledIndex = 0
-
 		self._animation.set()
+		brightness = self._image[0][3]
+		while brightness > 0:
+			brightness -= 1
+			for i, led in enumerate(self._image):
+				self._image[i][3] = brightness
+			self._displayImage()
+			time.sleep(0.002)
+
+		while brightness < self._controller.defaultBrightness:
+			brightness += 1
+			for i, led in enumerate(self._image):
+				self._image[i][3] = brightness
+			self._displayImage()
+			time.sleep(0.002)
+
+		degreesPerLed = 360 / self._numLeds
+
+		angle = 0
 		while self._animation.isSet():
-			self._controller.clearLeds()
-			ledIndex += 1
+			self._rotateImage(degreesPerLed)
+			self._displayImage()
+			angle += degreesPerLed
 
-			colors = list(self._colors)
-			for i in range(4):
-				self._controller.setLed(ledIndex, self._colors[colors[i - 1]][0], self._colors[colors[i - 1]][1], self._colors[colors[i - 1]][2], self._colors[colors[i - 1]][3])
-				ledIndex += step
-				if ledIndex >= self._numLeds:
-					ledIndex -= self._numLeds
+			if angle >= 360:
+				angle = 0
 
-			self._controller.show()
-			time.sleep(0.03)
+			time.sleep(0.1)
+
+		diff = 360 - angle
+		steps = int(math.ceil(diff / degreesPerLed))
+
+		for i in range(steps):
+			self._rotateImage(degreesPerLed)
+			self._displayImage()
+			time.sleep(0.02)
+
+		self.off()
 
 
 	def speak(self):
-		self._controller.clearLeds()
-		step = int(math.ceil(self._numLeds / 4))
-		colors = list(self._colors)
+		self._newImage()
 		direction = 1
-		bright = -20
-
+		brightness = self._controller.defaultBrightness
 		self._animation.set()
 		while self._animation.isSet():
-			direction *= -1
-			bright *= direction
-			for i in range(bright):
-				ledIndex = 0
-				for j in range(4):
-					self._controller.setLed(ledIndex, self._colors[colors[j - 1]][0], self._colors[colors[j - 1]][1], self._colors[colors[j - 1]][2], self._colors[colors[j - 1]][3] + i * direction)
-					ledIndex += step
+			brightness -= direction
+			for i, led in enumerate(self._image):
+				self._image[i][3] = brightness
+			self._displayImage()
 
-				self._controller.show()
-				time.sleep(0.025)
+			if brightness <= 10 or brightness >= self._controller.defaultBrightness:
+				direction *= -1
 
-		self._controller.clearLeds()
+			time.sleep(0.003)
 
 
-	def off(self):
-		self._controller.clearLeds()
+	def idle(self, *args):
+		self.off()
 
 
 	def onStart(self, *args):
-		self.wakeup()
-		self._controller.clearLeds()
+		self._controller.wakeup()
+		self._controller.idle()

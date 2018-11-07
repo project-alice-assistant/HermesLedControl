@@ -9,12 +9,6 @@ class CustomLedPattern(LedPattern):
 
 	def __init__(self, controller):
 		super(CustomLedPattern, self).__init__(controller)
-		self._animation = threading.Event()
-
-
-	@property
-	def animation(self):
-		return self._animation
 
 
 	def breathLeds(self, duration=1.0, color=None, leds=None):
@@ -39,7 +33,6 @@ class CustomLedPattern(LedPattern):
 
 		frame = 0
 		while frame < duration and self._animation.isSet():
-			#if not self._animation.isSet(): break
 			for l in leds:
 				self._controller.setLed(l, color[0], color[1], color[2], brightness)
 
@@ -49,7 +42,7 @@ class CustomLedPattern(LedPattern):
 
 			if brightness <= 0:
 				direction = 1
-			elif brightness >= 100:
+			elif brightness >= self._controller.defaultBrightness:
 				direction = -1
 
 			brightness += direction
@@ -144,11 +137,13 @@ class CustomLedPattern(LedPattern):
 			refs.pop()
 			refs.insert(0, 0)
 
+
 	def wakeup(self, *args):
 		self.off()
 		self._animation.set()
 		self.tailTranslate(0.3, [100, 0, 0])
 		self.tailTranslate(0.3, [100, 0, 0], True)
+
 
 	def listen(self, *args):
 		self.off()
@@ -157,12 +152,14 @@ class CustomLedPattern(LedPattern):
 			self.tailTranslate(0.5, [0,0,100])
 			self.tailTranslate(0.5, [0,0,100], True)
 
+
 	def think(self, *args):
 		self.off()
 		self._animation.set()
 		while self._animation.isSet():
 			self.tailTranslate(0.3, [100,60,5])
 			self.tailTranslate(0.3, [100,60,5], True)
+
 
 	def speak(self, *args):
 		self.off()
@@ -177,6 +174,7 @@ class CustomLedPattern(LedPattern):
 				self.idle()
 				break
 
+
 	def idle(self, *args):
 		self.off()
 		self._animation.set()
@@ -187,18 +185,21 @@ class CustomLedPattern(LedPattern):
 	########## DO NEVER CALL CustomLedPattern functions past this line ###########
 	def onError(self, *args):
 		for i in range(self._numLeds):
-			self._controller.setLed(i, 120, 0, 0, 100)
+			self._controller.setLed(i, 120, 0, 0, self._controller.defaultBrightness)
 		self._controller.show()
 		time.sleep(0.5)
+
 
 	def onSuccess(self, *args):
 		for i in range(self._numLeds):
-			self._controller.setLed(i, 0, 120, 0, 100)
+			self._controller.setLed(i, 0, 120, 0, self._controller.defaultBrightness)
 		self._controller.show()
 		time.sleep(0.5)
 
+
 	def onButton1(self, *args):
 		self._controller.toggleState()
+
 
 	def onStart(self, *args):
 		self._controller.wakeup()

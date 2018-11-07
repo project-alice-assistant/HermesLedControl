@@ -10,29 +10,30 @@ import threading
 class AlexaLedPattern(LedPattern):
 	def __init__(self, controller):
 		super(AlexaLedPattern, self).__init__(controller)
-		self._animation 			= threading.Event()
-		self._blank 				=[0, 0, 0]
-		self._white 				= (255, 255, 255)
-		self._blue 					= (0, 0, 255)
-		self._defaultBrightness 	= 25
 
-
-	@property
-	def animation(self):
-		return self._animation
+		self._colors = {
+			'blank' 	: (0, 0, 0),
+			'blue'		: (0, 0, 255),
+			'red'		: (60, 0, 0),
+			'yellow'	: (255, 255, 0),
+			'white'		: (255, 255, 255)
+		}
 
 
 	def wakeup(self, direction=0):
+		brightness = max(5, self._controller.defaultBrightness - 50)
 		for i in range(int(round(self._numLeds / 2)) + 1):
-			self._controller.setLedRGB(i, self._white, 5 + (i * 2))
-			self._controller.setLedRGB(self._numLeds - i, self._white, 5 + (i * 2))
+			brightness += i * 5
+			self._controller.setLedRGB(i, self._colors['white'], brightness)
+			self._controller.setLedRGB(self._numLeds - i, self._colors['white'], brightness)
 
 			if i > 1:
-				self._controller.setLedRGB(i - 2, self._blue, 5 + (i * 2))
-				self._controller.setLedRGB(self._numLeds - i + 2, self._blue, 5 + (i * 2))
+				self._controller.setLedRGB(i - 2, self._colors['blue'], brightness)
+				self._controller.setLedRGB(self._numLeds - i + 2, self._colors['blue'], brightness)
 
 			self._controller.show()
 			time.sleep(0.02)
+		time.sleep(0.5)
 
 
 	def listen(self):
@@ -40,8 +41,8 @@ class AlexaLedPattern(LedPattern):
 
 
 	def think(self):
-		first = self._blue
-		second = self._white
+		first = self._colors['blue']
+		second = self._colors['white']
 
 		self._animation.set()
 		while self._animation.isSet():
@@ -49,18 +50,18 @@ class AlexaLedPattern(LedPattern):
 				if not self._animation.isSet(): break
 
 				if i % 2 == 0:
-					self._controller.setLedRGB(i - 1, first, self._defaultBrightness)
+					self._controller.setLedRGB(i - 1, first)
 				else:
-					self._controller.setLedRGB(i - 1, second, self._defaultBrightness)
+					self._controller.setLedRGB(i - 1, second)
 
 			self._controller.show()
 
-			if first == self._blue:
-				first = self._white
-				second = self._blue
+			if first == self._colors['blue']:
+				first = self._colors['white']
+				second = self._colors['blue']
 			else:
-				first = self._blue
-				second = self._white
+				first = self._colors['blue']
+				second = self._colors['white']
 
 			time.sleep(0.15)
 
@@ -71,13 +72,13 @@ class AlexaLedPattern(LedPattern):
 		green = 255
 
 		for i in range(self._numLeds):
-			self._controller.setLedRGB(i, self._white, self._defaultBrightness)
+			self._controller.setLedRGB(i, self._colors['white'])
 
 		self._animation.set()
 		while self._animation.isSet():
 			for i in range(self._numLeds):
 				if not self._animation.isSet(): break
-				self._controller.setLed(i, red=red, green=green, blue=255, brightness=self._defaultBrightness)
+				self._controller.setLed(i, red=red, green=green, blue=255)
 			self._controller.show()
 
 			red -= direction
@@ -90,15 +91,15 @@ class AlexaLedPattern(LedPattern):
 
 	def off(self, *args):
 		for i in range(int(round(self._numLeds / 2)) + 1):
-			self._controller.setLedRGB(i, self._blank, 0)
-			self._controller.setLedRGB(self._numLeds - i, self._blank, 0)
+			self._controller.setLedRGB(i, self._colors['blank'], 0)
+			self._controller.setLedRGB(self._numLeds - i, self._colors['blank'], 0)
 
 			self._controller.show()
 			time.sleep(0.02)
 
 
 	def idle(self, *args):
-		self._controller.off()
+		self.off()
 
 
 	def onButton1(self, *args):
@@ -110,4 +111,4 @@ class AlexaLedPattern(LedPattern):
 
 	def onStart(self, *args):
 		self._controller.wakeup()
-		self._controller.off()
+		self._controller.idle()

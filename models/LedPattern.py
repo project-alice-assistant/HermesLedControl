@@ -3,6 +3,7 @@
 
 import logging
 from models.LedsController import *
+import threading
 
 class LedPattern(object):
 
@@ -10,6 +11,12 @@ class LedPattern(object):
 		self._logger 		= logging.getLogger('SnipsLedControl')
 		self._controller 	= controller # type: LedsController
 		self._numLeds 		= self._controller.hardware['numberOfLeds']
+		self._animation 	= threading.Event()
+
+
+	@property
+	def animation(self):
+		return self._animation
 
 
 	def wakeup(self, *args)		: pass
