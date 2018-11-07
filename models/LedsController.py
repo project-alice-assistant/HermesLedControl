@@ -241,7 +241,7 @@ class LedsController:
 
 
 	def setLedRGB(self, ledNum, color, brightness=100):
-		self._interface.setPixelRgb(ledNum, color, brightness)
+		self.setLed(ledNum, color[0], color[1], color[2], brightness)
 
 
 	def clearLeds(self):

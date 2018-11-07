@@ -162,9 +162,6 @@ class SnipsLedControl:
 			(self._SUB_ON_LEDS_ON_SUCCESS, 0)
 		])
 
-		if self._params.offListener == 'hermes/audioServer/playFinished':
-			self._params.offListener = self._SUB_ON_PLAY_FINISHED
-
 		self._mqttClient.subscribe(self._params.offListener)
 
 
