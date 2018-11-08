@@ -4,9 +4,7 @@
 
 from models.LedPattern import LedPattern
 import math
-import random
 import time
-import threading
 try:
 	import queue as Queue
 except ImportError:
