@@ -28,10 +28,10 @@ if [ ! -f /etc/systemd/system/snipsledcontrol.service ]; then
     cp snipsledcontrol.service /etc/systemd/system
 fi
 
-sed -i -e "s/snipsLedControl[0-9\.v_]*/snipsLedControl_v${VERSION}/" /etc/systemd/system/snipsledcontrol.service
+sed -i -e "s/snipsLedControl[0-9\.v_]*/snipsLedControl_${VERSION}/" /etc/systemd/system/snipsledcontrol.service
 
 systemctl daemon-reload
 systemctl enable snipsledcontrol
 
-echo "Finished installing Snips Led Control version $VERSION"
+echo "Finished installing Snips Led Control $VERSION"
 echo "You may want to copy over your custom led patterns to the new version"
