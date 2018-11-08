@@ -17,17 +17,16 @@ And if you are a private person, I can implement your hardware with your help. F
 
 # Installation
 
-Download the latest release. Do not use master unless you know what you are doing!
+Download the automatic downloading tool. Do not use master unless you know what you are doing!
 ```
-curl https://api.github.com/repos/Psychokiller1888/snipsLedControl/releases/latest | grep "zipball_url" | sed -E 's/.*"([^"]+)".*/\1/' | wget -qi -
+wget https://gist.githubusercontent.com/Psychokiller1888/a9826f92c5a3c5d03f34d182fda1ce4c/raw/6f31a789c95f0571b1a4e03838c63fbadd0e1d0f/slc_download.sh
 ```
 
-Unzip it and install! Don't forget to change the version number in the command lines
+Run it
 
 ```
-unzip slc_v1.0
-cd slc_v1.0
-sudo ./install.sh
+sudo chmod +x slc_download.sh
+sudo ./slc_download.sh
 ```
 
 Of course you should have your device installed and working
