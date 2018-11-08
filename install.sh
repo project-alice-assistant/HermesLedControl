@@ -7,6 +7,8 @@ else
     VERSION=$1
 fi
 
+systemctl stop snipsledcontrol
+
 apt-get update
 apt-get install -y python-pip
 apt-get install -y mosquitto
