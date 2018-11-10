@@ -43,7 +43,7 @@ Follow the same instructions as the install
 
 # Customize
 
-You have to/can customize the leds, depending on what leds hardware you have. By default it will run for the 3 leds respeaker 2 with a custom pattern. To change this:
+You have to/can customize the leds, depending on what leds hardware you have. By default it is set for the 3 leds respeaker 2 with a custom pattern. To change this:
 
 ```
 sudo systemctl stop snipsledcontrol
@@ -70,10 +70,10 @@ You want your own pattern? Edit snipsLedControl/ledPatterns/CustomLedPattern.py.
 Dont forget to `sudo systemctl daemon-reload` if you make any changes to snipsledcontrol.service and to `sudo systemctl restart snipsledcontrol` if you made any changes to CustomLedPattern.py
 
 # Special treats
-We all want to turn our lights off for the night. SLC does listen to the few mqtty topics Snips uses, so you don't have to do anything for it work. But, if you want to go a bit further, there's a few extra topics SLC listens to:
+We all want to turn our lights off for the night. SLC does listen to the few mqtt topics Snips uses, so you don't have to do anything for it work. But, if you want to go a bit further, there's a few extra topics SLC listens to:
 
-- **hermes/leds/toggle**: Publish on this topic to toggle the leds state. If the current is 'off' it will change to 'on' and vice versa
-- **hermes/leds/toggleOn**: Publish on this topic to toggle the leds to on. The led pattern will show
+- **hermes/leds/toggle**: Publish on this topic to toggle the leds state. If the current state is 'off' it's toggled to 'on' and vice versa
+- **hermes/leds/toggleOn**: Publish on this topic to toggle the leds to on. The onStart animation will trigger
 - **hermes/leds/toggleOff**: Publish on this topic to toggle the leds to off. No more leds will light until toggled back on
 
 Shell exemple:
