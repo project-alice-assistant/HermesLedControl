@@ -12,7 +12,7 @@ It is reading /etc/snips.toml on start to get the mqtt server in use as well as 
 - Matrix Voice
 
 I don't have the budget to buy every other devices just to implement them. If you are a manufacturer, **I appreciate hardware donations :-)**, they will be used wisely in my voice assistant projects.
-And if you are a private person, I can implement your hardware with your help. For that contact me. We will work it out together, over Discord
+And if you are a private person, I can implement your hardware with your help. For that contact me. We will work it out together, over Discord. I still appreciate a beer every now and then, so feel free to refresh me: https://paypal.me/Psychokiller1888
 
 
 # Installation
