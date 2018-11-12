@@ -29,12 +29,7 @@ sudo chmod +x slc_download.sh
 sudo ./slc_download.sh
 ```
 
-Of course you should have your device installed and working
-
 Sudo is required to install as we download the missing packages and create a log directory
-
-There's no need to edit anything
-
 
 # Update
 
