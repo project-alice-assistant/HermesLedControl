@@ -103,7 +103,7 @@ sudo rm -rf snipsLedControl
 - --mqttServer: Defines to what mqtt server SLC should connect. Overrides snips.toml
 - --mqttPort: Defines what port t use to connect to mqtt. Overrides snips.toml
 - --clientId: Defines a client id. Overrides snips.toml
-- --hardware: Type of hardware in use, default: respeaker2, choices: respeaker2, respeaker4, respeakerMicArrayV2, neoPixels12leds, matrixvoice, default: respeaker2
+- --hardware: Type of hardware in use, default: respeaker2, choices: respeaker2, respeaker4, respeakerMicArrayV2, neoPixelsSK6812RGBW, neoPixelsWS2812RGB, matrixvoice, default: respeaker2
 - --leds: Number of leds to control, default=3
 - --defaultBrightness: Set a default brightness for your leds, default=50
 - --pattern: The pattern to be used by SLC, choices: 'google', 'alexa', 'custom', default: google
