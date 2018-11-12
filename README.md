@@ -70,6 +70,12 @@ We all want to turn our lights off for the night. SLC does listen to the few mqt
 - **hermes/leds/toggle**: Publish on this topic to toggle the leds state. If the current state is 'off' it's toggled to 'on' and vice versa
 - **hermes/leds/toggleOn**: Publish on this topic to toggle the leds to on. The onStart animation will trigger
 - **hermes/leds/toggleOff**: Publish on this topic to toggle the leds to off. No more leds will light until toggled back on
+- **hermes/leds/systemUpdate**: Trigger the system update led animation
+- **hermes/leds/onCall**: Trigger the incoming call led animation
+- **hermes/leds/setupMode**: Trigger the setup mode led animation
+- **hermes/leds/connectionError**: Trigger the connection error led animation
+- **hermes/leds/onMessage**: Trigger the new message led animation
+- **hermes/leds/doNotDisturb**: Trigger the do not disturb led animation
 
 Shell exemple:
 
@@ -102,6 +108,18 @@ sudo rm -rf snipsLedControl
 - --leds: Number of leds to control, default=3
 - --defaultBrightness: Set a default brightness for your leds, default=50
 - --pattern: The pattern to be used by SLC, choices: 'google', 'alexa', 'custom', default: google
+- --defaultState: Define if the leds should be active or not by default, choices: 'on', 'off', default: on
+- --gpioPin: Define the gpio pin wiring number to use when your leds use gpio
+- --vid: Define the vid pin wiring number to use when your leds use usb
+- --pid: Define the pid pin wiring number to use when your leds use usb
+- --matrixIp: [Matrix Voice] - Define the ip of your matrix voice, default: 127.0.0.1
+- --everloopPort: [Matrix Voice] - Define the everloop port, default: 20021
+
+The following arguments let you override the default pattern method with other without having to rewrite the pattern file
+This is not needed and is only here to provide you with an easy customization way.
+
+You want the speak pattern look like the think pattern? add the argument `--speakPattern=think`
+
 - --offListener: Allows you to define which topics will trigger the off pattern, choices: hermes/hotword/toggleOn, hermes/tts/sayFinished, hermes/audioServer/playFinished, default: hermes/hotword/toggleOn
 - --offPattern: Define an off led pattern
 - --idlePattern: Define an idle led pattern
@@ -111,9 +129,34 @@ sudo rm -rf snipsLedControl
 - --listenPattern: Define a listen led pattern
 - --errorPattern: Define an error led pattern
 - --successPattern: Define a success led pattern
-- --defaultState: Define if the leds should be active or not by default, choices: 'on', 'off', default: on
-- --gpioPin: Define the gpio pin wiring number to use when your leds use gpio
-- --vid: Define the vid pin wiring number to use when your leds use usb
-- --pid: Define the pid pin wiring number to use when your leds use usb
-- --matrixIp: [Matrix Voice] - Define the ip of your matrix voice, default: 127.0.0.1
-- --everloopPort: [Matrix Voice] - Define the everloop port, default: 20021
+- --updatingPattern: Define an updating led pattern
+- --callPattern: Define a call led pattern
+- --setupModePattern: Define a setup mode led pattern
+- --conErrorPattern: Define a connection error led pattern
+- --messagePattern: Define a message led pattern
+- --dndPattern: Define a do not disturb led pattern
+
+
+This is the complete list of available methods in every patterns:
+- wakeup
+- listen
+- think
+- speak
+- idle
+- off
+- onError
+- onSuccess
+- updating
+- call
+- setupMode
+- conError
+- message
+- dnd
+- onButton1
+- onButton2
+- onButton3
+- onButton4
+- onButton5
+- onButton6
+- onStart
+- onStop

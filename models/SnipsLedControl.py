@@ -16,13 +16,20 @@ class SnipsLedControl:
 	_SUB_ON_THINK 					= 'hermes/asr/textCaptured'
 	_SUB_ON_LISTENING 				= 'hermes/asr/startListening'
 	_SUB_ON_HOTWORD_TOGGLE_ON 		= 'hermes/hotword/toggleOn'
+	_SUB_LEDS_ON_ERROR 				= 'hermes/nlu/intentNotRecognized'
+	_SUB_LEDS_ON_SUCCESS 			= 'hermes/nlu/intentParsed'
+	_SUB_ON_PLAY_FINISHED 			= 'hermes/audioServer/{}/playFinished'
+	_SUB_ON_TTS_FINISHED 			= 'hermes/tts/sayFinished'
+
 	_SUB_ON_LEDS_TOGGLE 			= 'hermes/leds/toggle'
 	_SUB_ON_LEDS_TOGGLE_ON 			= 'hermes/leds/toggleOn'
 	_SUB_ON_LEDS_TOGGLE_OFF 		= 'hermes/leds/toggleOff'
-	_SUB_ON_LEDS_ON_ERROR 			= 'hermes/nlu/intentNotRecognized'
-	_SUB_ON_LEDS_ON_SUCCESS 		= 'hermes/nlu/intentParsed'
-	_SUB_ON_PLAY_FINISHED 			= 'hermes/audioServer/{}/playFinished'
-	_SUB_ON_TTS_FINISHED 			= 'hermes/tts/sayFinished'
+	_SUB_UPDATING 					= 'hermes/leds/systemUpdate'
+	_SUB_ON_CALL 					= 'hermes/leds/onCall'
+	_SUB_SETUP_MODE 				= 'hermes/leds/setupMode'
+	_SUB_CON_ERROR 					= 'hermes/leds/connectionError'
+	_SUB_ON_MESSAGE 				= 'hermes/leds/onMessage'
+	_SUB_ON_DND 					= 'hermes/leds/doNotDisturb'
 
 
 	def __init__(self, params):
@@ -158,8 +165,8 @@ class SnipsLedControl:
 			(self._SUB_ON_LEDS_TOGGLE_ON, 0),
 			(self._SUB_ON_LEDS_TOGGLE_OFF, 0),
 			(self._SUB_ON_LEDS_TOGGLE, 0),
-			(self._SUB_ON_LEDS_ON_ERROR, 0),
-			(self._SUB_ON_LEDS_ON_SUCCESS, 0)
+			(self._SUB_LEDS_ON_ERROR, 0),
+			(self._SUB_LEDS_ON_SUCCESS, 0)
 		])
 
 		self._mqttClient.subscribe(self._params.offListener)
@@ -206,12 +213,30 @@ class SnipsLedControl:
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE:
 			if siteId == self._me:
 				self._ledsController.toggleState()
-		elif message.topic == self._SUB_ON_LEDS_ON_SUCCESS:
+		elif message.topic == self._SUB_LEDS_ON_SUCCESS:
 			if siteId == self._me:
 				self._ledsController.onSuccess()
-		elif message.topic == self._SUB_ON_LEDS_ON_ERROR:
+		elif message.topic == self._SUB_LEDS_ON_ERROR:
 			if siteId == self._me:
 				self._ledsController.onError()
+		elif message.topic == self._SUB_UPDATING:
+			if siteId == self._me:
+				self._ledsController.updating()
+		elif message.topic == self._SUB_ON_CALL:
+			if siteId == self._me:
+				self._ledsController.call()
+		elif message.topic == self._SUB_SETUP_MODE:
+			if siteId == self._me:
+				self._ledsController.setupMode()
+		elif message.topic == self._SUB_CON_ERROR:
+			if siteId == self._me:
+				self._ledsController.conError()
+		elif message.topic == self._SUB_ON_MESSAGE:
+			if siteId == self._me:
+				self._ledsController.message()
+		elif message.topic == self._SUB_ON_DND:
+			if siteId == self._me:
+				self._ledsController.dnd()
 
 
 	@property

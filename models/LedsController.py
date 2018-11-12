@@ -126,6 +126,7 @@ class LedsController:
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.wakeupPattern))
+				self._put(self._pattern.wakeup)
 
 
 	def listen(self):
@@ -137,6 +138,7 @@ class LedsController:
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.listenPattern))
+				self._put(self._pattern.listen)
 
 
 	def think(self):
@@ -148,6 +150,7 @@ class LedsController:
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.thinkPattern))
+				self._put(self._pattern.think)
 
 
 	def speak(self):
@@ -159,6 +162,7 @@ class LedsController:
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.speakPattern))
+				self._put(self._pattern.speak)
 
 
 	def idle(self):
@@ -170,6 +174,7 @@ class LedsController:
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.idlePattern))
+				self._put(self._pattern.idle)
 
 
 	def onError(self):
@@ -181,6 +186,7 @@ class LedsController:
 				self._put(funct)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.errorPattern))
+				self._put(self._pattern.onError)
 
 
 	def onSuccess(self):
@@ -192,6 +198,79 @@ class LedsController:
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.successPattern))
+				self._put(self._pattern.onSuccess)
+
+
+	def updating(self):
+		if self._params.updatingPattern is None:
+			self._put(self._pattern.updating())
+		else:
+			try:
+				func = getattr(self._pattern, self._params.updatingPattern)
+				self._put(func)
+			except AttributeError:
+				self._logger.error("Can't find {} method in pattern".format(self._params.updatingPattern))
+				self._put(self._pattern.updating())
+
+
+	def call(self):
+		if self._params.updatingPattern is None:
+			self._put(self._pattern.call())
+		else:
+			try:
+				func = getattr(self._pattern, self._params.callPattern)
+				self._put(func)
+			except AttributeError:
+				self._logger.error("Can't find {} method in pattern".format(self._params.callPattern))
+				self._put(self._pattern.call())
+
+
+	def setupMode(self):
+		if self._params.updatingPattern is None:
+			self._put(self._pattern.setupMode())
+		else:
+			try:
+				func = getattr(self._pattern, self._params.setupModePattern)
+				self._put(func)
+			except AttributeError:
+				self._logger.error("Can't find {} method in pattern".format(self._params.setupModePattern))
+				self._put(self._pattern.setupMode())
+
+
+	def conError(self):
+		if self._params.updatingPattern is None:
+			self._put(self._pattern.conError())
+		else:
+			try:
+				func = getattr(self._pattern, self._params.conErrorPattern)
+				self._put(func)
+			except AttributeError:
+				self._logger.error("Can't find {} method in pattern".format(self._params.conErrorPattern))
+				self._put(self._pattern.conError())
+
+
+	def message(self):
+		if self._params.updatingPattern is None:
+			self._put(self._pattern.message())
+		else:
+			try:
+				func = getattr(self._pattern, self._params.messagePattern)
+				self._put(func)
+			except AttributeError:
+				self._logger.error("Can't find {} method in pattern".format(self._params.messagePattern))
+				self._put(self._pattern.message())
+
+
+	def dnd(self):
+		if self._params.updatingPattern is None:
+			self._put(self._pattern.dnd())
+		else:
+			try:
+				func = getattr(self._pattern, self._params.dndPattern)
+				self._put(func)
+			except AttributeError:
+				self._logger.error("Can't find {} method in pattern".format(self._params.dndPattern))
+				self._put(self._pattern.dnd())
 
 
 	def off(self):
@@ -203,6 +282,7 @@ class LedsController:
 				self._put(func, True)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.offPattern))
+				self._put(self._pattern.off, True)
 
 
 	def toggleStateOff(self):
