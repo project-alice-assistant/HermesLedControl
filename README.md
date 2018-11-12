@@ -19,7 +19,7 @@ And if you are a private person, I can implement your hardware with your help. F
 
 Download the automatic downloading tool. Do not use master unless you know what you are doing!
 ```
-wget https://gist.githubusercontent.com/Psychokiller1888/a9826f92c5a3c5d03f34d182fda1ce4c/raw/6f31a789c95f0571b1a4e03838c63fbadd0e1d0f/slc_download.sh
+wget https://gist.githubusercontent.com/Psychokiller1888/a9826f92c5a3c5d03f34d182fda1ce4c/raw/e24882e8997730dcf7a308e303b3b88001dbbfa1/slc_download.sh
 ```
 
 Run it
