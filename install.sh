@@ -84,6 +84,11 @@ select answer in "yes" "no" "cancel"; do
                     ./installers/neopixels.sh
                     break
                     ;;
+                respeakerMicArrayV2)
+                    chmod +x ./installers/respeakerMicArrayV2.sh
+                    ./installers/respeakerMicArrayV2.sh
+                    break
+                    ;;
                 *)
                     echo "No installation needed / Installation not yet supported"
                     break
