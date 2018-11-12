@@ -24,11 +24,19 @@
 		"vid": "0x2886",
 		"pid": "0x0018"
 	},
-	"neoPixels12leds": {
-		"name": "Adafruit NeoPixels ring 12 leds",
+  	"neoPixelsSK6812RGBW": {
+		"name": "Adafruit NeoPixels SK6812 RGBW",
 		"numberOfLeds": 12,
 		"interface": "neopixels",
-		"gpioPin": 10
+		"gpioPin": 10,
+		"type": "SK6812_RGBW"
+	},
+  	"neoPixelsWS2812RGB": {
+		"name": "Adafruit NeoPixels WS2812 RGB",
+		"numberOfLeds": 12,
+		"interface": "neopixels",
+		"gpioPin": 10,
+		"type": "WS2812_RGB"
 	},
 	"matrixvoice": {
 		"name": "Matrix Voice",

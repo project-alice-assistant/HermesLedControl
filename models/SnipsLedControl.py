@@ -165,7 +165,6 @@ class SnipsLedControl:
 		self._mqttClient.subscribe(self._params.offListener)
 
 
-
 	def onMessage(self, client, userdata, message):
 		payload = None
 

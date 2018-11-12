@@ -51,8 +51,9 @@ def main():
 							"respeaker2",
 							"respeaker4",
 							"respeakerMicArrayV2",
-							"neoPixels12leds",
-							"matrixvoice"
+							"matrixvoice",
+							"neoPixelsSK6812RGBW",
+							"neoPixelsWS2812RGB",
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
 	parser.add_argument('--defaultBrightness', help='Set a default brightness for your leds', type=int, default=50)

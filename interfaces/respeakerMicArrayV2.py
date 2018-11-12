@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from models.Exceptions 	import InterfaceInitError
 from gpiozero 			import LED
 from libraries 			import usb_pixel_ring_v2 	as pixel_ring
 from models.Interface 	import Interface
@@ -14,8 +15,7 @@ class RespeakerMicArrayV2(Interface):
 		self._leds = pixel_ring.find()
 
 		if self._leds is None:
-			self._logger.error('Respeaker Mic Array V2 not found using pid={} and vid={}'.format(pid, vid))
-			raise KeyboardInterrupt
+			raise InterfaceInitError('Respeaker Mic Array V2 not found using pid={} and vid={}'.format(pid, vid))
 
 		self._power 	= LED(5)
 		self._colors 	= self._newArray()

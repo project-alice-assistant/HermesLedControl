@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from models.Exceptions 				import InterfaceInitError
 from models.Interfaces 				import Interfaces
 from models.SnipsLedControl 		import *
 import logging
@@ -90,26 +91,30 @@ class LedsController:
 
 
 	def initHardware(self):
-		if self._hardware['interface'] == Interfaces.APA102:
-			from interfaces.apa102 import APA102
-			self._interface = APA102(numLed=self._hardware['numberOfLeds'])
+		try:
+			if self._hardware['interface'] == Interfaces.APA102:
+				from interfaces.apa102 import APA102
+				self._interface = APA102(numLed=self._hardware['numberOfLeds'])
 
-		elif self._hardware['interface'] == Interfaces.NEOPIXELS:
-			from interfaces.neopixels import Neopixels
-			self._interface = Neopixels(numLeds=self._hardware['numberOfLeds'], pin=self._hardware['gpioPin'])
+			elif self._hardware['interface'] == Interfaces.NEOPIXELS:
+				from interfaces.neopixels import Neopixels
+				self._interface = Neopixels(numLeds=self._hardware['numberOfLeds'], stripType=self._hardware['type'], pin=self._hardware['gpioPin'])
 
-		elif self._hardware['interface'] == Interfaces.RESPEAKER_MIC_ARRAY_V2:
-			from interfaces.respeakerMicArrayV2 import RespeakerMicArrayV2
-			self._interface = RespeakerMicArrayV2(numLeds=self._hardware['numberOfLeds'], vid=self._hardware['vid'], pid=self._hardware['pid'])
+			elif self._hardware['interface'] == Interfaces.RESPEAKER_MIC_ARRAY_V2:
+				from interfaces.respeakerMicArrayV2 import RespeakerMicArrayV2
+				self._interface = RespeakerMicArrayV2(numLeds=self._hardware['numberOfLeds'], vid=self._hardware['vid'], pid=self._hardware['pid'])
 
-		elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
-			from interfaces.matrixvoice import MatrixVoice
-			self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'], matrixIp=self._hardware['matrixIp'], everloopPort=self._hardware['everloopPort'])
+			elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
+				from interfaces.matrixvoice import MatrixVoice
+				self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'], matrixIp=self._hardware['matrixIp'], everloopPort=self._hardware['everloopPort'])
 
-		if self._interface is None:
+			if self._interface is None:
+				return False
+			else:
+				return True
+		except InterfaceInitError as e:
+			self._logger.error('{}'.format(e))
 			return False
-		else:
-			return True
 
 
 	def wakeup(self):

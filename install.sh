@@ -8,19 +8,21 @@ else
 fi
 
 echo "What device do you wish to control with SLC?"
-select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neopixels" "matrixvoice" "don't overwrite existing parameters" "cancel installation"; do
+select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neopixels" "matrixvoice" "don't overwrite existing parameters" "cancel"; do
     case $device in
-        neopixels ) device="neoPixels12leds"; break;;
-        cancel ) exit;;
+        neopixels)
+            device="neoPixels12leds";
+            break;;
+        cancel) exit;;
         *) break;;
     esac
 done
 
 if [ "$device" != "don't overwrite existing parameters" ]; then
     echo "What pattern do you want to use?"
-    select pattern in "google" "alexa" "custom" "cancel installation"; do
+    select pattern in "google" "alexa" "custom" "cancel"; do
         case $pattern in
-            cancel ) exit;;
+            cancel) exit;;
             *) break;;
         esac
     done
@@ -30,6 +32,7 @@ systemctl stop snipsledcontrol
 
 apt-get update
 apt-get install -y python-pip
+apt-get install -y git
 apt-get install -y mosquitto
 apt-get install -y mosquitto-clients
 
@@ -41,7 +44,8 @@ pip install pytoml
 
 mkdir -p logs
 chown pi logs
-chmod +x ./installers/matrixvoice.sh
+
+chmod +x ./installers/respeakers.sh
 
 directory=${PWD##*/}
 
@@ -54,6 +58,42 @@ sed -i -e "s/snipsLedControl[0-9\.v_]*/snipsLedControl_${VERSION}/" /etc/systemd
 if [ "$device" != "don't overwrite existing parameters" ]; then
     sed -i -e "s/python main\.py.*/python main.py --hardware=${device} --pattern=${pattern}/" /etc/systemd/system/snipsledcontrol.service
 fi
+
+echo "Do you need to install your $device?"
+select answer in "yes" "no" "cancel"; do
+    case $answer in
+        yes)
+            case $device in
+                matrixvoice)
+                    chmod +x ./installers/matrixvoice.sh
+                    ./installers/matrixvoice.sh
+                    break
+                    ;;
+                respeaker2)
+                    chmod +x ./installers/respeakers.sh
+                    ./installers/respeakers.sh
+                    break
+                    ;;
+                respeaker4)
+                    chmod +x ./installers/respeakers.sh
+                    ./installers/respeakers.sh
+                    break
+                    ;;
+                neopixels)
+                    chmod +x ./installers/neopixels.sh
+                    ./installers/neopixels.sh
+                    break
+                    ;;
+                *)
+                    echo "No installation needed / Installation not yet supported"
+                    break
+                    ;;
+            esac
+            break;;
+        cancel) exit;;
+        *) break;;
+    esac
+done
 
 systemctl daemon-reload
 systemctl enable snipsledcontrol

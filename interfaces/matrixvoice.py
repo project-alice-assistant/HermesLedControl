@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from models.Exceptions 	import InterfaceInitError
 from libraries.everloop import Everloop
 from models.Interface 	import Interface
 
@@ -12,8 +13,7 @@ class MatrixVoice(Interface):
 		try:
 			self._leds = Everloop(numLeds, matrixIp, everloopPort)
 		except:
-			self._logger.error("Couldn't initialize everloop")
-			raise KeyboardInterrupt
+			raise InterfaceInitError("Couldn't initialize everloop")
 
 
 	def setPixel(self, ledNum, red, green, blue, brightness):
