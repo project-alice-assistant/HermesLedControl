@@ -114,13 +114,15 @@ sudo rm -rf snipsLedControl
 - --pid: Define the pid pin wiring number to use when your leds use usb
 - --matrixIp: [Matrix Voice] - Define the ip of your matrix voice, default: 127.0.0.1
 - --everloopPort: [Matrix Voice] - Define the everloop port, default: 20021
+- --offListener: Allows you to define which topics will trigger the off pattern, choices: hermes/hotword/toggleOn, hermes/tts/sayFinished, hermes/audioServer/playFinished, default: hermes/hotword/toggleOn
 
-The following arguments let you override the default pattern method with other without having to rewrite the pattern file
+
+
+#### The following arguments let you override the default pattern method with other without having to rewrite the pattern file.
 This is not needed and is only here to provide you with an easy customization way.
 
-You want the speak pattern look like the think pattern? add the argument `--speakPattern=think`
+You want the speak pattern look like the think pattern? Add the argument `--speakPattern=think`
 
-- --offListener: Allows you to define which topics will trigger the off pattern, choices: hermes/hotword/toggleOn, hermes/tts/sayFinished, hermes/audioServer/playFinished, default: hermes/hotword/toggleOn
 - --offPattern: Define an off led pattern
 - --idlePattern: Define an idle led pattern
 - --wakeupPattern: Define a wakeup led pattern
@@ -137,7 +139,8 @@ You want the speak pattern look like the think pattern? add the argument `--spea
 - --dndPattern: Define a do not disturb led pattern
 
 
-This is the complete list of available methods in every patterns:
+#### This is the complete list of available methods in every patterns
+These methods are available by default, but might not be implemented to display any led, depending on the pattern you use!
 - wakeup
 - listen
 - think
