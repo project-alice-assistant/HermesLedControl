@@ -8,11 +8,8 @@ else
 fi
 
 echo "What device do you wish to control with SLC?"
-select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neopixels" "matrixvoice" "don't overwrite existing parameters" "cancel"; do
+select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "don't overwrite existing parameters" "cancel"; do
     case $device in
-        neopixels)
-            device="neoPixels12leds";
-            break;;
         cancel) exit;;
         *) break;;
     esac
@@ -79,7 +76,12 @@ select answer in "yes" "no" "cancel"; do
                     ./installers/respeakers.sh
                     break
                     ;;
-                neopixels)
+                neoPixelsSK6812RGBW)
+                    chmod +x ./installers/neopixels.sh
+                    ./installers/neopixels.sh
+                    break
+                    ;;
+                neoPixelsWS2812RGB)
                     chmod +x ./installers/neopixels.sh
                     ./installers/neopixels.sh
                     break
