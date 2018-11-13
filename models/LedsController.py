@@ -16,6 +16,7 @@ except ImportError:
 from ledPatterns.AlexaLedPattern 	import AlexaLedPattern
 from ledPatterns.CustomLedPattern 	import CustomLedPattern
 from ledPatterns.GoogleLedPattern 	import GoogleHomeLedPattern
+from ledPatterns.KiboostLedPattern 	import KiboostLedPattern
 
 
 class LedsController:
@@ -50,8 +51,11 @@ class LedsController:
 			self._pattern = GoogleHomeLedPattern(self)
 		elif self._params.pattern == 'alexa':
 			self._pattern = AlexaLedPattern(self)
+		elif self._params.pattern == 'kiboost':
+			self._pattern = KiboostLedPattern(self)
 		else:
 			self._pattern = CustomLedPattern(self)
+
 
 		if not self.initHardware():
 			self._logger.fatal("Couldn't start hardware")

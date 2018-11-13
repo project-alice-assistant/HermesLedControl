@@ -44,7 +44,7 @@ def main():
 
 	parser = argparse.ArgumentParser(prog='Snips Led Control')
 	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides snips.toml', type=str)
-	parser.add_argument('--mqttPort', help='Defines what port t use to connect to mqtt. Overrides snips.toml', type=str)
+	parser.add_argument('--mqttPort', help='Defines what port to use to connect to mqtt. Overrides snips.toml', type=str)
 	parser.add_argument('--clientId', help='Defines a client id. Overrides snips.toml', type=str)
 	parser.add_argument('--hardware', help='Type of hardware in use', type=str, default='respeaker2',
 						choices=[
@@ -57,7 +57,13 @@ def main():
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
 	parser.add_argument('--defaultBrightness', help='Set a default brightness for your leds', type=int, default=50)
-	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, choices=['google', 'alexa', 'custom'], default='custom')
+	parser.add_argument('--pattern', help='The pattern to be used', type=str, default='google',
+						choices=[
+							'google',
+							'alexa',
+							'custom',
+							'kiboost'
+						])
 	parser.add_argument('--offListener', help='Allows you to define which topics will trigger the off pattern', type=str, default='hermes/hotword/toggleOn',
 						choices=[
 							'hermes/hotword/toggleOn',
