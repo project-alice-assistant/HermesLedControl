@@ -36,7 +36,7 @@
 		"numberOfLeds": 12,
 		"interface": "neopixels",
 		"gpioPin": 10,
-		"type": "WS2812_RGB"
+		"type": "WS2812"
 	},
 	"matrixvoice": {
 		"name": "Matrix Voice",
