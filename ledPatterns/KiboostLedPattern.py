@@ -66,7 +66,7 @@ class KiboostLedPattern(LedPattern):
 
 		for i in range(self._numLeds):
 			self._controller.setLed(i, color[0], color[1], color[2], 0)
-			self._controller.show()
+		self._controller.show()
 
 		refs = [0 for i in range(self._numLeds)]
 		refs[0] = 100
