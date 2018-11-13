@@ -4,8 +4,10 @@ about: Create a bug report to help me improve SLC
 
 ---
 
+**Do not remove fields, answer them, otherwise your bug will be reported as invalid and closed**
+
 **How I did start SLC, with what arguments**
-python3 main.py xxxxxxxxx
+python main.py xxxxxxxxx
 
 **Led device name**
 The name of the device such as "ReSpeaker 2" or "Matrix Voice"
