@@ -52,5 +52,6 @@ class CustomLedPattern(LedPattern):
 
 
 	def onStart(self, *args):
-		self._animationTemplate.rotate(color=[255, 0, 0, 100], speed=25, trail=4)
+		self._animationTemplate.relayRace([0, 0, 255, 150], relayColor=[255, 0, 0, 200], backgroundColor=[0, 255, 0, 50], speed=-25)
+		#self._animationTemplate.rotate(color=[255, 0, 0, 100], speed=25, trail=4)
 		#elf._controller.think()

@@ -45,7 +45,7 @@ class Animations:
 		self._displayImage()
 
 
-	def rotate(self, color, speed, trail=0, startAt=0):
+	def rotate(self, color, speed=10, trail=0, startAt=0):
 		"""
 		Makes a light circulate your strip
 		:param color: list, an array containing RGB or RGBW informations
@@ -87,6 +87,51 @@ class Animations:
 				self.rotateImage(1)
 			else:
 				self.rotateImage(-1)
+
+
+	def relayRace(self, color, relayColor, backgroundColor=None, speed=10, startAt=0):
+		"""
+		:param color: array RGBW
+		:param relayColor: array RGBW
+		:param backgroundColor: array RGBW
+		:param speed: float, in l/s or led per second
+		:param startAt: int, the led index where the animation starts
+		"""
+		if backgroundColor is None:
+			backgroundColor = [0, 0, 0, 0]
+
+		self.new()
+		for i in range(self._numLeds):
+			self._setPixel(i, backgroundColor)
+
+		index = startAt
+		self._animationFlag.set()
+		while self._animationFlag.isSet():
+			self._setPixel(index, color)
+			if speed >= 0:
+				relayIndex = self._normalizeIndex(index + 1)
+			else:
+				relayIndex = self._normalizeIndex(index - 1)
+
+			self._setPixel(relayIndex, relayColor)
+			self._displayImage()
+			while self._animationFlag.isSet() and relayIndex != index:
+				time.sleep(1.0 / abs(speed))
+				self._setPixel(relayIndex, backgroundColor)
+
+				if speed >= 0:
+					relayIndex = self._normalizeIndex(relayIndex + 1)
+				else:
+					relayIndex = self._normalizeIndex(relayIndex - 1)
+
+				self._setPixel(relayIndex, relayColor)
+				self._displayImage()
+
+			self._setPixel(index, backgroundColor)
+			if speed >= 0:
+				index = self._normalizeIndex(index + 1)
+			else:
+				index = self._normalizeIndex(index - 1)
 
 
 	def _setPixel(self, index, color):
