@@ -348,7 +348,8 @@ class LedsController:
 
 
 	def clearLeds(self):
-		self._interface.clearStrip()
+		if self._interface is not None:
+			self._interface.clearStrip()
 
 
 	@DeprecationWarning
@@ -381,6 +382,7 @@ class LedsController:
 
 	def onStart(self):
 		if self._interface is None:
+			self._logger.error('Interface error')
 			return
 
 		self._running = True

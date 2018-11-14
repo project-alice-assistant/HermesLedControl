@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import math
 from models.Exceptions 	import InterfaceInitError
 from models.Interface 	import Interface
 from libraries.neopixel import *
@@ -39,15 +40,25 @@ class Neopixels(Interface):
 
 		self._type 	= stripType
 		self._pin 	= pin
-		self._leds 	= Adafruit_NeoPixel(num=numLeds, pin=pin, brightness=100, strip_type=self._STRIP_TYPES[stripType])
+		self._leds 	= Adafruit_NeoPixel(num=numLeds, pin=pin, brightness=255, strip_type=self._STRIP_TYPES[stripType])
 		self._leds.begin()
 
 
 	def setPixel(self, ledNum, red, green, blue, brightness):
+		if not str(self._type).endswith('W'):
+			bRatio = float(brightness) / 255
+			red = int(math.ceil(red * bRatio))
+			green = int(math.ceil(green * bRatio))
+			blue = int(math.ceil(blue * bRatio))
 		self._leds.setPixelColorRGB(ledNum, red, green, blue, brightness)
 
 
 	def setPixelRgb(self, ledNum, color, brightness=None):
+		if not str(self._type).endswith('W') and brightness is not None:
+			bRatio = float(brightness) / 255
+			color[0] = int(math.ceil(color[0] * bRatio))
+			color[1] = int(math.ceil(color[1] * bRatio))
+			color[2] = int(math.ceil(color[2] * bRatio))
 		self._leds.setPixelColor(ledNum, color)
 
 
