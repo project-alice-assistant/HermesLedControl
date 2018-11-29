@@ -134,8 +134,79 @@ class Animations:
 				index = self._normalizeIndex(index - 1)
 
 
+	def doublePingPong(self, color, speed=10, backgroundColor=None, startAt=0):
+		"""
+		Makes two balls ping pong
+		:param color: array RBGW
+		:param speed: float, in l/s or led per second
+		:param backgroundColor: array RGBW
+		:param startAt: int, the led index where the animation starts
+		:return:
+		"""
+		if backgroundColor is None:
+			backgroundColor = [0, 0, 0, 0]
+
+		self.new()
+		self._setPixel(startAt, color)
+
+		index = startAt
+		self._animationFlag.set()
+		while self._animationFlag.isSet():
+			self._displayImage()
+			self._setPixel(startAt, [0, 0, 0, 0])
+			step = 0
+			while self._animationFlag.isSet() and step != self._numLeds / 2:
+				step += 1
+				leftIndex = self._normalizeIndex(index - step)
+				rightIndex = self._normalizeIndex(index + step)
+				self._setPixel(leftIndex, color)
+				self._setPixel(rightIndex, color)
+				self._displayImage()
+				time.sleep(1.0 / abs(speed))
+				self._setPixel(leftIndex, [0, 0, 0, 0])
+				self._setPixel(rightIndex, [0, 0, 0, 0])
+			while self._animationFlag.isSet() and step >= 0:
+				step -= 1
+				leftIndex = self._normalizeIndex(index + step)
+				rightIndex = self._normalizeIndex(index - step)
+				self._setPixel(leftIndex, color)
+				self._setPixel(rightIndex, color)
+				self._displayImage()
+				time.sleep(1.0 / abs(speed))
+				self._setPixel(leftIndex, [0, 0, 0, 0])
+				self._setPixel(rightIndex, [0, 0, 0, 0])
+
+
+	def waitWheel(self, color, speed=10, backgroundColor=None, startAt=0):
+		"""
+		Makes two balls ping pong
+		:param color: array RBGW
+		:param speed: float, in l/s or led per second
+		:param backgroundColor: array RGBW
+		:param startAt: int, the led index where the animation starts
+		:return:
+		"""
+		if backgroundColor is None:
+			backgroundColor = [0, 0, 0, 0]
+
+		self.new()
+		self._setPixel(startAt, color)
+
+		index = startAt
+		self._animationFlag.set()
+		while self._animationFlag.isSet():
+			time.sleep(1.0 / abs(speed))
+			self._displayImage()
+			index += 1
+			index = self._normalizeIndex(index)
+
+			if self._image[index] == color:
+				self._setPixel(index, backgroundColor)
+			else:
+				self._setPixel(index, color)
+
 	def _setPixel(self, index, color):
-		if index >= len(self._image):
+		if index >= len(self._image) or index < 0:
 			self._logger.error("Cannot assign led index {}, out of bound".format(index))
 			return
 		self._image[index] = [color[0], color[1], color[2], color[3]]
