@@ -44,5 +44,12 @@
 		"interface": "matrixvoice",
 		"matrixIp": "127.0.0.1",
 		"everloopPort": 20021
+	},
+	"puregpio": {
+		"__comment__": "Use the broadcom gpio number, not the physical pin number!",
+		"name": "Pure GPIO",
+		"numberOfLeds": 3,
+		"interface": "pureGPIO",
+		"gpios": [14, 15, 18]
 	}
 }

@@ -54,6 +54,7 @@ def main():
 							"matrixvoice",
 							"neoPixelsSK6812RGBW",
 							"neoPixelsWS2812RGB",
+							"puregpio"
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
 	parser.add_argument('--defaultBrightness', help='Set a default brightness for your leds', type=int, default=50)
@@ -90,6 +91,7 @@ def main():
 	parser.add_argument('--pid', help='Define the pid pin wiring number to use when your leds use usb', type=str)
 	parser.add_argument('--matrixIp', help='[Matrix Voice] - Define the ip of your matrix voice', type=str, default='127.0.0.1')
 	parser.add_argument('--everloopPort', help='[Matrix Voice] - Define the everloop port', type=int, default=20021)
+	parser.add_argument('--pureGpioPinout', help='[Pure GPIO] - Define the broadcom gpio number of your leds, in the order you want them', type=list, default=[])
 	args = parser.parse_args()
 
 	slc = SnipsLedControl(args)
