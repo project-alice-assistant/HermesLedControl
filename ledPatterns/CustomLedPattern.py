@@ -21,7 +21,4 @@ class CustomLedPattern(LedPattern):
 
 
 	def onStart(self, *args):
-		#self._animationTemplate.doublePingPong(color=[255, 0, 0, 100], speed=25, startAt=0)
-		#self._animationTemplate.relayRace([0, 0, 255, 150], relayColor=[255, 0, 0, 200], backgroundColor=[0, 255, 0, 50], speed=-25)
-		self._animationTemplate.waitWheel([0, 0, 255, 150], backgroundColor=[0, 0, 0, 0], speed=35)
-		#self._animationTemplate.rotate(color=[100, 0, 0, 50], speed=10, trail=2)
+		self._logger.warning('Implement me! /ledPatterns/CustomLedPattern.py')
