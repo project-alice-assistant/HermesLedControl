@@ -54,6 +54,7 @@ def main():
 							"matrixvoice",
 							"neoPixelsSK6812RGBW",
 							"neoPixelsWS2812RGB",
+							"googleAIY",
 							"puregpio"
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
