@@ -16,6 +16,7 @@ except ImportError:
 from ledPatterns.AlexaLedPattern 	import AlexaLedPattern
 from ledPatterns.CustomLedPattern 	import CustomLedPattern
 from ledPatterns.GoogleLedPattern 	import GoogleHomeLedPattern
+from ledPatterns.KiboostLedPattern 	import KiboostLedPattern
 
 
 class LedsController:
@@ -50,8 +51,11 @@ class LedsController:
 			self._pattern = GoogleHomeLedPattern(self)
 		elif self._params.pattern == 'alexa':
 			self._pattern = AlexaLedPattern(self)
+		elif self._params.pattern == 'kiboost':
+			self._pattern = KiboostLedPattern(self)
 		else:
 			self._pattern = CustomLedPattern(self)
+
 
 		if not self.initHardware():
 			self._logger.fatal("Couldn't start hardware")
@@ -107,6 +111,10 @@ class LedsController:
 			elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
 				from interfaces.matrixvoice import MatrixVoice
 				self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'], matrixIp=self._hardware['matrixIp'], everloopPort=self._hardware['everloopPort'])
+
+			elif self._hardware['interface'] == Interfaces.PURE_GPIO:
+				from interfaces.pureGPIO import PureGPIO
+				self._interface = PureGPIO(numLeds=self._hardware['numberOfLeds'], pinout=self._hardware['gpios'], activeHigh=self._hardware['activeHigh'])
 
 			if self._interface is None:
 				return False
@@ -344,7 +352,8 @@ class LedsController:
 
 
 	def clearLeds(self):
-		self._interface.clearStrip()
+		if self._interface is not None:
+			self._interface.clearStrip()
 
 
 	@DeprecationWarning
@@ -377,6 +386,7 @@ class LedsController:
 
 	def onStart(self):
 		if self._interface is None:
+			self._logger.error('Interface error')
 			return
 
 		self._running = True

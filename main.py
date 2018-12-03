@@ -44,7 +44,7 @@ def main():
 
 	parser = argparse.ArgumentParser(prog='Snips Led Control')
 	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides snips.toml', type=str)
-	parser.add_argument('--mqttPort', help='Defines what port t use to connect to mqtt. Overrides snips.toml', type=str)
+	parser.add_argument('--mqttPort', help='Defines what port to use to connect to mqtt. Overrides snips.toml', type=str)
 	parser.add_argument('--clientId', help='Defines a client id. Overrides snips.toml', type=str)
 	parser.add_argument('--hardware', help='Type of hardware in use', type=str, default='respeaker2',
 						choices=[
@@ -54,10 +54,18 @@ def main():
 							"matrixvoice",
 							"neoPixelsSK6812RGBW",
 							"neoPixelsWS2812RGB",
+							"googleAIY",
+							"puregpio"
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
 	parser.add_argument('--defaultBrightness', help='Set a default brightness for your leds', type=int, default=50)
-	parser.add_argument('--pattern', help='The pattern to be used by SLC (google / alexa / custom)', type=str, choices=['google', 'alexa', 'custom'], default='custom')
+	parser.add_argument('--pattern', help='The pattern to be used', type=str, default='google',
+						choices=[
+							'google',
+							'alexa',
+							'custom',
+							'kiboost'
+						])
 	parser.add_argument('--offListener', help='Allows you to define which topics will trigger the off pattern', type=str, default='hermes/hotword/toggleOn',
 						choices=[
 							'hermes/hotword/toggleOn',
@@ -84,6 +92,8 @@ def main():
 	parser.add_argument('--pid', help='Define the pid pin wiring number to use when your leds use usb', type=str)
 	parser.add_argument('--matrixIp', help='[Matrix Voice] - Define the ip of your matrix voice', type=str, default='127.0.0.1')
 	parser.add_argument('--everloopPort', help='[Matrix Voice] - Define the everloop port', type=int, default=20021)
+	parser.add_argument('--pureGpioPinout', help='[Pure GPIO] - Define the broadcom gpio number of your leds, in the order you want them', type=list, default=[])
+	parser.add_argument('--activeHigh', help='[Pure GPIO] - Define how your leds are controlled', type=bool, default=True)
 	args = parser.parse_args()
 
 	slc = SnipsLedControl(args)

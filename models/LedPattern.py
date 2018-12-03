@@ -2,16 +2,18 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from models.LedsController import *
+from models.Animations 		import Animations
+from models.LedsController 	import *
 import threading
 
 class LedPattern(object):
 
 	def __init__(self, controller):
-		self._logger 		= logging.getLogger('SnipsLedControl')
-		self._controller 	= controller # type: LedsController
-		self._numLeds 		= self._controller.hardware['numberOfLeds']
-		self._animation 	= threading.Event()
+		self._logger 				= logging.getLogger('SnipsLedControl')
+		self._controller 			= controller # type: LedsController
+		self._numLeds 				= self._controller.hardware['numberOfLeds']
+		self._animation 			= threading.Event()
+		self._animator 				= Animations(self._animation, controller)
 
 
 	@property
