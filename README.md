@@ -10,4 +10,8 @@ It currently supports these hardwares:
 - Google AIY
 - Any leds on gpios
 
+I don't have the budget to buy every other devices just to implement them. If you are a manufacturer, **I appreciate hardware donations :-)**, they will be used wisely in my voice assistant projects.
+
+But as they say, sometimes I'm thirsty so I still appreciate a beer every now and then, feel free to refresh me: https://paypal.me/Psychokiller1888
+
 Check out the wiki for all the informations
