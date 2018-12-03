@@ -12,7 +12,6 @@
 ###########################################################################################################
 
 from models.LedPattern import LedPattern
-import time
 
 class CustomLedPattern(LedPattern):
 

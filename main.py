@@ -92,6 +92,7 @@ def main():
 	parser.add_argument('--matrixIp', help='[Matrix Voice] - Define the ip of your matrix voice', type=str, default='127.0.0.1')
 	parser.add_argument('--everloopPort', help='[Matrix Voice] - Define the everloop port', type=int, default=20021)
 	parser.add_argument('--pureGpioPinout', help='[Pure GPIO] - Define the broadcom gpio number of your leds, in the order you want them', type=list, default=[])
+	parser.add_argument('--activeHigh', help='[Pure GPIO] - Define how your leds are controlled', type=bool, default=True)
 	args = parser.parse_args()
 
 	slc = SnipsLedControl(args)

@@ -7,18 +7,19 @@ from models.Interface 	import Interface
 
 class PureGPIO(Interface):
 
-	def __init__(self, numLeds, pinout):
+	def __init__(self, numLeds, pinout, activeHigh):
 		super(PureGPIO, self).__init__(numLeds)
 
 		if len(pinout) != numLeds:
 			raise InterfaceInitError('Pure GPIO number of led versus pinout declaration missmatch')
 
-		self._pinout 	= pinout
-		self._image 	= self._newArray()
+		self._pinout 		= pinout
+		self._activeHigh 	= activeHigh
+		self._image 		= self._newArray()
 
 		self._leds 		= []
 		for pin in self._pinout:
-			self._leds.append(LED(pin=pin, active_high=True, initial_value=False))
+			self._leds.append(LED(pin=pin, active_high=activeHigh, initial_value=False))
 
 
 	def setPixel(self, ledNum, red, green, blue, brightness):
@@ -31,7 +32,7 @@ class PureGPIO(Interface):
 			self._logger.warning('Trying to access a led index out of reach')
 			return
 
-		if red > 0 or green > 0 or blue > 0:
+		if red > 0 or green > 0 or blue > 0 or brightness > 0:
 			self._image[ledNum] = 1
 		else:
 			self._image[ledNum] = 0
@@ -53,6 +54,10 @@ class PureGPIO(Interface):
 			else:
 				self._leds[index].on()
 
+
+	def onStop(self):
+		for led in self._leds:
+			led.off()
 
 	def _newArray(self):
 		return [0] * self._numLeds

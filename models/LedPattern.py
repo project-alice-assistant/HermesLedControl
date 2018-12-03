@@ -13,7 +13,7 @@ class LedPattern(object):
 		self._controller 			= controller # type: LedsController
 		self._numLeds 				= self._controller.hardware['numberOfLeds']
 		self._animation 			= threading.Event()
-		self._animationTemplate 	= Animations(self._animation, controller)
+		self._animator 				= Animations(self._animation, controller)
 
 
 	@property

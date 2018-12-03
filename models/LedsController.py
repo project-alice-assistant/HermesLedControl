@@ -114,7 +114,7 @@ class LedsController:
 
 			elif self._hardware['interface'] == Interfaces.PURE_GPIO:
 				from interfaces.pureGPIO import PureGPIO
-				self._interface = PureGPIO(numLeds=self._hardware['numberOfLeds'], pinout=self._hardware['gpios'])
+				self._interface = PureGPIO(numLeds=self._hardware['numberOfLeds'], pinout=self._hardware['gpios'], activeHigh=self._hardware['activeHigh'])
 
 			if self._interface is None:
 				return False

@@ -114,6 +114,10 @@ class SnipsLedControl:
 		if 'gpios' in self._hardware and len(params.pureGpioPinout) > 0:
 			self.hardware['gpios'] = params.pureGpioPinout
 
+		if 'activeHigh' in self._hardware and params.activeHigh != self._hardware['activeHigh']:
+			self._hardware['activeHigh'] = params.activeHigh
+
+
 		self._ledsController = LedsController(self)
 		self._mqttClient = self.connectMqtt()
 

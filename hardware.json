@@ -50,6 +50,7 @@
 		"name": "Pure GPIO",
 		"numberOfLeds": 3,
 		"interface": "pureGPIO",
+		"activeHigh": true,
 		"gpios": [14, 15, 18]
 	}
 }
