@@ -111,6 +111,9 @@ class SnipsLedControl:
 		if 'vid' in self._hardware and params.vid is not None:
 			self._hardware['vid'] = params.vid
 
+		if 'gpios' in self._hardware and len(params.pureGpioPinout) > 0:
+			self.hardware['gpios'] = params.pureGpioPinout
+
 		self._ledsController = LedsController(self)
 		self._mqttClient = self.connectMqtt()
 

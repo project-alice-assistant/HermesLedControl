@@ -3,7 +3,6 @@
 
 from models.Exceptions 	import InterfaceInitError
 from gpiozero 			import LED
-from libraries 			import usb_pixel_ring_v2 	as pixel_ring
 from models.Interface 	import Interface
 
 class PureGPIO(Interface):
@@ -12,7 +11,7 @@ class PureGPIO(Interface):
 		super(PureGPIO, self).__init__(numLeds)
 
 		if len(pinout) != numLeds:
-			raise InterfaceInitError('Pure GPIO number of led versus pinoput declaration missmatch')
+			raise InterfaceInitError('Pure GPIO number of led versus pinout declaration missmatch')
 
 		self._pinout 	= pinout
 		self._image 	= self._newArray()
@@ -56,4 +55,4 @@ class PureGPIO(Interface):
 
 
 	def _newArray(self):
-		return [0] * len(self._numLeds)
+		return [0] * self._numLeds
