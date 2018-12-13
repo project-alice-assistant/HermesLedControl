@@ -23,7 +23,7 @@ class AlexaLedPattern(LedPattern):
 	def wakeup(self, direction=0):
 		brightness = max(5, self._controller.defaultBrightness - 50)
 		for i in range(int(round(self._numLeds / 2)) + 1):
-			brightness += i * 5
+			brightness += 5
 			self._controller.setLedRGB(i, self._colors['white'], brightness)
 			self._controller.setLedRGB(self._numLeds - i, self._colors['white'], brightness)
 

@@ -1,6 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+###########################################################################################################
+# SUBMIT YOUR OWN CUSTOM PATTERN AND SHARE WITH THE WORLD YOUR LED ANIMATIONS!
+# Visit https://github.com/Psychokiller1888/snipsLedControl/issues/new?template=custom-pattern-proposal.md
+# for more informations
+#
+# Check models/LedPattern.py for the available functions
+# Do NEVER have a function call a super class function directly!!
+# It could cause a deadlock! Instead, call self._controller.THE_METHOD_YOU_WANT
+#
+# @author: Kiboost
+# @weblink: github.com/KiboOst
+# @email:
+#
+###########################################################################################################
+
 from models.LedPattern import LedPattern
 import time
 import threading
@@ -17,7 +32,6 @@ class KiboostLedPattern(LedPattern):
 		duration in seconds
 		color as array [r,g,b]
 		leds as array of index
-		github.com/KiboOst
 		"""
 		if leds is None:
 			leds = []
@@ -56,7 +70,6 @@ class KiboostLedPattern(LedPattern):
 		color as array [r,g,b]
 		invert as boolean
 		for a ping-pong effect call it twice, second call with invert True
-		github.com/KiboOst
 		"""
 		if color is None:
 			color = [0, 0, 40]
@@ -109,7 +122,6 @@ class KiboostLedPattern(LedPattern):
 		duration in seconds
 		color as array [r,g,b]
 		leds as array of index
-		github.com/KiboOst
 		"""
 		if leds is None:
 			leds = []

@@ -73,7 +73,12 @@ class Everloop:
 		ledValue.green = green
 		ledValue.blue  = blue
 		ledValue.white = white
-		self._colors[ledNum] = ledValue
+		print(ledNum)
+		print(self._numLeds)
+		if ledNum < len(self._colors):
+			self._colors[ledNum] = ledValue
+		else:
+			self._logger.warning("Tried to access a led number that doesn't exist")
 
 
 	def _newArray(self):
