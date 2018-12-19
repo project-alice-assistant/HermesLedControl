@@ -44,6 +44,9 @@ pip install pytoml
 mkdir -p logs
 chown pi logs
 
+chmod +x ./installers/matrixvoice.sh
+chmod +x ./installers/neopixels.sh
+chmod +x ./installers/respeakerMicArrayV2.sh
 chmod +x ./installers/respeakers.sh
 
 directory=${PWD##*/}
