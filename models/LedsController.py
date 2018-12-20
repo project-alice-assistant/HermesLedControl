@@ -94,6 +94,11 @@ class LedsController:
 		return self._defaultBrightness
 
 
+	@property
+	def interface(self):
+		return self._interface
+
+
 	def initHardware(self):
 		try:
 			if self._hardware['interface'] == Interfaces.APA102:
@@ -336,6 +341,10 @@ class LedsController:
 
 
 	def setLed(self, ledNum, red, green, blue, brightness=-1):
+		if ledNum < 0 or ledNum > self._interface.numLeds:
+			self._logger.warning("Tried to access a led number that doesn't exist")
+			return
+
 		if brightness == -1:
 			brightness = self.defaultBrightness
 		self._interface.setPixel(ledNum, red, green, blue, brightness)
