@@ -35,11 +35,11 @@ apt-get install -y mosquitto-clients
 apt-get install -y portaudio19-dev
 apt-get install -y python-numpy
 
-pip install RPi.GPIO
-pip install spidev
-pip install gpiozero
-pip install paho-mqtt
-pip install pytoml
+pip --no-cache-dir install RPi.GPIO
+pip --no-cache-dir install spidev
+pip --no-cache-dir install gpiozero
+pip --no-cache-dir install paho-mqtt
+pip --no-cache-dir install pytoml
 
 mkdir -p logs
 chown pi logs
