@@ -342,7 +342,7 @@ class LedsController:
 
 	def setLed(self, ledNum, red, green, blue, brightness=-1):
 		if ledNum < 0 or ledNum > self._interface.numLeds:
-			self._logger.warning("Tried to access a led number that doesn't exist")
+			self._logger.warning("Tried to access a led number that doesn't exist: {} / {}".format(ledNum, self._interface.numLeds))
 			return
 
 		if brightness == -1:

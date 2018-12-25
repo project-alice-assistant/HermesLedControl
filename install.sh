@@ -8,7 +8,7 @@ else
 fi
 
 echo "What device do you wish to control with SLC?"
-select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "don't overwrite existing parameters" "cancel"; do
+select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "respeakerCoreV2" "don't overwrite existing parameters" "cancel"; do
     case $device in
         cancel) exit;;
         *) break;;
@@ -94,6 +94,10 @@ select answer in "yes" "no" "cancel"; do
                 respeakerMicArrayV2)
                     chmod +x ./installers/respeakerMicArrayV2.sh
                     ./installers/respeakerMicArrayV2.sh
+                    break
+                    ;;
+                respeakerCoreV2)
+                    pip uninstall -y gpiozero
                     break
                     ;;
                 *)
