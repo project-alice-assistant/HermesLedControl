@@ -28,6 +28,7 @@ class GoogleHomeLedPattern(LedPattern):
 
 	def _newImage(self):
 		# Drawing the Google color scheme by default
+		self._image = []
 		j = 0
 		for i in range(self._numLeds):
 			if i % self._cardinalSteps == 0:
