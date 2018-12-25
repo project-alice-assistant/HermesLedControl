@@ -415,6 +415,7 @@ class LedsController:
 		self._running = False
 		self._interface.onStop()
 
-		self._animationThread.join(timeout=2)
-		if self._buttonsThread is not None:
+		if self._animationThread is not None and self._animationThread.isAlive():
+			self._animationThread.join(timeout=2)
+		if self._buttonsThread is not None and self._buttonsThread.isAlive():
 			self._buttonsThread.join(timeout=2)
