@@ -32,6 +32,7 @@ class Interface(object):
 	def setPixelRgb(self, ledNum, color, brightness)			: pass
 	def clearStrip(self)										: pass
 	def show(self)												: self._leds.show()
+
 	def onStart(self):
 		if self._power is not None:
 			self._power.on()
