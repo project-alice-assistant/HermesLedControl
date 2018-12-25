@@ -64,8 +64,8 @@ def main():
 						choices=[
 							'google',
 							'alexa',
-							'custom',
-							'kiboost'
+							'kiboost',
+							'custom'
 						])
 	parser.add_argument('--offListener', help='Allows you to define which topics will trigger the off pattern', type=str, default='hermes/hotword/toggleOn',
 						choices=[
