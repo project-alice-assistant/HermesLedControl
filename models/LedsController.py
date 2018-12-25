@@ -47,6 +47,12 @@ class LedsController:
 			self._active.clear()
 
 
+		if not self.initHardware():
+			self._logger.fatal("Couldn't start hardware")
+			self._mainClass.onStop()
+			return
+
+
 		if self._params.pattern == 'google':
 			self._pattern = GoogleHomeLedPattern(self)
 		elif self._params.pattern == 'alexa':
@@ -55,12 +61,6 @@ class LedsController:
 			self._pattern = KiboostLedPattern(self)
 		else:
 			self._pattern = CustomLedPattern(self)
-
-
-		if not self.initHardware():
-			self._logger.fatal("Couldn't start hardware")
-			self._mainClass.onStop()
-			return
 
 
 		self._buttonsThread = None
