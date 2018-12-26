@@ -97,7 +97,8 @@ select answer in "yes" "no" "cancel"; do
                     break
                     ;;
                 respeakerCoreV2)
-                    pip uninstall -y gpiozero
+                    chmod +x ./installers/respeakerCoreV2.sh
+                    ./installers/respeakerCoreV2.sh
                     break
                     ;;
                 *)

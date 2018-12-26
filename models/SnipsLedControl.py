@@ -192,57 +192,93 @@ class SnipsLedControl:
 
 		if message.topic == self._SUB_ON_HOTWORD:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On hotword triggered')
 				self._ledsController.wakeup()
 		elif message.topic == self._SUB_ON_LISTENING:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On listen triggered')
 				self._ledsController.listen()
 		elif message.topic == self._SUB_ON_SAY:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On say triggered')
 				self._ledsController.speak()
 		elif message.topic == self._SUB_ON_THINK:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On think triggered')
 				self._ledsController.think()
 		elif message.topic == self._SUB_ON_HOTWORD_TOGGLE_ON:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On hotword toggle on triggered')
 				self._ledsController.idle()
 		elif message.topic == self._SUB_ON_TTS_FINISHED:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On tts finished triggered')
 				self._ledsController.idle()
 		elif message.topic == self._SUB_ON_PLAY_FINISHED:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On play finished triggered')
 				self._ledsController.idle()
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE_ON:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On leds toggle on triggered')
 				self._ledsController.toggleStateOn()
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE_OFF:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On leds toggle off triggered')
 				self._ledsController.toggleStateOff()
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On leds toggle triggered')
 				self._ledsController.toggleState()
 		elif message.topic == self._SUB_LEDS_ON_SUCCESS:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On success triggered')
 				self._ledsController.onSuccess()
 		elif message.topic == self._SUB_LEDS_ON_ERROR:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On error triggered')
 				self._ledsController.onError()
 		elif message.topic == self._SUB_UPDATING:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On updating triggered')
 				self._ledsController.updating()
 		elif message.topic == self._SUB_ON_CALL:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On call triggered')
 				self._ledsController.call()
 		elif message.topic == self._SUB_SETUP_MODE:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On setup mode triggered')
 				self._ledsController.setupMode()
 		elif message.topic == self._SUB_CON_ERROR:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On connection error triggered')
 				self._ledsController.conError()
 		elif message.topic == self._SUB_ON_MESSAGE:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On message triggered')
 				self._ledsController.message()
 		elif message.topic == self._SUB_ON_DND:
 			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On do not disturb triggered')
 				self._ledsController.dnd()
 
 
