@@ -11,6 +11,8 @@ class Interface(object):
 		self._logger 	= logging.getLogger('SnipsLedControl')
 		self._leds 		= None
 		self._power 	= None
+		self._doa 		= False
+		self._audioChunks = []
 
 
 	@property
@@ -22,14 +24,25 @@ class Interface(object):
 	def numLeds(self):
 		return self._numLeds
 
+	@property
+	def doa(self):
+		return self._doa
 
 	def setPixel(self, ledNum, red, green, blue, brightness)	: pass
 	def setPixelRgb(self, ledNum, color, brightness)			: pass
 	def clearStrip(self)										: pass
 	def show(self)												: self._leds.show()
+
 	def onStart(self):
 		if self._power is not None:
 			self._power.on()
 	def onStop(self):
 		if self._power is not None:
 			self._power.off()
+
+	def getDoA(self):
+		pass
+
+	def initDoA(self):
+		self._doa = True
+		self._audioChunks = []

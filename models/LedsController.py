@@ -47,6 +47,12 @@ class LedsController:
 			self._active.clear()
 
 
+		if not self.initHardware():
+			self._logger.fatal("Couldn't start hardware")
+			self._mainClass.onStop()
+			return
+
+
 		if self._params.pattern == 'google':
 			self._pattern = GoogleHomeLedPattern(self)
 		elif self._params.pattern == 'alexa':
@@ -55,12 +61,6 @@ class LedsController:
 			self._pattern = KiboostLedPattern(self)
 		else:
 			self._pattern = CustomLedPattern(self)
-
-
-		if not self.initHardware():
-			self._logger.fatal("Couldn't start hardware")
-			self._mainClass.onStop()
-			return
 
 
 		self._buttonsThread = None
@@ -92,6 +92,11 @@ class LedsController:
 	@property
 	def defaultBrightness(self):
 		return self._defaultBrightness
+
+
+	@property
+	def interface(self):
+		return self._interface
 
 
 	def initHardware(self):
@@ -336,6 +341,10 @@ class LedsController:
 
 
 	def setLed(self, ledNum, red, green, blue, brightness=-1):
+		if ledNum < 0 or ledNum > self._interface.numLeds:
+			self._logger.warning("Tried to access a led number that doesn't exist: {} / {}".format(ledNum, self._interface.numLeds))
+			return
+
 		if brightness == -1:
 			brightness = self.defaultBrightness
 		self._interface.setPixel(ledNum, red, green, blue, brightness)
@@ -406,6 +415,7 @@ class LedsController:
 		self._running = False
 		self._interface.onStop()
 
-		self._animationThread.join(timeout=2)
-		if self._buttonsThread is not None:
+		if self._animationThread is not None and self._animationThread.isAlive():
+			self._animationThread.join(timeout=2)
+		if self._buttonsThread is not None and self._buttonsThread.isAlive():
 			self._buttonsThread.join(timeout=2)

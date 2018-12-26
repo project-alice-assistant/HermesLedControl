@@ -5,6 +5,7 @@ It currently supports these hardwares:
 - Respeaker 2
 - Respeaker 4
 - Respeaker Mic Array V2
+- Respeaker core V2
 - NeoPixels ring
 - Matrix Voice
 - Google AIY

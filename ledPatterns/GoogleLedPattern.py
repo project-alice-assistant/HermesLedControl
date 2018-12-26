@@ -28,6 +28,7 @@ class GoogleHomeLedPattern(LedPattern):
 
 	def _newImage(self):
 		# Drawing the Google color scheme by default
+		self._image = []
 		j = 0
 		for i in range(self._numLeds):
 			if i % self._cardinalSteps == 0:
@@ -86,7 +87,7 @@ class GoogleHomeLedPattern(LedPattern):
 		self._animation.set()
 		while self._animation.isSet():
 			brightness -= direction
-			for i, led in enumerate(self._image):
+			for i in range(self._numLeds):
 				self._image[i][3] = brightness
 			self._displayImage()
 
@@ -101,7 +102,7 @@ class GoogleHomeLedPattern(LedPattern):
 		brightness = self._image[0][3]
 		while brightness > 0:
 			brightness -= 1
-			for i, led in enumerate(self._image):
+			for i in range(self._numLeds):
 				self._image[i][3] = brightness
 			self._displayImage()
 			time.sleep(0.002)

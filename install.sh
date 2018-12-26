@@ -8,7 +8,7 @@ else
 fi
 
 echo "What device do you wish to control with SLC?"
-select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "don't overwrite existing parameters" "cancel"; do
+select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "respeakerCoreV2" "don't overwrite existing parameters" "cancel"; do
     case $device in
         cancel) exit;;
         *) break;;
@@ -32,16 +32,21 @@ apt-get install -y python-pip
 apt-get install -y git
 apt-get install -y mosquitto
 apt-get install -y mosquitto-clients
+apt-get install -y portaudio19-dev
+apt-get install -y python-numpy
 
-pip install RPi.GPIO
-pip install spidev
-pip install gpiozero
-pip install paho-mqtt
-pip install pytoml
+pip --no-cache-dir install RPi.GPIO
+pip --no-cache-dir install spidev
+pip --no-cache-dir install gpiozero
+pip --no-cache-dir install paho-mqtt
+pip --no-cache-dir install pytoml
 
 mkdir -p logs
 chown pi logs
 
+chmod +x ./installers/matrixvoice.sh
+chmod +x ./installers/neopixels.sh
+chmod +x ./installers/respeakerMicArrayV2.sh
 chmod +x ./installers/respeakers.sh
 
 directory=${PWD##*/}
@@ -89,6 +94,11 @@ select answer in "yes" "no" "cancel"; do
                 respeakerMicArrayV2)
                     chmod +x ./installers/respeakerMicArrayV2.sh
                     ./installers/respeakerMicArrayV2.sh
+                    break
+                    ;;
+                respeakerCoreV2)
+                    chmod +x ./installers/respeakerCoreV2.sh
+                    ./installers/respeakerCoreV2.sh
                     break
                     ;;
                 *)

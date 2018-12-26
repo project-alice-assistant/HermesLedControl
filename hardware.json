@@ -15,14 +15,21 @@
 	"respeaker4": {
 		"name": "ReSpeaker 4",
 		"numberOfLeds": 12,
-		"interface": "apa102"
+		"interface": "apa102",
+		"doa": true
 	},
 	"respeakerMicArrayV2": {
 		"name": "ReSpeaker Mic array v2",
 		"numberOfLeds": 12,
-		"interface": "respeakerMicArrayV2",
+		"interface": "apa102",
 		"vid": "0x2886",
 		"pid": "0x0018"
+	},
+	"respeakerCoreV2": {
+		"name": "Respeaker Core v2",
+		"numberOfLeds": 12,
+		"interface": "apa102",
+		"doa": true
 	},
   	"neoPixelsSK6812RGBW": {
 		"name": "Adafruit NeoPixels SK6812 RGBW",

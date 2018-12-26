@@ -51,6 +51,7 @@ def main():
 							"respeaker2",
 							"respeaker4",
 							"respeakerMicArrayV2",
+							"respeakerCoreV2",
 							"matrixvoice",
 							"neoPixelsSK6812RGBW",
 							"neoPixelsWS2812RGB",
@@ -63,8 +64,8 @@ def main():
 						choices=[
 							'google',
 							'alexa',
-							'custom',
-							'kiboost'
+							'kiboost',
+							'custom'
 						])
 	parser.add_argument('--offListener', help='Allows you to define which topics will trigger the off pattern', type=str, default='hermes/hotword/toggleOn',
 						choices=[
@@ -94,6 +95,7 @@ def main():
 	parser.add_argument('--everloopPort', help='[Matrix Voice] - Define the everloop port', type=int, default=20021)
 	parser.add_argument('--pureGpioPinout', help='[Pure GPIO] - Define the broadcom gpio number of your leds, in the order you want them', type=list, default=[])
 	parser.add_argument('--activeHigh', help='[Pure GPIO] - Define how your leds are controlled', type=bool, default=True)
+	parser.add_argument('--debug', help='Enable the debug mode for the console to return more informations', type=bool, default=False)
 	args = parser.parse_args()
 
 	slc = SnipsLedControl(args)

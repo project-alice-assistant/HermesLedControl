@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from gpiozero 			import LED
+try:
+	from gpiozero 			import LED
+except:
+	pass
+
 from libraries.apa102   import APA102       as AAPA102
 from models.Interface 	import Interface
 
@@ -10,7 +14,11 @@ class APA102(Interface):
 	def __init__(self, numLed, global_brightness=AAPA102.MAX_BRIGHTNESS, order='rgb', bus=0, device=1, max_speed_hz=8000000):
 		super(APA102, self).__init__(numLed)
 		self._leds  = AAPA102(numLed, global_brightness=global_brightness, order=order, bus=bus, device=device, max_speed_hz=max_speed_hz)
-		self._power = LED(5)
+
+		try:
+			self._power = LED(5)
+		except:
+			self._logger.info('Device not using gpio zero, ignore power')
 
 
 	def setPixel(self, ledNum, red, green, blue, brightness):

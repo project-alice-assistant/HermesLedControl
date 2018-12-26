@@ -11,7 +11,7 @@ class LedPattern(object):
 	def __init__(self, controller):
 		self._logger 				= logging.getLogger('SnipsLedControl')
 		self._controller 			= controller # type: LedsController
-		self._numLeds 				= self._controller.hardware['numberOfLeds']
+		self._numLeds 				= self._controller.interface.numLeds
 		self._animation 			= threading.Event()
 		self._animator 				= Animations(self._animation, controller)
 
