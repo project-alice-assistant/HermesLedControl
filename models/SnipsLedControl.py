@@ -34,7 +34,7 @@ class SnipsLedControl:
 
 	def __init__(self, params):
 		self._logger = logging.getLogger('SnipsLedControl')
-		self._logger.info('Initializing SnipsLedControl')
+		self._logger.info('Initializing SnipsLedControl v1.6')
 
 		self._snipsConfigs 	= self.loadConfigs()
 
