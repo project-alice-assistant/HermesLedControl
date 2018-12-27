@@ -11,7 +11,8 @@ from models.SnipsLedControl 	import SnipsLedControl
 formatter = logging.Formatter('%(asctime)s [%(threadName)s] - [%(levelname)s] - %(message)s')
 
 _logger = logging.getLogger('SnipsLedControl')
-_logger.setLevel(logging.INFO)
+
+_logger.setLevel(logging.DEBUG)
 
 date = int(datetime.now().strftime('%Y%m%d'))
 
@@ -37,7 +38,7 @@ def onStop():
 
 
 def main():
-	_logger.info('Starting Snips Led Control')
+	_logger.info('Starting Snips Led Control v. 1.6.1')
 
 	signal.signal(signal.SIGINT, stopHandler)
 	signal.signal(signal.SIGTERM, stopHandler)
