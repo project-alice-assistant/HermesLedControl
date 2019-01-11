@@ -25,6 +25,12 @@
 		"vid": "0x2886",
 		"pid": "0x0018"
 	},
+	"respeaker6MicArray": {
+		"name": "ReSpeaker 6-Mic Circular Array",
+		"numberOfLeds": 12,
+		"interface": "apa102",
+		"doa": true
+	},
 	"respeakerCoreV2": {
 		"name": "Respeaker Core v2",
 		"numberOfLeds": 12,
