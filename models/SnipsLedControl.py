@@ -36,15 +36,16 @@ class SnipsLedControl:
 		self._logger = logging.getLogger('SnipsLedControl')
 		self._logger.info('Initializing SnipsLedControl')
 
+		self._mqttClient 			= None
+		self._hardwareReference 	= None
+		self._ledsController 		= None
+		self._params 				= params
+
 		self._snipsConfigs 	= self.loadConfigs()
 
-		self._params 				= params
 		self._mqttServer 			= 'localhost'
 		self._me 					= 'default'
 		self._mqttPort 				= 1883
-		self._hardwareReference 	= None
-		self._mqttClient 			= None
-		self._ledsController 		= None
 
 		with open('hardware.json') as f:
 			self._hardwareReference = json.load(f)
@@ -144,10 +145,14 @@ class SnipsLedControl:
 			with open('/etc/snips.toml') as confFile:
 				configs = pytoml.load(confFile)
 				return configs
-
-		self._logger.fatal('Error loading configurations')
-		self.onStop()
-		return None
+		else:
+			if self.params.debug:
+				self._logger.info('No snips config found but debug mode, allow to continue')
+				return None
+			else:
+				self._logger.fatal('Error loading configurations')
+				self.onStop()
+				return None
 
 
 	def connectMqtt(self):
@@ -195,91 +200,145 @@ class SnipsLedControl:
 				if self._params.debug:
 					self._logger.debug('On hotword triggered')
 				self._ledsController.wakeup()
+			else:
+				if self._params.debug:
+					self._logger.debug("On hotword received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_LISTENING:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On listen triggered')
 				self._ledsController.listen()
+			else:
+				if self._params.debug:
+					self._logger.debug("On listen received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_SAY:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On say triggered')
 				self._ledsController.speak()
+			else:
+				if self._params.debug:
+					self._logger.debug("On say received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_THINK:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On think triggered')
 				self._ledsController.think()
+			else:
+				if self._params.debug:
+					self._logger.debug("On think received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_HOTWORD_TOGGLE_ON:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On hotword toggle on triggered')
 				self._ledsController.idle()
+			else:
+				if self._params.debug:
+					self._logger.debug("On hotword toggle on received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_TTS_FINISHED:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On tts finished triggered')
 				self._ledsController.idle()
+			else:
+				if self._params.debug:
+					self._logger.debug("On tts finished received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_PLAY_FINISHED:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On play finished triggered')
 				self._ledsController.idle()
+			else:
+				if self._params.debug:
+					self._logger.debug("On play finished received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE_ON:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On leds toggle on triggered')
 				self._ledsController.toggleStateOn()
+			else:
+				if self._params.debug:
+					self._logger.debug("On leds toggle on received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE_OFF:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On leds toggle off triggered')
 				self._ledsController.toggleStateOff()
+			else:
+				if self._params.debug:
+					self._logger.debug("On leds toggle off received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On leds toggle triggered')
 				self._ledsController.toggleState()
+			else:
+				if self._params.debug:
+					self._logger.debug("On leds toggle received, but it wasn't not for me")
 		elif message.topic == self._SUB_LEDS_ON_SUCCESS:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On success triggered')
 				self._ledsController.onSuccess()
+			else:
+				if self._params.debug:
+					self._logger.debug("On sucess received, but it wasn't not for me")
 		elif message.topic == self._SUB_LEDS_ON_ERROR:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On error triggered')
 				self._ledsController.onError()
+			else:
+				if self._params.debug:
+					self._logger.debug("On error received, but it wasn't not for me")
 		elif message.topic == self._SUB_UPDATING:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On updating triggered')
 				self._ledsController.updating()
+			else:
+				if self._params.debug:
+					self._logger.debug("On updating received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_CALL:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On call triggered')
 				self._ledsController.call()
+			else:
+				if self._params.debug:
+					self._logger.debug("On call received, but it wasn't not for me")
 		elif message.topic == self._SUB_SETUP_MODE:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On setup mode triggered')
 				self._ledsController.setupMode()
+			else:
+				if self._params.debug:
+					self._logger.debug("On setup mode received, but it wasn't not for me")
 		elif message.topic == self._SUB_CON_ERROR:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On connection error triggered')
 				self._ledsController.conError()
+			else:
+				if self._params.debug:
+					self._logger.debug("On connection error received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_MESSAGE:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On message triggered')
 				self._ledsController.message()
+			else:
+				if self._params.debug:
+					self._logger.debug("On message received, but it wasn't not for me")
 		elif message.topic == self._SUB_ON_DND:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On do not disturb triggered')
 				self._ledsController.dnd()
+			else:
+				if self._params.debug:
+					self._logger.debug("On do not disturb received, but it wasn't not for me")
 
 
 	@property
