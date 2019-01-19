@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-echo "######################## Matrix Voice installation ########################"
-echo "#################### Please run this script with sudo #####################"
+echo "######################## Matrix Voice / Creator installation ########################"
+echo "######################### Please run this script with sudo ##########################"
 
 curl https://apt.matrix.one/doc/apt-key.gpg | sudo apt-key add -
 echo "deb https://apt.matrix.one/raspbian $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/matrixlabs.list

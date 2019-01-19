@@ -3,22 +3,11 @@
 echo "############### Respeaker Core V2 installation ########################"
 echo "############## Please run this script with sudo #######################"
 
-if [[ -d "/var/lib/snips/skills/snips-skill-respeaker" ]]; then
-    echo "snips-skill-respeaker detected, do you want to remove it? Leaving it be might result in weird behaviors..."
-    select answer in "yes" "no" "cancel"; do
-        case $answer in
-            yes)
-                rm -rf "/var/lib/snips/skills/snips-skill-respeaker"
-                systemctl restart snips-*
-                echo "Removed snips-skill-respeaker"
-                break;;
-            cancel) exit;;
-            *) break;;
-        esac
-    done
-fi
-
 pip uninstall -y gpiozero
+curl https://raw.githubusercontent.com/respeaker/respeakerd/master/scripts/install_all.sh|bash
+cp -f ~/respeakerd/scripts/pixel_ring_server /usr/local/bin/
+chmod a+x /usr/local/bin/pixel_ring_server
+pixel_ring_server
 
 echo "############################## All done! ##############################"
 echo "############## Don't forget to turn on the SPI interface! #############"
