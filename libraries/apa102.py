@@ -75,8 +75,9 @@ class APA102:
     LED_START = 0b11100000 # Three "1" bits, followed by 5 brightness bits
 
     def __init__(self, num_led, global_brightness=MAX_BRIGHTNESS,
-                 order='rgb', bus=0, device=1, max_speed_hz=8000000):
+                 order='rgb', bus=0, device=1, max_speed_hz=8000000, endFrame=255):
         self.num_led = num_led  # The number of LEDs in the Strip
+        self._endFrame = endFrame
         order = order.lower()
         self.rgb = RGB_MAP.get(order, RGB_MAP['rgb'])
         # Limit the brightness to the maximum if it's set higher
@@ -128,9 +129,14 @@ class APA102:
         of the driver could omit the "clockStartFrame" method if enough zeroes have
         been sent as part of "clockEndFrame".
         """
+
         # Round up num_led/2 bits (or num_led/16 bytes)
         for _ in range((self.num_led + 15) // 16):
-            self.spi.xfer2([0x00])
+            self.spi.xfer2([self._endFrame])
+
+        #self.spi.xfer2([0xFF] * 4)
+        #for _ in range((self.num_led + 15) // 16):
+        #    self.spi.xfer2([0x00])
 
 
     def clear_strip(self):

@@ -11,9 +11,9 @@ from models.Interface 	import Interface
 
 class APA102(Interface):
 
-	def __init__(self, numLed, global_brightness=AAPA102.MAX_BRIGHTNESS, order='rgb', bus=0, device=1, max_speed_hz=8000000):
+	def __init__(self, numLed, global_brightness=AAPA102.MAX_BRIGHTNESS, order='rgb', bus=0, device=1, max_speed_hz=8000000, endFrame=255):
 		super(APA102, self).__init__(numLed)
-		self._leds  = AAPA102(numLed, global_brightness=global_brightness, order=order, bus=bus, device=device, max_speed_hz=max_speed_hz)
+		self._leds  = AAPA102(numLed, global_brightness=global_brightness, order=order, bus=bus, device=device, max_speed_hz=max_speed_hz, endFrame=endFrame)
 
 		try:
 			self._power = LED(5)

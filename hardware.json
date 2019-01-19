@@ -3,6 +3,7 @@
 		"name": "ReSpeaker 2",
 		"numberOfLeds": 3,
 		"interface": "apa102",
+		"endFrame": "255",
 		"extras": {
 			"buttons": {
 				"button1": {
@@ -16,26 +17,30 @@
 		"name": "ReSpeaker 4",
 		"numberOfLeds": 12,
 		"interface": "apa102",
-		"doa": true
+		"doa": true,
+		"endFrame": "255"
 	},
 	"respeakerMicArrayV2": {
 		"name": "ReSpeaker Mic array v2",
 		"numberOfLeds": 12,
 		"interface": "apa102",
 		"vid": "0x2886",
-		"pid": "0x0018"
+		"pid": "0x0018",
+		"endFrame": "0"
 	},
 	"respeaker6MicArray": {
 		"name": "ReSpeaker 6-Mic Circular Array",
 		"numberOfLeds": 12,
 		"interface": "apa102",
-		"doa": true
+		"doa": true,
+		"endFrame": "255"
 	},
 	"respeakerCoreV2": {
 		"name": "Respeaker Core v2",
 		"numberOfLeds": 12,
 		"interface": "apa102",
-		"doa": true
+		"doa": true,
+		"endFrame": "0"
 	},
   	"neoPixelsSK6812RGBW": {
 		"name": "Adafruit NeoPixels SK6812 RGBW",
@@ -53,6 +58,13 @@
 	},
 	"matrixvoice": {
 		"name": "Matrix Voice",
+		"numberOfLeds": 18,
+		"interface": "matrixvoice",
+		"matrixIp": "127.0.0.1",
+		"everloopPort": 20021
+	},
+	"matrixcreator": {
+		"name": "Matrix Creator",
 		"numberOfLeds": 18,
 		"interface": "matrixvoice",
 		"matrixIp": "127.0.0.1",
