@@ -46,6 +46,8 @@ def main():
 	parser = argparse.ArgumentParser(prog='Snips Led Control')
 	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides snips.toml', type=str)
 	parser.add_argument('--mqttPort', help='Defines what port to use to connect to mqtt. Overrides snips.toml', type=str)
+	parser.add_argument('--mqttUsername', help='Mqtt username if required. Overrides snips.toml', type=str)
+	parser.add_argument('--mqttPassword', help='Mqtt password if required. Overrides snips.toml', type=str)
 	parser.add_argument('--clientId', help='Defines a client id. Overrides snips.toml', type=str)
 	parser.add_argument('--hardware', help='Type of hardware in use', type=str, default='respeaker2',
 						choices=[
@@ -55,6 +57,7 @@ def main():
 							"respeakerCoreV2",
 							"respeaker6MicArray",
 							"matrixvoice",
+							"matrixcreator",
 							"neoPixelsSK6812RGBW",
 							"neoPixelsWS2812RGB",
 							"googleAIY",

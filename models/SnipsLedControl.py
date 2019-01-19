@@ -46,6 +46,8 @@ class SnipsLedControl:
 		self._mqttServer 			= 'localhost'
 		self._me 					= 'default'
 		self._mqttPort 				= 1883
+		self._mqttUsername 			= ''
+		self._mqttPassword 			= ''
 
 		with open('hardware.json') as f:
 			self._hardwareReference = json.load(f)
@@ -61,6 +63,13 @@ class SnipsLedControl:
 			try:
 				if 'snips-common' in self._snipsConfigs and 'mqtt' in self._snipsConfigs['snips-common']:
 					self._mqttServer = self._snipsConfigs['snips-common']['mqtt'].replace(':1883', '')
+
+					if 'mqtt_username' in self._snipsConfigs['snips-common'] and params.mqttUsername is None:
+						self._mqttUsername = self._snipsConfigs['snips-common']['mqtt_username']
+
+					if 'mqtt_password' in self._snipsConfigs['snips-common'] and params.mqttPassword is None:
+						self._mqttPassword = self._snipsConfigs['snips-common']['mqtt_password']
+
 			except:
 				self._logger.info('- Falling back to default config for mqtt server')
 		else:
@@ -91,6 +100,12 @@ class SnipsLedControl:
 
 		self._logger.info('- Mqtt server set to {}'.format(self._mqttServer))
 		self._logger.info('- Mqtt port set to {}'.format(self._mqttPort))
+
+		if self._mqttUsername:
+			self._logger.info('- Mqtt username set to {}'.format(self._mqttUsername))
+		if self._mqttPassword:
+			self._logger.info('- Mqtt password set to {}'.format(self._mqttPassword))
+
 		self._logger.info('- Client id set to {}'.format(self._me))
 		self._logger.info('- Hardware set to {}'.format(self._hardware['name']))
 
@@ -158,6 +173,10 @@ class SnipsLedControl:
 	def connectMqtt(self):
 		try:
 			mqttClient = mqtt.Client()
+
+			if self._mqttUsername and self._mqttPassword:
+				mqttClient.username_pw_set(self._mqttUsername, self._mqttPassword)
+
 			mqttClient.on_connect = self.onConnect
 			mqttClient.on_message = self.onMessage
 			mqttClient.connect(self._mqttServer, int(self._mqttPort))
@@ -187,7 +206,7 @@ class SnipsLedControl:
 	def onMessage(self, client, userdata, message):
 		payload = None
 
-		if hasattr(message, 'payload') and message.payload != '':
+		if hasattr(message, 'payload') and message.payload:
 			payload = json.loads(message.payload)
 
 		if payload is not None and 'siteId' in payload:
