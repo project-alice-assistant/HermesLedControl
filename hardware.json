@@ -23,7 +23,7 @@
 	"respeakerMicArrayV2": {
 		"name": "ReSpeaker Mic array v2",
 		"numberOfLeds": 12,
-		"interface": "apa102",
+		"interface": "respeakerMicArrayV2",
 		"vid": "0x2886",
 		"pid": "0x0018",
 		"endFrame": 0
