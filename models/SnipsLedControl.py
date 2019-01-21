@@ -221,7 +221,7 @@ class SnipsLedControl:
 				self._ledsController.wakeup()
 			else:
 				if self._params.debug:
-					self._logger.debug("On hotword received, but it wasn't not for me")
+					self._logger.debug("On hotword received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_LISTENING:
 			if siteId == self._me:
 				if self._params.debug:
@@ -229,7 +229,7 @@ class SnipsLedControl:
 				self._ledsController.listen()
 			else:
 				if self._params.debug:
-					self._logger.debug("On listen received, but it wasn't not for me")
+					self._logger.debug("On listen received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_SAY:
 			if siteId == self._me:
 				if self._params.debug:
@@ -237,7 +237,7 @@ class SnipsLedControl:
 				self._ledsController.speak()
 			else:
 				if self._params.debug:
-					self._logger.debug("On say received, but it wasn't not for me")
+					self._logger.debug("On say received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_THINK:
 			if siteId == self._me:
 				if self._params.debug:
@@ -245,7 +245,7 @@ class SnipsLedControl:
 				self._ledsController.think()
 			else:
 				if self._params.debug:
-					self._logger.debug("On think received, but it wasn't not for me")
+					self._logger.debug("On think received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_HOTWORD_TOGGLE_ON:
 			if siteId == self._me:
 				if self._params.debug:
@@ -253,7 +253,7 @@ class SnipsLedControl:
 				self._ledsController.idle()
 			else:
 				if self._params.debug:
-					self._logger.debug("On hotword toggle on received, but it wasn't not for me")
+					self._logger.debug("On hotword toggle on received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_TTS_FINISHED:
 			if siteId == self._me:
 				if self._params.debug:
@@ -261,7 +261,7 @@ class SnipsLedControl:
 				self._ledsController.idle()
 			else:
 				if self._params.debug:
-					self._logger.debug("On tts finished received, but it wasn't not for me")
+					self._logger.debug("On tts finished received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_PLAY_FINISHED:
 			if siteId == self._me:
 				if self._params.debug:
@@ -269,7 +269,7 @@ class SnipsLedControl:
 				self._ledsController.idle()
 			else:
 				if self._params.debug:
-					self._logger.debug("On play finished received, but it wasn't not for me")
+					self._logger.debug("On play finished received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE_ON:
 			if siteId == self._me:
 				if self._params.debug:
@@ -277,7 +277,7 @@ class SnipsLedControl:
 				self._ledsController.toggleStateOn()
 			else:
 				if self._params.debug:
-					self._logger.debug("On leds toggle on received, but it wasn't not for me")
+					self._logger.debug("On leds toggle on received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE_OFF:
 			if siteId == self._me:
 				if self._params.debug:
@@ -285,7 +285,7 @@ class SnipsLedControl:
 				self._ledsController.toggleStateOff()
 			else:
 				if self._params.debug:
-					self._logger.debug("On leds toggle off received, but it wasn't not for me")
+					self._logger.debug("On leds toggle off received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_LEDS_TOGGLE:
 			if siteId == self._me:
 				if self._params.debug:
@@ -293,7 +293,7 @@ class SnipsLedControl:
 				self._ledsController.toggleState()
 			else:
 				if self._params.debug:
-					self._logger.debug("On leds toggle received, but it wasn't not for me")
+					self._logger.debug("On leds toggle received, but it wasn't for me")
 		elif message.topic == self._SUB_LEDS_ON_SUCCESS:
 			if siteId == self._me:
 				if self._params.debug:
@@ -301,7 +301,7 @@ class SnipsLedControl:
 				self._ledsController.onSuccess()
 			else:
 				if self._params.debug:
-					self._logger.debug("On sucess received, but it wasn't not for me")
+					self._logger.debug("On success received, but it wasn't for me")
 		elif message.topic == self._SUB_LEDS_ON_ERROR:
 			if siteId == self._me:
 				if self._params.debug:
@@ -309,7 +309,7 @@ class SnipsLedControl:
 				self._ledsController.onError()
 			else:
 				if self._params.debug:
-					self._logger.debug("On error received, but it wasn't not for me")
+					self._logger.debug("On error received, but it wasn't for me")
 		elif message.topic == self._SUB_UPDATING:
 			if siteId == self._me:
 				if self._params.debug:
@@ -317,7 +317,7 @@ class SnipsLedControl:
 				self._ledsController.updating()
 			else:
 				if self._params.debug:
-					self._logger.debug("On updating received, but it wasn't not for me")
+					self._logger.debug("On updating received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_CALL:
 			if siteId == self._me:
 				if self._params.debug:
@@ -325,7 +325,7 @@ class SnipsLedControl:
 				self._ledsController.call()
 			else:
 				if self._params.debug:
-					self._logger.debug("On call received, but it wasn't not for me")
+					self._logger.debug("On call received, but it wasn't for me")
 		elif message.topic == self._SUB_SETUP_MODE:
 			if siteId == self._me:
 				if self._params.debug:
@@ -333,7 +333,7 @@ class SnipsLedControl:
 				self._ledsController.setupMode()
 			else:
 				if self._params.debug:
-					self._logger.debug("On setup mode received, but it wasn't not for me")
+					self._logger.debug("On setup mode received, but it wasn't for me")
 		elif message.topic == self._SUB_CON_ERROR:
 			if siteId == self._me:
 				if self._params.debug:
@@ -341,7 +341,7 @@ class SnipsLedControl:
 				self._ledsController.conError()
 			else:
 				if self._params.debug:
-					self._logger.debug("On connection error received, but it wasn't not for me")
+					self._logger.debug("On connection error received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_MESSAGE:
 			if siteId == self._me:
 				if self._params.debug:
@@ -349,7 +349,7 @@ class SnipsLedControl:
 				self._ledsController.message()
 			else:
 				if self._params.debug:
-					self._logger.debug("On message received, but it wasn't not for me")
+					self._logger.debug("On message received, but it wasn't for me")
 		elif message.topic == self._SUB_ON_DND:
 			if siteId == self._me:
 				if self._params.debug:
@@ -357,7 +357,7 @@ class SnipsLedControl:
 				self._ledsController.dnd()
 			else:
 				if self._params.debug:
-					self._logger.debug("On do not disturb received, but it wasn't not for me")
+					self._logger.debug("On do not disturb received, but it wasn't for me")
 
 
 	@property
