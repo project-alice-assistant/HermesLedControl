@@ -133,6 +133,9 @@ class SnipsLedControl:
 		if 'activeHigh' in self._hardware and params.activeHigh != self._hardware['activeHigh']:
 			self._hardware['activeHigh'] = params.activeHigh
 
+		if 'endFrame' in self._hardware and params.endFrame is not None:
+			self._hardware['endFrame'] = params.endFrame
+
 
 		self._ledsController = LedsController(self)
 		self._mqttClient = self.connectMqtt()
