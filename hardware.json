@@ -76,7 +76,7 @@
 		"numberOfLeds": 1,
 		"interface": "pureGPIO",
 		"activeHigh": true,
-		"gpios": [26]
+		"gpios": [25]
 	},
 	"puregpio": {
 		"__comment__": "Use the broadcom gpio number, not the physical pin number!",
