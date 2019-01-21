@@ -25,11 +25,14 @@ class AlexaLedPattern(LedPattern):
 		for i in range(int(round(self._numLeds / 2)) + 1):
 			brightness += 5
 			self._controller.setLedRGB(i, self._colors['white'], brightness)
-			self._controller.setLedRGB(self._numLeds - i, self._colors['white'], brightness)
+
+			if i > 0:
+				self._controller.setLedRGB(self._numLeds - i, self._colors['white'], brightness)
 
 			if i > 1:
 				self._controller.setLedRGB(i - 2, self._colors['blue'], brightness)
-				self._controller.setLedRGB(self._numLeds - i + 2, self._colors['blue'], brightness)
+				if i > 2:
+					self._controller.setLedRGB(self._numLeds - i + 2, self._colors['blue'], brightness)
 
 			self._controller.show()
 			time.sleep(0.02)
