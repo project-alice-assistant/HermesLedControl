@@ -42,7 +42,7 @@ pip --no-cache-dir install paho-mqtt
 pip --no-cache-dir install pytoml
 
 mkdir -p logs
-chown user logs
+chown pi logs
 
 chmod +x ./installers/matrixvoice.sh
 chmod +x ./installers/neopixels.sh
