@@ -73,7 +73,7 @@ class Everloop:
 		ledValue.green = green
 		ledValue.blue  = blue
 		ledValue.white = white
-		if ledNum < self._numLeds:
+		if ledNum <= self._numLeds:
 			self._colors[ledNum] = ledValue
 		else:
 			self._logger.warning("Led number missmatch ({}/{}), aborting".format(ledNum, self._numLeds))
