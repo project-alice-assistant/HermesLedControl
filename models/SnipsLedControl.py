@@ -104,7 +104,7 @@ class SnipsLedControl:
 		if self._mqttUsername:
 			self._logger.info('- Mqtt username set to {}'.format(self._mqttUsername))
 		if self._mqttPassword:
-			self._logger.info('- Mqtt password set to {}'.format(self._mqttPassword))
+			self._logger.info('- Mqtt password set to "hidden"')
 
 		self._logger.info('- Client id set to {}'.format(self._me))
 		self._logger.info('- Hardware set to {}'.format(self._hardware['name']))
