@@ -30,7 +30,6 @@ systemctl stop snipsledcontrol
 apt-get update
 apt-get install -y python-pip
 apt-get install -y git
-apt-get install -y mosquitto
 apt-get install -y mosquitto-clients
 apt-get install -y portaudio19-dev
 apt-get install -y python-numpy
