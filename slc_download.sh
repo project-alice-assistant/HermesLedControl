@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 url=$(curl --silent "https://api.github.com/repos/Psychokiller1888/snipsLedControl/releases/latest" | grep -Po '"tarball_url": "\K.*?(?=")')
 latest=$(curl --silent "https://api.github.com/repos/Psychokiller1888/snipsLedControl/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 

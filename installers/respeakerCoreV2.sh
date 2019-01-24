@@ -3,7 +3,11 @@
 echo "############### Respeaker Core V2 installation ########################"
 echo "############## Please run this script with sudo #######################"
 
+USER=$(logname)
+
 pip uninstall -y gpiozero
+
+cd /home/$USER
 curl https://raw.githubusercontent.com/respeaker/respeakerd/master/scripts/install_all.sh|bash
 cp -f ~/respeakerd/scripts/pixel_ring_server /usr/local/bin/
 chmod a+x /usr/local/bin/pixel_ring_server

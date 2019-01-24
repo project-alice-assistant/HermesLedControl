@@ -3,6 +3,8 @@
 echo "############### Respeaker Mic Array V2 installation ########################"
 echo "################ Please run this script with sudo ##########################"
 
+USER=$(logname)
+
 echo "How many channels do you want to use?"
 select channels in "1" "6"; do
     case $channels in
@@ -12,7 +14,7 @@ done
 
 pip install click
 pip install pyusb
-cd /home/pi
+cd /home/$USER
 rm -rf /home/pi/usb_4_mic_array
 git clone https://github.com/respeaker/usb_4_mic_array.git
 cd usb_4_mic_array

@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 if [ -z "$1" ]; then
     echo "No version supplied"
     exit
 else
     VERSION=$1
 fi
+
+USER=$(logname)
 
 echo "What device do you wish to control with SLC?"
 select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
@@ -41,7 +48,7 @@ pip --no-cache-dir install paho-mqtt
 pip --no-cache-dir install pytoml
 
 mkdir -p logs
-chown pi logs
+chown $USER logs
 
 chmod +x ./installers/matrixVoiceCreator.sh
 chmod +x ./installers/neopixels.sh
