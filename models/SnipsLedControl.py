@@ -200,7 +200,13 @@ class SnipsLedControl:
 			(self._SUB_ON_LEDS_TOGGLE_OFF, 0),
 			(self._SUB_ON_LEDS_TOGGLE, 0),
 			(self._SUB_LEDS_ON_ERROR, 0),
-			(self._SUB_LEDS_ON_SUCCESS, 0)
+			(self._SUB_LEDS_ON_SUCCESS, 0),
+			(self._SUB_UPDATING, 0),
+			(self._SUB_ON_CALL, 0),
+			(self._SUB_SETUP_MODE, 0),
+			(self._SUB_CON_ERROR, 0),
+			(self._SUB_ON_MESSAGE, 0),
+			(self._SUB_ON_DND, 0)
 		])
 
 		self._mqttClient.subscribe(self._params.offListener)
