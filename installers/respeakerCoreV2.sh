@@ -9,11 +9,13 @@ if [[ $(logname) != "respeaker" ]]; then
 fi
 
 pip uninstall -y gpiozero
+pip uninstall -y RPi.GPIO
 pip --no-cache-dir install pydbus
 pip --no-cache-dir install pixel-ring
 
-cd /home/respeaker
+sed -i -e "s/WorkingDirectory=\/home\/pi\//WorkingDirectory=\/home\/respeaker\//" /etc/systemd/system/snipsledcontrol.service
 
+cd /home/respeaker
 rm /home/respeaker/install_all.sh
 wget https://raw.githubusercontent.com/respeaker/respeakerd/master/scripts/install_all.sh
 sudo su respeaker ./install_all.sh
