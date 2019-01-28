@@ -15,7 +15,7 @@ done
 pip install click
 pip install pyusb
 cd /home/$USER
-rm -rf /home/pi/usb_4_mic_array
+rm -rf /home/$USER/usb_4_mic_array
 git clone https://github.com/respeaker/usb_4_mic_array.git
 cd usb_4_mic_array
 
