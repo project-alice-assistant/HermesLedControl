@@ -95,7 +95,7 @@ class AlexaLedPattern(LedPattern):
 	def off(self, *args):
 		for i in range(int(round(self._numLeds / 2)) + 1):
 			self._controller.setLedRGB(i, self._colors['blank'], 0)
-			self._controller.setLedRGB(self._numLeds - i, self._colors['blank'], 0)
+			self._controller.setLedRGB(self._normalizeIndex(self._numLeds - i), self._colors['blank'], 0)
 
 			self._controller.show()
 			time.sleep(0.02)

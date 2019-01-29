@@ -49,3 +49,17 @@ class LedPattern(object):
 	@staticmethod
 	def color(red, green, blue, white=0):
 		return (white << 24) | (red << 16) | (green << 8) | blue
+
+
+	def _normalizeIndex(self, index):
+		"""
+		Makes sure the given index is valid in the led strip or returns the one on the other side of the loop
+		:param int index:
+		:return: int
+		"""
+		if index < 0:
+			return self._numLeds - abs(index)
+		elif index >= self._numLeds:
+			return index - self._numLeds
+		else:
+			return index
