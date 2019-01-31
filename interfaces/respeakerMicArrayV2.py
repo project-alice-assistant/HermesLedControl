@@ -11,8 +11,7 @@ class RespeakerMicArrayV2(Interface):
 	def __init__(self, numLeds, vid, pid):
 		super(RespeakerMicArrayV2, self).__init__(numLeds)
 
-		#self._leds = pixel_ring.find(vid=hex(int(vid, 16)), pid=hex(int(pid, 16)))
-		self._leds = pixel_ring.find()
+		self._leds = pixel_ring.find(vid=int(vid, 16), pid=int(pid, 16))
 
 		if self._leds is None:
 			raise InterfaceInitError('Respeaker Mic Array V2 not found using pid={} and vid={}'.format(pid, vid))
