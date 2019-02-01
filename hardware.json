@@ -26,7 +26,14 @@
 		"interface": "respeakerMicArrayV2",
 		"vid": "0x2886",
 		"pid": "0x0018",
-		"endFrame": 0
+		"endFrame": 0,
+		"extras": {
+			"volume": {
+				"min": 0,
+				"max": 12
+			},
+			"vad_led": true
+		}
 	},
 	"respeaker6MicArray": {
 		"name": "ReSpeaker 6-Mic Circular Array",

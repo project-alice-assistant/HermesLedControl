@@ -31,6 +31,8 @@ class SnipsLedControl:
 	_SUB_ON_MESSAGE 				= 'hermes/leds/onMessage'
 	_SUB_ON_DND 					= 'hermes/leds/doNotDisturb'
 
+	_SUB_VOLUME_SET 				= 'hermes/volume/set'
+
 
 	def __init__(self, params):
 		self._logger = logging.getLogger('SnipsLedControl')
@@ -206,7 +208,8 @@ class SnipsLedControl:
 			(self._SUB_SETUP_MODE, 0),
 			(self._SUB_CON_ERROR, 0),
 			(self._SUB_ON_MESSAGE, 0),
-			(self._SUB_ON_DND, 0)
+			(self._SUB_ON_DND, 0),
+			(self._SUB_VOLUME_SET, 0)
 		])
 
 		self._mqttClient.subscribe(self._params.offListener)
@@ -367,6 +370,17 @@ class SnipsLedControl:
 			else:
 				if self._params.debug:
 					self._logger.debug("On do not disturb received, but it wasn't for me")
+		elif message.topic == self._SUB_VOLUME_SET:
+			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On volume set triggered')
+				if 'volume' not in payload:
+					self._logger.error('Missing "volume" in payload for set volume')
+				else:
+					self._ledsController.dnd()
+			else:
+				if self._params.debug:
+					self._logger.debug("On volume set received, but it wasn't for me")
 
 
 	@property
