@@ -3,7 +3,7 @@
 		"name": "ReSpeaker 2",
 		"numberOfLeds": 3,
 		"interface": "apa102",
-		"endFrame": "255",
+		"endFrame": 255,
 		"extras": {
 			"buttons": {
 				"button1": {
@@ -18,29 +18,36 @@
 		"numberOfLeds": 12,
 		"interface": "apa102",
 		"doa": true,
-		"endFrame": "255"
+		"endFrame": 255
 	},
 	"respeakerMicArrayV2": {
 		"name": "ReSpeaker Mic array v2",
 		"numberOfLeds": 12,
-		"interface": "apa102",
+		"interface": "respeakerMicArrayV2",
 		"vid": "0x2886",
 		"pid": "0x0018",
-		"endFrame": "0"
+		"endFrame": 0,
+		"extras": {
+			"volume": {
+				"min": 0,
+				"max": 12
+			},
+			"vadLed": true
+		}
 	},
 	"respeaker6MicArray": {
 		"name": "ReSpeaker 6-Mic Circular Array",
 		"numberOfLeds": 12,
 		"interface": "apa102",
 		"doa": true,
-		"endFrame": "255"
+		"endFrame": 255
 	},
 	"respeakerCoreV2": {
 		"name": "Respeaker Core v2",
 		"numberOfLeds": 12,
 		"interface": "apa102",
 		"doa": true,
-		"endFrame": "0"
+		"endFrame": 0
 	},
   	"neoPixelsSK6812RGBW": {
 		"name": "Adafruit NeoPixels SK6812 RGBW",
@@ -76,7 +83,7 @@
 		"numberOfLeds": 1,
 		"interface": "pureGPIO",
 		"activeHigh": true,
-		"gpios": [26]
+		"gpios": [25]
 	},
 	"puregpio": {
 		"__comment__": "Use the broadcom gpio number, not the physical pin number!",

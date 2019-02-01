@@ -103,7 +103,7 @@ class LedsController:
 		try:
 			if self._hardware['interface'] == Interfaces.APA102:
 				from interfaces.apa102 import APA102
-				self._interface = APA102(numLed=self._hardware['numberOfLeds'], endFrame=int(self._hardware['endFrame']))
+				self._interface = APA102(numLed=self._hardware['numberOfLeds'], endFrame=self._hardware['endFrame'])
 
 			elif self._hardware['interface'] == Interfaces.NEOPIXELS:
 				from interfaces.neopixels import Neopixels
@@ -128,6 +128,41 @@ class LedsController:
 		except InterfaceInitError as e:
 			self._logger.error('{}'.format(e))
 			return False
+	
+	
+	def setVolume(self, volume):
+		"""
+		Some hardware such as respeaker mic array have onboard volume control that can be set
+		:type volume: int
+		:return: 
+		"""
+		if 'extras' in self._hardware and 'volume' in self._hardware['extras']:
+			try:
+				minVol = self._hardware['extras']['volume']['min']
+				maxVol = self._hardware['extras']['volume']['max']
+				volume = max(min(volume, maxVol), minVol)
+				if self._interface is not None:
+					self._interface.setVolume(volume)
+			except:
+				self._logger.error('Missing or wrong configuration for volume setting')
+		else:
+			self._logger.warning('Tried to set volume on an unsupported device')
+
+
+	def setVadLed(self, state):
+		"""
+		Some hardware such as respeaker mic array have onboard vad led
+		:type state: int (0-1)
+		:return:
+		"""
+		if 'extras' in self._hardware and 'vadLed' in self._hardware['extras']:
+			try:
+				if self._interface is not None:
+					self._interface.setVadLed(state)
+			except:
+				self._logger.error('Missing or wrong vad led setting')
+		else:
+			self._logger.warning('Tried to set vad led on an unsupported device')
 
 
 	def wakeup(self):

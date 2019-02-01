@@ -21,6 +21,7 @@ class LedPattern(object):
 		return self._animation
 
 
+	def nothing(self, *args) 	: pass
 	def wakeup(self, *args)		: pass
 	def listen(self, *args)		: pass
 	def think(self, *args)		: pass
@@ -35,6 +36,7 @@ class LedPattern(object):
 	def conError(self, *args)	: pass
 	def message(self, *args)	: pass
 	def dnd(self, *args)		: pass
+	def onVolumeSet(self, *args): pass
 	def onButton1(self, *args)	: self._logger.warning('Button 1 not implemented, override it in CustomLedPattern')
 	def onButton2(self, *args)	: self._logger.warning('Button 2 not implemented, override it in CustomLedPattern')
 	def onButton3(self, *args)	: self._logger.warning('Button 3 not implemented, override it in CustomLedPattern')
@@ -48,3 +50,17 @@ class LedPattern(object):
 	@staticmethod
 	def color(red, green, blue, white=0):
 		return (white << 24) | (red << 16) | (green << 8) | blue
+
+
+	def _normalizeIndex(self, index):
+		"""
+		Makes sure the given index is valid in the led strip or returns the one on the other side of the loop
+		:param int index:
+		:return: int
+		"""
+		if index < 0:
+			return self._numLeds - abs(index)
+		elif index >= self._numLeds:
+			return index - self._numLeds
+		else:
+			return index

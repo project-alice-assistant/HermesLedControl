@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 if [ -z "$1" ]; then
     echo "No version supplied"
     exit
 else
     VERSION=$1
 fi
+
+USER=$(logname)
 
 echo "What device do you wish to control with SLC?"
 select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
@@ -17,7 +24,7 @@ done
 
 if [ "$device" != "don't overwrite existing parameters" ]; then
     echo "What pattern do you want to use?"
-    select pattern in "google" "alexa" "custom" "cancel"; do
+    select pattern in "google" "alexa" "custom" "kiboost" "cancel"; do
         case $pattern in
             cancel) exit;;
             *) break;;
@@ -25,7 +32,7 @@ if [ "$device" != "don't overwrite existing parameters" ]; then
     done
 fi
 
-systemctl stop snipsledcontrol
+systemctl is-active -q snipsledcontrol && systemctl stop snipsledcontrol
 
 apt-get update
 apt-get install -y python-pip
@@ -42,10 +49,11 @@ pip --no-cache-dir install paho-mqtt
 pip --no-cache-dir install pytoml
 
 mkdir -p logs
-chown user logs
+chown $USER logs
 
-chmod +x ./installers/matrixvoice.sh
+chmod +x ./installers/matrixVoiceCreator.sh
 chmod +x ./installers/neopixels.sh
+chmod +x ./installers/respeakerCoreV2.sh
 chmod +x ./installers/respeakerMicArrayV2.sh
 chmod +x ./installers/respeakers.sh
 
@@ -76,7 +84,7 @@ if [[ -d "/var/lib/snips/skills/snips-skill-respeaker" ]]; then
     done
 fi
 
-echo "Do you need to install / configure your $device?"
+echo "Do you need to install / configure your $device? This is strongly suggested as it does turn off services that might conflict as well!"
 select answer in "yes" "no" "cancel"; do
     case $answer in
         yes)

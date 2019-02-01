@@ -19,7 +19,6 @@ class Interface(object):
 	def leds(self):
 		return self._leds
 
-
 	@property
 	def numLeds(self):
 		return self._numLeds
@@ -32,13 +31,28 @@ class Interface(object):
 	def setPixelRgb(self, ledNum, color, brightness)			: pass
 	def clearStrip(self)										: pass
 	def show(self)												: self._leds.show()
+	def setVolume(self, volume)									: pass
+	def setVadLed(self, state) 									: pass
 
 	def onStart(self):
 		if self._power is not None:
-			self._power.on()
+			try:
+				self._power.on()
+			except:
+				try:
+					self._power.write(0)
+				except:
+					pass
+
 	def onStop(self):
 		if self._power is not None:
-			self._power.off()
+			try:
+				self._power.off()
+			except:
+				try:
+					self._power.write(1)
+				except:
+					pass
 
 	def getDoA(self):
 		pass

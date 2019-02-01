@@ -3,8 +3,11 @@
 echo "######################### Respeakers installation #########################"
 echo "#################### Please run this script with sudo #####################"
 
-cd /home/pi
-rm -rf /home/pi/seeed-voicecard
+USER=$(logname)
+
+cd /home/$USER
+rm -rf /home/$USER/seeed-voicecard
+
 git clone https://github.com/respeaker/seeed-voicecard.git
 cd seeed-voicecard
 chmod +x ./install.sh

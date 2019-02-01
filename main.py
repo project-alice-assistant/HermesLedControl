@@ -65,6 +65,7 @@ def main():
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
 	parser.add_argument('--defaultBrightness', help='Set a default brightness for your leds', type=int, default=50)
+	parser.add_argument('--endFrame', help='Respeakers, or apa102 led systems need an end frame. If your device is not working try either 255 or 0', type=int)
 	parser.add_argument('--pattern', help='The pattern to be used', type=str, default='google',
 						choices=[
 							'google',
