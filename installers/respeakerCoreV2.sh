@@ -9,10 +9,6 @@ pip uninstall -y gpiozero
 pip uninstall -y RPi.GPIO
 
 apt-get install -y python-mraa
-apt-get install -y python-upm
-apt-get install -y libmraa1
-apt-get install -y libupm1
-apt-get install -y mraa-tools
 
 sed -i -e "s/WorkingDirectory=\/home\/pi\//WorkingDirectory=\/home\/"$(logname)"\//" /etc/systemd/system/snipsledcontrol.service
 
