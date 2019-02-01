@@ -32,11 +32,12 @@ if [ "$device" != "don't overwrite existing parameters" ]; then
     done
 fi
 
-systemctl stop snipsledcontrol
+systemctl is-active -q snipsledcontrol && systemctl stop snipsledcontrol
 
 apt-get update
 apt-get install -y python-pip
 apt-get install -y git
+apt-get install -y mosquitto
 apt-get install -y mosquitto-clients
 apt-get install -y portaudio19-dev
 apt-get install -y python-numpy
@@ -124,13 +125,6 @@ select answer in "yes" "no" "cancel"; do
                     break
                     ;;
                 respeakerCoreV2)
-                    echo ""
-                    echo "There's still time to cancel!"
-                    echo ""
-                    echo "Did you install your respeaker core 2 using `https://raw.githubusercontent.com/respeaker/respeakerd/master/scripts/install_all.sh` ?"
-                    echo "If not, CTRL-C this script now and do it! Then restart this installer!"
-                    echo ""
-                    read -p "Press CTRL-C to abort install or any key if you did install your respeaker core v2 basic needs"
                     chmod +x ./installers/respeakerCoreV2.sh
                     ./installers/respeakerCoreV2.sh
                     break

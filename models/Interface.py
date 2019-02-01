@@ -19,7 +19,6 @@ class Interface(object):
 	def leds(self):
 		return self._leds
 
-
 	@property
 	def numLeds(self):
 		return self._numLeds
@@ -35,10 +34,23 @@ class Interface(object):
 
 	def onStart(self):
 		if self._power is not None:
-			self._power.on()
+			try:
+				self._power.on()
+			except:
+				try:
+					self._power.write(0)
+				except:
+					pass
+
 	def onStop(self):
 		if self._power is not None:
-			self._power.off()
+			try:
+				self._power.off()
+			except:
+				try:
+					self._power.write(1)
+				except:
+					pass
 
 	def getDoA(self):
 		pass
