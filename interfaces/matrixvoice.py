@@ -29,5 +29,6 @@ class MatrixVoice(Interface):
 
 
 	def onStop(self):
+		self.clearStrip()
 		self._leds.onStop()
 		super(MatrixVoice, self).onStop()
