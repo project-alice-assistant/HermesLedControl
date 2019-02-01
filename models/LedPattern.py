@@ -36,6 +36,7 @@ class LedPattern(object):
 	def conError(self, *args)	: pass
 	def message(self, *args)	: pass
 	def dnd(self, *args)		: pass
+	def onVolumeSet(self, *args): pass
 	def onButton1(self, *args)	: self._logger.warning('Button 1 not implemented, override it in CustomLedPattern')
 	def onButton2(self, *args)	: self._logger.warning('Button 2 not implemented, override it in CustomLedPattern')
 	def onButton3(self, *args)	: self._logger.warning('Button 3 not implemented, override it in CustomLedPattern')

@@ -32,7 +32,7 @@
 				"min": 0,
 				"max": 12
 			},
-			"vad_led": true
+			"vadLed": true
 		}
 	},
 	"respeaker6MicArray": {

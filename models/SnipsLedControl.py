@@ -32,6 +32,7 @@ class SnipsLedControl:
 	_SUB_ON_DND 					= 'hermes/leds/doNotDisturb'
 
 	_SUB_VOLUME_SET 				= 'hermes/volume/set'
+	_SUB_VADLED_SET 				= 'hermes/leds/vadLed'
 
 
 	def __init__(self, params):
@@ -209,7 +210,8 @@ class SnipsLedControl:
 			(self._SUB_CON_ERROR, 0),
 			(self._SUB_ON_MESSAGE, 0),
 			(self._SUB_ON_DND, 0),
-			(self._SUB_VOLUME_SET, 0)
+			(self._SUB_VOLUME_SET, 0),
+			(self._SUB_VADLED_SET, 0)
 		])
 
 		self._mqttClient.subscribe(self._params.offListener)
@@ -377,10 +379,21 @@ class SnipsLedControl:
 				if 'volume' not in payload:
 					self._logger.error('Missing "volume" in payload for set volume')
 				else:
-					self._ledsController.dnd()
+					self._ledsController.setVolume(payload['volume'])
 			else:
 				if self._params.debug:
 					self._logger.debug("On volume set received, but it wasn't for me")
+		elif message.topic == self._SUB_VADLED_SET:
+			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On vad led set triggered')
+				if 'state' not in payload:
+					self._logger.error('Missing "state" in payload for set vad led')
+				else:
+					self._ledsController.setVadLed(payload['state'])
+			else:
+				if self._params.debug:
+					self._logger.debug("On vad led set received, but it wasn't for me")
 
 
 	@property

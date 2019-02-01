@@ -45,5 +45,16 @@ class RespeakerMicArrayV2(Interface):
 		self._leds.customize(self._colors)
 
 
+	def setVolume(self, volume):
+		self._leds.set_volume(volume)
+
+
+	def setVadLed(self, state):
+		if state == 1:
+			self._leds.set_vad_led(state)
+		else:
+			self._leds.set_vad_led(0)
+
+
 	def _newArray(self):
 		return [0, 0, 0, 0] * self._numLeds

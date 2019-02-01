@@ -136,7 +136,33 @@ class LedsController:
 		:type volume: int
 		:return: 
 		"""
-		pass
+		if 'extras' in self._hardware and 'volume' in self._hardware['extras']:
+			try:
+				minVol = self._hardware['extras']['volume']['min']
+				maxVol = self._hardware['extras']['volume']['max']
+				volume = max(min(volume, maxVol), minVol)
+				if self._interface is not None:
+					self._interface.setVolume(volume)
+			except:
+				self._logger.error('Missing or wrong configuration for volume setting')
+		else:
+			self._logger.warning('Tried to set volume on an unsupported device')
+
+
+	def setVadLed(self, state):
+		"""
+		Some hardware such as respeaker mic array have onboard vad led
+		:type state: int (0-1)
+		:return:
+		"""
+		if 'extras' in self._hardware and 'vadLed' in self._hardware['extras']:
+			try:
+				if self._interface is not None:
+					self._interface.setVadLed(state)
+			except:
+				self._logger.error('Missing or wrong vad led setting')
+		else:
+			self._logger.warning('Tried to set vad led on an unsupported device')
 
 
 	def wakeup(self):
