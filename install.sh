@@ -48,10 +48,11 @@ pip --no-cache-dir install gpiozero
 pip --no-cache-dir install paho-mqtt
 pip --no-cache-dir install pytoml
 
+systemctl is-active -q pixel_ring_server && systemctl disable pixel_ring_server
+pip uninstall -y pixel_ring
+
 mkdir -p logs
 chown $USER logs
-
-directory=${PWD##*/}
 
 if [ ! -f /etc/systemd/system/snipsledcontrol.service ]; then
     cp snipsledcontrol.service /etc/systemd/system
