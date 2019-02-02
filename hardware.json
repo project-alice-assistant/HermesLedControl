@@ -42,6 +42,18 @@
 		"doa": true,
 		"endFrame": 255
 	},
+	"respeaker7MicArray": {
+		"name": "ReSpeaker 7-Mic Array",
+		"numberOfLeds": 12,
+		"interface": "respeaker7MicArray",
+		"doa": true,
+		"extras": {
+			"volume": {
+				"min": 0,
+				"max": 12
+			}
+		}
+	},
 	"respeakerCoreV2": {
 		"name": "Respeaker Core v2",
 		"numberOfLeds": 12,

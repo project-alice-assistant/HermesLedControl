@@ -56,6 +56,7 @@ def main():
 							"respeakerMicArrayV2",
 							"respeakerCoreV2",
 							"respeaker6MicArray",
+							"respeaker7MicArray",
 							"matrixvoice",
 							"matrixcreator",
 							"neoPixelsSK6812RGBW",

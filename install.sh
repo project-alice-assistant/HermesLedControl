@@ -15,7 +15,7 @@ fi
 USER=$(logname)
 
 echo "What device do you wish to control with SLC?"
-select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
+select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
     case $device in
         cancel) exit;;
         *) break;;
@@ -50,12 +50,6 @@ pip --no-cache-dir install pytoml
 
 mkdir -p logs
 chown $USER logs
-
-chmod +x ./installers/matrixVoiceCreator.sh
-chmod +x ./installers/neopixels.sh
-chmod +x ./installers/respeakerCoreV2.sh
-chmod +x ./installers/respeakerMicArrayV2.sh
-chmod +x ./installers/respeakers.sh
 
 directory=${PWD##*/}
 
@@ -127,6 +121,11 @@ select answer in "yes" "no" "cancel"; do
                 respeakerCoreV2)
                     chmod +x ./installers/respeakerCoreV2.sh
                     ./installers/respeakerCoreV2.sh
+                    break
+                    ;;
+                respeaker7MicArray)
+                    chmod +x ./installers/respeaker7MicArray.sh
+                    ./installers/respeaker7MicArray.sh
                     break
                     ;;
                 *)

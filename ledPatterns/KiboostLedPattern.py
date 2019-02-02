@@ -18,7 +18,6 @@
 
 from models.LedPattern import LedPattern
 import time
-import threading
 
 class KiboostLedPattern(LedPattern):
 
