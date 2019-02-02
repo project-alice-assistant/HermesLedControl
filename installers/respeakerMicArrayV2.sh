@@ -14,6 +14,8 @@ done
 
 pip install click
 pip install pyusb
+systemctl is-active -q pixel_ring_server && systemctl stop pixel_ring_server
+pip uninstall -y pixel_ring
 cd /home/$USER
 rm -rf /home/$USER/usb_4_mic_array
 git clone https://github.com/respeaker/usb_4_mic_array.git
