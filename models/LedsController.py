@@ -251,38 +251,38 @@ class LedsController:
 
 	def updating(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.updating())
+			self._put(self._pattern.updating)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.updatingPattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.updatingPattern))
-				self._put(self._pattern.updating())
+				self._put(self._pattern.updating)
 
 
 	def call(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.call())
+			self._put(self._pattern.call)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.callPattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.callPattern))
-				self._put(self._pattern.call())
+				self._put(self._pattern.call)
 
 
 	def setupMode(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.setupMode())
+			self._put(self._pattern.setupMode)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.setupModePattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.setupModePattern))
-				self._put(self._pattern.setupMode())
+				self._put(self._pattern.setupMode)
 
 
 	def conError(self):
@@ -294,31 +294,31 @@ class LedsController:
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.conErrorPattern))
-				self._put(self._pattern.conError())
+				self._put(self._pattern.conError)
 
 
 	def message(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.message())
+			self._put(self._pattern.message)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.messagePattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.messagePattern))
-				self._put(self._pattern.message())
+				self._put(self._pattern.message)
 
 
 	def dnd(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.dnd())
+			self._put(self._pattern.dnd)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.dndPattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.dndPattern))
-				self._put(self._pattern.dnd())
+				self._put(self._pattern.dnd)
 
 
 	def off(self):
