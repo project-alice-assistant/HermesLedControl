@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 echo "############### Respeaker Core V2 installation ########################"
 echo "############## Please run this script with sudo #######################"
 
-pip uninstall -y gpiozero
-pip uninstall -y RPi.GPIO
+pip3 uninstall -y gpiozero
+pip3 uninstall -y RPi.GPIO
 
 apt-get install -y python-mraa
 

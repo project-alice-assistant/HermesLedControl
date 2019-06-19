@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 echo "############### Respeaker Mic Array V2 installation ########################"
 echo "################ Please run this script with sudo ##########################"
@@ -12,17 +12,17 @@ select channels in "1" "6"; do
     esac
 done
 
-pip install click
-pip install pyusb
+pip3 install click
+pip3 install pyusb
 cd /home/$USER
 rm -rf /home/$USER/usb_4_mic_array
 git clone https://github.com/respeaker/usb_4_mic_array.git
 cd usb_4_mic_array
 
 if [ "channels" == 6 ]; then
-    python dfu.py --download 6_channels_firmware.bin
+    python3 dfu.py --download 6_channels_firmware.bin
 else
-    python dfu.py --download 1_channel_firmware.bin
+    python3 dfu.py --download 1_channel_firmware.bin
 fi
 
 echo "############################## All done! ##############################"

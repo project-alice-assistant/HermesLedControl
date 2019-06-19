@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 echo "############### Respeaker 7 Mic Array installation #########################"
 echo "################ Please run this script with sudo ##########################"
 
-pip uninstall -y gpiozero
-pip uninstall -y RPi.GPIO
+pip3 uninstall -y gpiozero
+pip3 uninstall -y RPi.GPIO
 
-pip install respeaker
+pip3 install respeaker
 
 echo "############################## All done! ##############################"
 echo "############## Don't forget to turn on the SPI interface! #############"

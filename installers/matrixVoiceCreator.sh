@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
 
 echo "######################## Matrix Voice / Creator installation ########################"
 echo "######################### Please run this script with sudo ##########################"
@@ -10,18 +11,18 @@ wget https://download.opensuse.org/repositories/network:/messaging:/zeromq:/rele
 sudo apt-get update
 sudo apt-get install -y build-essential python-dev matrixio-malos
 
-pip --no-cache-dir install appdirs
-pip --no-cache-dir install backports-abc
-pip --no-cache-dir install certifi
-pip --no-cache-dir install matrix_io-proto
-pip --no-cache-dir install packaging
-pip --no-cache-dir install protobuf
-pip --no-cache-dir install pyparsing
-pip --no-cache-dir install pyzmq
-pip --no-cache-dir install zmq
-pip --no-cache-dir install singledispatch
-pip --no-cache-dir install six
-pip --no-cache-dir install tornado
+pip3 --no-cache-dir install appdirs
+pip3 --no-cache-dir install backports-abc
+pip3 --no-cache-dir install certifi
+pip3 --no-cache-dir install matrix_io-proto
+pip3 --no-cache-dir install packaging
+pip3 --no-cache-dir install protobuf
+pip3 --no-cache-dir install pyparsing
+pip3 --no-cache-dir install pyzmq
+pip3 --no-cache-dir install zmq
+pip3 --no-cache-dir install singledispatch
+pip3 --no-cache-dir install six
+pip3 --no-cache-dir install tornado
 
 echo "######################## All done! ########################"
 echo "##################### Enjoy! Psycho #######################"
