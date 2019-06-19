@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 echo "######################## Matrix Voice / Creator installation ########################"
 echo "######################### Please run this script with sudo ##########################"
 

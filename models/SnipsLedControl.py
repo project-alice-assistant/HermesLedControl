@@ -6,7 +6,7 @@ import sys
 
 import os
 import paho.mqtt.client as mqtt
-import pytoml
+import toml
 
 from models.LedsController import LedsController
 from paho.mqtt.client import MQTTMessage
@@ -171,7 +171,7 @@ class SnipsLedControl:
 
 		if os.path.isfile('/etc/snips.toml'):
 			with open('/etc/snips.toml') as confFile:
-				configs = pytoml.load(confFile)
+				configs = toml.load(confFile)
 				return configs
 		else:
 			if self.params.debug:

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 echo "######################### Respeakers installation #########################"
 echo "#################### Please run this script with sudo #####################"
 

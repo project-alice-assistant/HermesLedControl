@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 echo "############### Respeaker 7 Mic Array installation #########################"
 echo "################ Please run this script with sudo ##########################"
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ "$EUID" -ne 0 ]]; then
     echo "Please run as root"
@@ -65,7 +65,7 @@ pip3.5 --no-cache-dir install RPi.GPIO
 pip3.5 --no-cache-dir install spidev
 pip3.5 --no-cache-dir install gpiozero
 pip3.5 --no-cache-dir install paho-mqtt
-pip3.5 --no-cache-dir install pytoml
+pip3.5 --no-cache-dir install toml
 
 systemctl is-active -q pixel_ring_server && systemctl disable pixel_ring_server
 pip3.5 uninstall -y pixel_ring

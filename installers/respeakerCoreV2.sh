@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 echo "############### Respeaker Core V2 installation ########################"
 echo "############## Please run this script with sudo #######################"
 
