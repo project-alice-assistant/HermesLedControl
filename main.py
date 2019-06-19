@@ -38,7 +38,7 @@ def onStop():
 
 
 def main():
-	_logger.info('Starting Snips Led Control v. 1.8')
+	_logger.info('Starting Snips Led Control v. 1.8 beta')
 
 	signal.signal(signal.SIGINT, stopHandler)
 	signal.signal(signal.SIGTERM, stopHandler)
