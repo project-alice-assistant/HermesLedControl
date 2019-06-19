@@ -2,7 +2,7 @@
 
 from models.Animations import Animations
 from models.LedsController import *
-
+import logging
 
 class LedPattern(object):
 

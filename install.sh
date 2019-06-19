@@ -165,6 +165,8 @@ select answer in "yes" "no" "cancel"; do
     esac
 done
 
+chown -R ${USER} ${USERDIR}/snipsLedControl_${VERSION}
+
 systemctl daemon-reload
 systemctl enable snipsledcontrol
 systemctl start snipsledcontrol
