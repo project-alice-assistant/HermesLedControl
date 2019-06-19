@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import logging.handlers
+import logging
+from logging import handlers
 import signal
 import time
 from datetime import datetime
@@ -17,7 +18,7 @@ _logger.setLevel(logging.DEBUG)
 date = int(datetime.now().strftime('%Y%m%d'))
 
 handler = logging.FileHandler(filename='logs.log', mode='w')
-rotatingHandler = logging.handlers.RotatingFileHandler(filename='./logs/{}-logs.log'.format(date), mode='a', maxBytes=100000, backupCount=5)
+rotatingHandler = handlers.RotatingFileHandler(filename='./logs/{}-logs.log'.format(date), mode='a', maxBytes=100000, backupCount=5)
 streamHandler = logging.StreamHandler()
 
 handler.setFormatter(formatter)

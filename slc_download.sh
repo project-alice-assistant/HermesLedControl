@@ -18,6 +18,7 @@ wget ${url}
 tar -xzf ${latest} -C ${dest} --strip-components=1
 rm ${latest}
 
+chown -R $(logname) ${dest}
 cd ${dest}
 chmod +x install.sh
 ./install.sh ${latest}
