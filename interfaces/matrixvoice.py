@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from models.Exceptions 	import InterfaceInitError
 from libraries.everloop import Everloop
-from models.Interface 	import Interface
+from models.Exceptions import InterfaceInitError
+from models.Interface import Interface
+
 
 class MatrixVoice(Interface):
 

@@ -2,12 +2,14 @@
 
 
 import logging
+import time
+from multiprocessing import Process
+
 import zmq
 from matrix_io.proto.malos.v1 import driver_pb2
 from matrix_io.proto.malos.v1 import io_pb2
-from multiprocessing import Process
 from zmq.eventloop import ioloop, zmqstream
-import time
+
 
 class Everloop:
 

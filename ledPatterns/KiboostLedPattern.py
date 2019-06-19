@@ -15,8 +15,10 @@
 #
 ###########################################################################################################
 
-from models.LedPattern import LedPattern
 import time
+
+from models.LedPattern import LedPattern
+
 
 class KiboostLedPattern(LedPattern):
 

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from models.Exceptions 				import InterfaceInitError
-from models.Interfaces 				import Interfaces
-from models.SnipsLedControl 		import *
 import logging
 import threading
 import time
+
+from models.Exceptions import InterfaceInitError
+from models.Interfaces import Interfaces
+from models.SnipsLedControl import *
 
 try:
 	import queue 					as Queue

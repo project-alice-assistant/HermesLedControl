@@ -2,11 +2,14 @@
 
 import json
 import logging
-from models.LedsController import LedsController
+import sys
+
 import os
 import paho.mqtt.client as mqtt
 import pytoml
-import sys
+
+from models.LedsController import LedsController
+
 
 class SnipsLedControl:
 

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-from models.LedPattern import LedPattern
 import math
 import time
+
+from models.LedPattern import LedPattern
+
 try:
 	import queue as Queue
 except ImportError:

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from models.Exceptions 	import InterfaceInitError
-from gpiozero 			import LED
-from models.Interface 	import Interface
+from gpiozero import LED
+
+from models.Exceptions import InterfaceInitError
+from models.Interface import Interface
+
 
 class PureGPIO(Interface):
 

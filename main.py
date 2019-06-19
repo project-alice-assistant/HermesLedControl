@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-from datetime 					import datetime
 import logging.handlers
 import signal
 import time
-from models.SnipsLedControl 	import SnipsLedControl
+from datetime import datetime
+
+from models.SnipsLedControl import SnipsLedControl
 
 formatter = logging.Formatter('%(asctime)s [%(threadName)s] - [%(levelname)s] - %(message)s')
 

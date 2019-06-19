@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import logging
-from models.Animations 		import Animations
-from models.LedsController 	import *
 import threading
+
+from models.Animations import Animations
+from models.LedsController import *
+
 
 class LedPattern(object):
 
