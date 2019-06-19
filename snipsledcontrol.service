@@ -8,6 +8,7 @@ WorkingDirectory=%WORKING_DIR%
 ExecStart=%EXECSTART%
 Restart=always
 RestartSec=5
+User=%USER%
 
 [Install]
 WantedBy=multi-user.target

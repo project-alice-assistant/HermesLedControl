@@ -83,6 +83,7 @@ fi
 
 escaped=${USERDIR//\//\\/}
 sed -i -e "s/%WORKING_DIR%/"${escaped}"\/snipsLedControl_"${VERSION}"/" /etc/systemd/system/snipsledcontrol.service
+sed -i -e "s/%USER%/"${USER}"/" /etc/systemd/system/snipsledcontrol.service
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
     sed -i -e "s/%EXECSTART%/"${escaped}"\/snipsLedControl_"${VERSION}"\/venv\/bin\/python3.5 main.py --hardware="${device}" --pattern="${pattern}"/" /etc/systemd/system/snipsledcontrol.service
