@@ -1,22 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import logging
+import queue as Queue
 import threading
 import time
 
+from ledPatterns.AlexaLedPattern import AlexaLedPattern
+from ledPatterns.CustomLedPattern import CustomLedPattern
+from ledPatterns.GoogleLedPattern import GoogleHomeLedPattern
+from ledPatterns.KiboostLedPattern import KiboostLedPattern
 from models.Exceptions import InterfaceInitError
 from models.Interfaces import Interfaces
 from models.SnipsLedControl import *
-
-try:
-	import queue 					as Queue
-except ImportError:
-	import Queue 					as Queue
-
-from ledPatterns.AlexaLedPattern 	import AlexaLedPattern
-from ledPatterns.CustomLedPattern 	import CustomLedPattern
-from ledPatterns.GoogleLedPattern 	import GoogleHomeLedPattern
-from ledPatterns.KiboostLedPattern 	import KiboostLedPattern
 
 
 class LedsController:

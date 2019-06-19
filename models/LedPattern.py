@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import threading
-
 from models.Animations import Animations
 from models.LedsController import *
 

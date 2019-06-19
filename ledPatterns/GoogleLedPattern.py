@@ -6,10 +6,6 @@ import time
 
 from models.LedPattern import LedPattern
 
-try:
-	import queue as Queue
-except ImportError:
-	import Queue as Queue
 
 class GoogleHomeLedPattern(LedPattern):
 

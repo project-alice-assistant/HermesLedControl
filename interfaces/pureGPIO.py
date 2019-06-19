@@ -26,6 +26,10 @@ class PureGPIO(Interface):
 	def setPixel(self, ledNum, red, green, blue, brightness):
 		"""
 		Set pixel here doesn't take RGB(W) values but sets the led on/off instead
+		:param red: int
+		:param green: int
+		:param blue: int
+		:param brightness: int
 		:type ledNum: int
 		"""
 

@@ -6,12 +6,11 @@ import sys
 
 import os
 import paho.mqtt.client as mqtt
+import re
 import toml
-
-from models.LedsController import LedsController
 from paho.mqtt.client import MQTTMessage
 
-import re
+from models.LedsController import LedsController
 
 
 class SnipsLedControl:
