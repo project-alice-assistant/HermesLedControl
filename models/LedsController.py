@@ -328,6 +328,30 @@ class LedsController:
 				self._put(self._pattern.off, True)
 
 
+	def start(self):
+		if self._params.startPattern is None:
+			self._put(self._pattern.onStart, True)
+		else:
+			try:
+				func = getattr(self._pattern, self._params.offPattern)
+				self._put(func, True)
+			except AttributeError:
+				self._logger.error("Can't find {} method in pattern".format(self._params.startPattern))
+				self._put(self._pattern.onStart, True)
+
+
+	def stop(self):
+		if self._params.startPattern is None:
+			self._put(self._pattern.onStop, True)
+		else:
+			try:
+				self._logger.error("Can't find {} method in pattern".format(self._params.stopPattern))
+				self._put(func, True)
+			except AttributeError:
+				self._logger.error("Can't find onStop method in pattern")
+				self._put(self._pattern.onStart, True)
+
+
 	def toggleStateOff(self):
 		if self.active:
 			threading.Timer(interval=0.5, function=self._clear).start()

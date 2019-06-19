@@ -34,6 +34,8 @@ class SnipsLedControl:
 	_SUB_CON_ERROR 					= 'hermes/leds/connectionError'
 	_SUB_ON_MESSAGE 				= 'hermes/leds/onMessage'
 	_SUB_ON_DND 					= 'hermes/leds/doNotDisturb'
+	_SUB_ON_START 					= 'hermes/leds/onStart'
+	_SUB_ON_STOP 					= 'hermes/leds/onStop'
 
 	_SUB_VOLUME_SET 				= 'hermes/volume/set'
 	_SUB_VADLED_SET 				= 'hermes/leds/vadLed'
@@ -216,6 +218,8 @@ class SnipsLedControl:
 			(self._SUB_ON_LEDS_TOGGLE, 0),
 			(self._SUB_LEDS_ON_ERROR, 0),
 			(self._SUB_LEDS_ON_SUCCESS, 0),
+			(self._SUB_ON_START, 0),
+			(self._SUB_ON_STOP, 0),
 			(self._SUB_UPDATING, 0),
 			(self._SUB_ON_CALL, 0),
 			(self._SUB_SETUP_MODE, 0),
@@ -401,6 +405,24 @@ class SnipsLedControl:
 			else:
 				if self._params.debug:
 					self._logger.debug("On do not disturb received but it wasn't for me")
+
+		elif message.topic == self._SUB_ON_START:
+			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On start triggered')
+				self._ledsController.start()
+			else:
+				if self._params.debug:
+					self._logger.debug("On start received but it wasn't for me")
+
+		elif message.topic == self._SUB_ON_STOP:
+			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On stop triggered')
+				self._ledsController.stop()
+			else:
+				if self._params.debug:
+					self._logger.debug("On stop received but it wasn't for me")
 
 		elif message.topic == self._SUB_VOLUME_SET:
 			if siteId == self._me:

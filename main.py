@@ -81,6 +81,8 @@ def main():
 							'hermes/tts/sayFinished',
 							'hermes/audioServer/playFinished'
 						])
+	parser.add_argument('--startPattern', help='Define a program start led pattern', type=str)
+	parser.add_argument('--stopPattern', help='Define a prorgam stop led pattern', type=str)
 	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)
 	parser.add_argument('--idlePattern', help='Define an idle led pattern', type=str)
 	parser.add_argument('--wakeupPattern', help='Define a wakeup led pattern', type=str)
