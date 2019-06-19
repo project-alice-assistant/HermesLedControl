@@ -117,6 +117,7 @@ def main():
 		_logger.info('Shutting down Snips Led Control')
 		slc.onStop()
 
+
 if __name__ == '__main__':
 	RUNNING = True
 	main()
