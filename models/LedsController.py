@@ -110,7 +110,7 @@ class LedsController:
 
 			elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
 				from interfaces.matrixvoice import MatrixVoice
-				self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'], matrixIp=self._hardware['matrixIp'], everloopPort=self._hardware['everloopPort'])
+				self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'])
 
 			elif self._hardware['interface'] == Interfaces.PURE_GPIO:
 				from interfaces.pureGPIO import PureGPIO

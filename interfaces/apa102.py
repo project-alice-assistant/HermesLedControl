@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 try:
-	from gpiozero 			import LED
+	from gpiozero import LED
 except:
 	try:
 		import mraa
@@ -19,13 +19,13 @@ class APA102(Interface):
 		self._leds  = AAPA102(numLed, global_brightness=global_brightness, order=order, bus=bus, device=device, max_speed_hz=max_speed_hz, endFrame=endFrame)
 
 		try:
-			self._power = LED(5)
+			self._power = LED(12)
 		except:
 			try:
 				self._power = mraa.Gpio(12)
 				self._power.dir(mraa.DIR_OUT)
-			except:
-				self._logger.info('Device not using gpiozero or mraa, ignore power')
+			except Exception as e:
+				self._logger.info('Device not using gpiozero or mraa, ignore power: {}'.format(e))
 
 
 	def setPixel(self, ledNum, red, green, blue, brightness):
