@@ -24,5 +24,7 @@ else
     python3.5 dfu.py --download 1_channel_firmware.bin
 fi
 
+sed -i -e "s/User="${USER}"/User=root/" /etc/systemd/system/snipsledcontrol.service
+
 echo "############################## All done! ##############################"
 echo "############## Don't forget to turn on the SPI interface! #############"
