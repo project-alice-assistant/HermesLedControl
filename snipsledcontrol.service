@@ -8,7 +8,7 @@ ExecStart=/usr/bin/python main.py
 WorkingDirectory=/home/pi/snipsLedControl_v1.3
 Restart=always
 RestartSec=5
-User=pi
+User=root
 
 [Install]
 WantedBy=multi-user.target
