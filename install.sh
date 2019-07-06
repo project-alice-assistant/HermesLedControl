@@ -129,6 +129,11 @@ select answer in "yes" "no" "cancel"; do
                     ./installers/respeakers.sh
                     break
                     ;;
+                respeaker6MicArray)
+                    chmod +x ./installers/respeakers.sh
+                    ./installers/respeakers.sh
+                    break
+                    ;;
                 neoPixelsSK6812RGBW)
                     chmod +x ./installers/neopixels.sh
                     ./installers/neopixels.sh
