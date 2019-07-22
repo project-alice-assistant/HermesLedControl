@@ -72,7 +72,7 @@ class APA102:
     down the line to the last LED.
     """
     # Constants
-    MAX_BRIGHTNESS = 31 # Safeguard: Set to a value appropriate for your setup
+    MAX_BRIGHTNESS = 100 # Safeguard: Set to a value appropriate for your setup
     LED_START = 0b11100000 # Three "1" bits, followed by 5 brightness bits
 
     def __init__(self, num_led, global_brightness=MAX_BRIGHTNESS,
