@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-
 echo "######################### Respeakers installation #########################"
 echo "#################### Please run this script with sudo #####################"
 
 USER=$(logname)
 
-cd /home/$USER
-rm -rf /home/$USER/seeed-voicecard
+cd /home/${USER}
+rm -rf /home/${USER}/seeed-voicecard
 
 git clone https://github.com/respeaker/seeed-voicecard.git
 cd seeed-voicecard

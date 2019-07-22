@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ###########################################################################################################
@@ -16,8 +15,10 @@
 #
 ###########################################################################################################
 
-from models.LedPattern import LedPattern
 import time
+
+from models.LedPattern import LedPattern
+
 
 class KiboostLedPattern(LedPattern):
 

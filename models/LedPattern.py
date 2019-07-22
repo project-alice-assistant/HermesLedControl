@@ -1,10 +1,8 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from models.Animations import Animations
+from models.LedsController import *
 import logging
-from models.Animations 		import Animations
-from models.LedsController 	import *
-import threading
 
 class LedPattern(object):
 

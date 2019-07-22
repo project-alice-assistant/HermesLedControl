@@ -1,9 +1,10 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from models.Exceptions 	import InterfaceInitError
-from gpiozero 			import LED
-from models.Interface 	import Interface
+from gpiozero import LED
+
+from models.Exceptions import InterfaceInitError
+from models.Interface import Interface
+
 
 class PureGPIO(Interface):
 
@@ -25,6 +26,10 @@ class PureGPIO(Interface):
 	def setPixel(self, ledNum, red, green, blue, brightness):
 		"""
 		Set pixel here doesn't take RGB(W) values but sets the led on/off instead
+		:param red: int
+		:param green: int
+		:param blue: int
+		:param brightness: int
 		:type ledNum: int
 		"""
 

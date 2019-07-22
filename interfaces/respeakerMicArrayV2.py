@@ -1,9 +1,11 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from models.Exceptions 	import InterfaceInitError
-from libraries 			import usb_pixel_ring_v2 	as pixel_ring
-from models.Interface 	import Interface
+from gpiozero import LED
+
+from libraries import usb_pixel_ring_v2    as pixel_ring
+from models.Exceptions import InterfaceInitError
+from models.Interface import Interface
+
 
 class RespeakerMicArrayV2(Interface):
 

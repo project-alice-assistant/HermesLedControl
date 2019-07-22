@@ -1,10 +1,10 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import math
-from models.Exceptions 	import InterfaceInitError
-from models.Interface 	import Interface
+
 from libraries.neopixel import *
+from models.Exceptions import InterfaceInitError
+from models.Interface import Interface
 
 try:
 	import rpi_ws281x 	as ws

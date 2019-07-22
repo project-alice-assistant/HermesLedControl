@@ -1,12 +1,13 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import argparse
-from datetime 					import datetime
-import logging.handlers
+import logging
+from logging import handlers
 import signal
 import time
-from models.SnipsLedControl 	import SnipsLedControl
+from datetime import datetime
+
+from models.SnipsLedControl import SnipsLedControl
 
 formatter = logging.Formatter('%(asctime)s [%(threadName)s] - [%(levelname)s] - %(message)s')
 
@@ -17,7 +18,7 @@ _logger.setLevel(logging.DEBUG)
 date = int(datetime.now().strftime('%Y%m%d'))
 
 handler = logging.FileHandler(filename='logs.log', mode='w')
-rotatingHandler = logging.handlers.RotatingFileHandler(filename='./logs/{}-logs.log'.format(date), mode='a', maxBytes=100000, backupCount=5)
+rotatingHandler = handlers.RotatingFileHandler(filename='./logs/{}-logs.log'.format(date), mode='a', maxBytes=100000, backupCount=5)
 streamHandler = logging.StreamHandler()
 
 handler.setFormatter(formatter)
@@ -38,7 +39,7 @@ def onStop():
 
 
 def main():
-	_logger.info('Starting Snips Led Control v. 1.7.1')
+	_logger.info('Starting Snips Led Control v. 1.8.1')
 
 	signal.signal(signal.SIGINT, stopHandler)
 	signal.signal(signal.SIGTERM, stopHandler)
@@ -80,6 +81,8 @@ def main():
 							'hermes/tts/sayFinished',
 							'hermes/audioServer/playFinished'
 						])
+	parser.add_argument('--startPattern', help='Define a program start led pattern', type=str)
+	parser.add_argument('--stopPattern', help='Define a prorgam stop led pattern', type=str)
 	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)
 	parser.add_argument('--idlePattern', help='Define an idle led pattern', type=str)
 	parser.add_argument('--wakeupPattern', help='Define a wakeup led pattern', type=str)
@@ -116,6 +119,7 @@ def main():
 	finally:
 		_logger.info('Shutting down Snips Led Control')
 		slc.onStop()
+
 
 if __name__ == '__main__':
 	RUNNING = True

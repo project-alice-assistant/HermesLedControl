@@ -78,16 +78,12 @@
 	"matrixvoice": {
 		"name": "Matrix Voice",
 		"numberOfLeds": 18,
-		"interface": "matrixvoice",
-		"matrixIp": "127.0.0.1",
-		"everloopPort": 20021
+		"interface": "matrixvoice"
 	},
 	"matrixcreator": {
 		"name": "Matrix Creator",
 		"numberOfLeds": 18,
-		"interface": "matrixvoice",
-		"matrixIp": "127.0.0.1",
-		"everloopPort": 20021
+		"interface": "matrixvoice"
 	},
 	"googleAIY": {
 		"__comment__": "Use the broadcom gpio number, not the physical pin number!",

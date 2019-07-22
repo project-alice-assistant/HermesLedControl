@@ -2,8 +2,9 @@
 from https://github.com/tinue/APA102_Pi
 This is the main driver module for APA102 LEDs
 """
-import spidev
 from math import ceil
+
+import spidev
 
 RGB_MAP = { 'rgb': [3, 2, 1], 'rbg': [3, 1, 2], 'grb': [2, 3, 1],
             'gbr': [2, 1, 3], 'brg': [1, 3, 2], 'bgr': [1, 2, 3] }
@@ -71,7 +72,7 @@ class APA102:
     down the line to the last LED.
     """
     # Constants
-    MAX_BRIGHTNESS = 31 # Safeguard: Set to a value appropriate for your setup
+    MAX_BRIGHTNESS = 100 # Safeguard: Set to a value appropriate for your setup
     LED_START = 0b11100000 # Three "1" bits, followed by 5 brightness bits
 
     def __init__(self, num_led, global_brightness=MAX_BRIGHTNESS,

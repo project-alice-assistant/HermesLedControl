@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
-from models.LedPattern import LedPattern
 import time
-import threading
+
+from models.LedPattern import LedPattern
 
 
 class AlexaLedPattern(LedPattern):

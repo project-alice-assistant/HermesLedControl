@@ -1,23 +1,23 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from models.Exceptions 	import InterfaceInitError
-from libraries.everloop import Everloop
-from models.Interface 	import Interface
+from matrix_lite import led
+from models.Exceptions import InterfaceInitError
+from models.Interface import Interface
+
 
 class MatrixVoice(Interface):
 
-	def __init__(self, numLeds, matrixIp, everloopPort):
+	def __init__(self, numLeds):
 		super(MatrixVoice, self).__init__(numLeds)
-
-		try:
-			self._leds = Everloop(numLeds, matrixIp, everloopPort)
-		except:
-			raise InterfaceInitError("Couldn't initialize everloop")
+		self._colors = self._newArray()
 
 
 	def setPixel(self, ledNum, red, green, blue, brightness):
-		self._leds.setPixel(ledNum=ledNum, red=red, green=green, blue=blue, white=brightness)
+		if ledNum < 0 or ledNum >= led.length:
+			self._logger.warning('Trying to access a led index out of reach')
+			return
+
+		self._colors[ledNum - 1] = (red, green, blue, brightness)
 
 
 	def setPixelRgb(self, ledNum, color, brightness):
@@ -25,10 +25,17 @@ class MatrixVoice(Interface):
 
 
 	def clearStrip(self):
-		self._leds.clear()
+		self._colors = self._newArray()
+		led.set()
 
 
-	def onStop(self):
-		self.clearStrip()
-		self._leds.onStop()
-		super(MatrixVoice, self).onStop()
+	def show(self):
+		led.set(self._colors)
+
+
+	@staticmethod
+	def _newArray():
+		arr = []
+		for i in range(0, led.length):
+			arr.append((0, 0, 0, 0))
+		return arr

@@ -1,14 +1,11 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
-from models.LedPattern import LedPattern
 import math
 import time
-try:
-	import queue as Queue
-except ImportError:
-	import Queue as Queue
+
+from models.LedPattern import LedPattern
+
 
 class GoogleHomeLedPattern(LedPattern):
 

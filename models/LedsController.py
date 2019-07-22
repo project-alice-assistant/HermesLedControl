@@ -1,22 +1,17 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from models.Exceptions 				import InterfaceInitError
-from models.Interfaces 				import Interfaces
-from models.SnipsLedControl 		import *
-import logging
+import queue as Queue
 import threading
 import time
 
-try:
-	import queue 					as Queue
-except ImportError:
-	import Queue 					as Queue
-
-from ledPatterns.AlexaLedPattern 	import AlexaLedPattern
-from ledPatterns.CustomLedPattern 	import CustomLedPattern
-from ledPatterns.GoogleLedPattern 	import GoogleHomeLedPattern
-from ledPatterns.KiboostLedPattern 	import KiboostLedPattern
+from ledPatterns.AlexaLedPattern import AlexaLedPattern
+from ledPatterns.CustomLedPattern import CustomLedPattern
+from ledPatterns.GoogleLedPattern import GoogleHomeLedPattern
+from ledPatterns.KiboostLedPattern import KiboostLedPattern
+import logging
+from models.Exceptions import InterfaceInitError
+from models.Interfaces import Interfaces
+from models.SnipsLedControl import *
 
 
 class LedsController:
@@ -115,7 +110,7 @@ class LedsController:
 
 			elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
 				from interfaces.matrixvoice import MatrixVoice
-				self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'], matrixIp=self._hardware['matrixIp'], everloopPort=self._hardware['everloopPort'])
+				self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'])
 
 			elif self._hardware['interface'] == Interfaces.PURE_GPIO:
 				from interfaces.pureGPIO import PureGPIO
@@ -251,38 +246,38 @@ class LedsController:
 
 	def updating(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.updating())
+			self._put(self._pattern.updating)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.updatingPattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.updatingPattern))
-				self._put(self._pattern.updating())
+				self._put(self._pattern.updating)
 
 
 	def call(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.call())
+			self._put(self._pattern.call)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.callPattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.callPattern))
-				self._put(self._pattern.call())
+				self._put(self._pattern.call)
 
 
 	def setupMode(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.setupMode())
+			self._put(self._pattern.setupMode)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.setupModePattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.setupModePattern))
-				self._put(self._pattern.setupMode())
+				self._put(self._pattern.setupMode)
 
 
 	def conError(self):
@@ -294,31 +289,31 @@ class LedsController:
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.conErrorPattern))
-				self._put(self._pattern.conError())
+				self._put(self._pattern.conError)
 
 
 	def message(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.message())
+			self._put(self._pattern.message)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.messagePattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.messagePattern))
-				self._put(self._pattern.message())
+				self._put(self._pattern.message)
 
 
 	def dnd(self):
 		if self._params.updatingPattern is None:
-			self._put(self._pattern.dnd())
+			self._put(self._pattern.dnd)
 		else:
 			try:
 				func = getattr(self._pattern, self._params.dndPattern)
 				self._put(func)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.dndPattern))
-				self._put(self._pattern.dnd())
+				self._put(self._pattern.dnd)
 
 
 	def off(self):
@@ -331,6 +326,30 @@ class LedsController:
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(self._params.offPattern))
 				self._put(self._pattern.off, True)
+
+
+	def start(self):
+		if self._params.startPattern is None:
+			self._put(self._pattern.onStart, True)
+		else:
+			try:
+				func = getattr(self._pattern, self._params.startPattern)
+				self._put(func, True)
+			except AttributeError:
+				self._logger.error("Can't find {} method in pattern".format(self._params.startPattern))
+				self._put(self._pattern.onStart, True)
+
+
+	def stop(self):
+		if self._params.startPattern is None:
+			self._put(self._pattern.onStop, True)
+		else:
+			try:
+				func = getattr(self._pattern, self._params.stopPattern)
+				self._put(func, True)
+			except AttributeError:
+				self._logger.error("Can't find {} method in pattern".format(self._params.stopPattern))
+				self._put(self._pattern.onStart, True)
 
 
 	def toggleStateOff(self):

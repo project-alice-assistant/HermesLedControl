@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+import respeaker.usb_hid
 
 from models.Exceptions import InterfaceInitError
 from models.Interface import Interface
-import respeaker.usb_hid
-from respeaker.spi import spi
 
 
 class respeaker7MicArray(Interface):
