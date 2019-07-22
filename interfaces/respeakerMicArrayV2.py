@@ -17,7 +17,6 @@ class RespeakerMicArrayV2(Interface):
 		if self._leds is None:
 			raise InterfaceInitError('Respeaker Mic Array V2 not found using pid={} and vid={}'.format(pid, vid))
 
-		self._power 	= LED(5)
 		self._colors 	= self._newArray()
 
 
