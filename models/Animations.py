@@ -24,6 +24,70 @@ class Animations:
 				self._image.append([0, 0, 0, 0])
 
 
+	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10):
+		"""
+		Fills the strip from both sides
+		:param startAt: int
+		:param color: array RBGW
+		:param direction: 1 or -1
+		:param speed: float, in l/s or led per second
+		:param startAt: int, the led index where the animation starts
+		:return:
+		"""
+		self.new()
+
+		index = startAt
+
+		if direction == 1:
+			r = range(int(self._numLeds / 2) + 1)
+		else:
+			r = reversed(range(int(self._numLeds / 2) + 1))
+
+		for i in r:
+			if i == 0 or i == int(self._numLeds / 2):
+				self._controller.setLedRGB(i, [color[0], color[1], color[2]], color[3])
+			else:
+				self._controller.setLedRGB(self._normalizeIndex(index + i), [color[0], color[1], color[2]], color[3])
+				self._controller.setLedRGB(self._normalizeIndex(index - i), [color[0], color[1], color[2]], color[3])
+
+			self._controller.show()
+			time.sleep(1.0 / abs(speed))
+
+
+	def breath(self, color, minBrightness, maxBrightness, speed=10):
+		"""
+		Breathes the leds, from min to max brightness
+		:param color: array RBGW
+		:param speed: float, in l/s or led per second
+		:param minBrightness: int
+		:param maxBrigthness: int
+		:return:
+		"""
+
+		image = list()
+		for _ in range(self._numLeds):
+			image.append(color)
+
+		self.new(image)
+
+		direction = 1
+		self._animationFlag.set()
+		while self._animationFlag.isSet():
+			bri = self._image[0][3]
+
+			if bri >= maxBrightness:
+				direction = -1
+			elif bri <= minBrightness:
+				direction = 1
+
+			for i in range(self._numLeds):
+				self._image[i] = color[0], color[1], color[2], bri + direction
+
+			self._displayImage()
+
+			time.sleep(1.0 / abs(speed))
+
+
 	def rotateImage(self, step):
 		"""
 		Rotates an image by step number of led
@@ -203,6 +267,48 @@ class Animations:
 				self._setPixel(index, backgroundColor)
 			else:
 				self._setPixel(index, color)
+
+
+	def blink(self, color, minBrightness, maxBrightness, speed=200, repeat=-1):
+		"""
+		:param color: array RBGW
+		:param minBrightness: int
+		:param maxBrightness: int
+		:param speed: float, in l/s or led per second
+		:param repeat: -1 for infinite or int
+		:return:
+		"""
+
+		if repeat == -1:
+			self.breath(color=color, maxBrightness=maxBrightness, minBrightness=minBrightness, speed=speed)
+		else:
+			image = list()
+			for _ in range(self._numLeds):
+				image.append(color)
+
+			self.new(image)
+
+			for _ in range(repeat):
+				bri = self._image[0][3]
+
+				while bri < maxBrightness:
+					bri = self._image[0][3]
+
+					for i in range(self._numLeds):
+						self._image[i] = color[0], color[1], color[2], bri + 1
+
+					self._displayImage()
+					time.sleep(1.0 / abs(speed))
+
+				while bri > minBrightness:
+					bri = self._image[0][3]
+
+					for i in range(self._numLeds):
+						self._image[i] = color[0], color[1], color[2], bri - 1
+
+					self._displayImage()
+					time.sleep(1.0 / abs(speed))
+
 
 	def _setPixel(self, index, color):
 		if index >= len(self._image) or index < 0:

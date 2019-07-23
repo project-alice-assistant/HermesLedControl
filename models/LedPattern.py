@@ -19,6 +19,11 @@ class LedPattern(object):
 		return self._animation
 
 
+	@property
+	def numLeds(self):
+		return self._numLeds
+
+
 	def nothing(self, *args) 	: pass
 	def wakeup(self, *args)		: pass
 	def listen(self, *args)		: pass

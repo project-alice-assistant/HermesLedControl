@@ -73,6 +73,7 @@ def main():
 							'google',
 							'alexa',
 							'kiboost',
+							'projectalice',
 							'custom'
 						])
 	parser.add_argument('--offListener', help='Allows you to define which topics will trigger the off pattern', type=str, default='hermes/hotword/toggleOn',
