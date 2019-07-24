@@ -6,6 +6,7 @@ pip3.5 uninstall -y gpiozero
 pip3.5 uninstall -y RPi.GPIO
 
 pip3.5 --no-cache-dir install respeaker
+pip3.5 install python3-numpy
 
 echo "############################## All done! ##############################"
 echo "############## Don't forget to turn on the SPI interface! #############"

@@ -17,26 +17,26 @@
 import time
 
 from models.LedPattern import LedPattern
-from models.Animations import Animations
 
 class ProjectAlicePattern(LedPattern):
 
 	def __init__(self, controller):
 		super().__init__(controller)
-		self._animator = Animations(self.animation, self._controller)
 
 
 	def wakeup(self, *args):
+		start = self._controller.doa()
 		self.off()
-		self._animator.doubleSidedFilling(color=[255, 255, 255, 15], startAt=0, direction=1, speed=50)
+		self._animator.doubleSidedFilling(color=[255, 255, 255, 15], startAt=start, direction=1, speed=50)
 		time.sleep(0.1)
-		self._animator.doubleSidedFilling(color=[0, 0, 255, 25], startAt=0, direction=-1, speed=50)
+		self._animator.doubleSidedFilling(color=[0, 0, 255, 25], startAt=start, direction=-1, speed=50)
 		time.sleep(0.2)
-		self._animator.doubleSidedFilling(color=[0, 0, 0, 0], startAt=0, direction=1, speed=50)
+		self._animator.doubleSidedFilling(color=[0, 0, 0, 0], startAt=start, direction=1, speed=50)
 
 
 	def listen(self, *args):
-		self._animator.doubleSidedFilling(color=[0, 0, 255, 25], startAt=0, direction=1, speed=50)
+		start = self._controller.doa()
+		self._animator.doubleSidedFilling(color=[0, 0, 255, 25], startAt=start, direction=1, speed=50)
 		self._animator.breath(color=[0, 0, 255, 25], minBrightness=2, maxBrightness=25, speed=20)
 
 
@@ -122,6 +122,9 @@ class ProjectAlicePattern(LedPattern):
 			time.sleep(1)
 
 
-
 	def onStart(self, *args):
 		self.wakeup()
+
+
+	def onButton1(self, *args):
+		pass

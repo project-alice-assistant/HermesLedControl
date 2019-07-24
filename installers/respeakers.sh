@@ -4,6 +4,8 @@ echo "#################### Please run this script with sudo ####################
 
 USER=$(logname)
 
+pip3.5 install python3-numpy
+
 cd /home/${USER}
 rm -rf /home/${USER}/seeed-voicecard
 

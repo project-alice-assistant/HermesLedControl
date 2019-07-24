@@ -10,7 +10,8 @@ class Animations:
 		self._animationFlag = animationFlag
 		self._controller 	= controller
 		self._numLeds 		= self._controller.hardware['numberOfLeds']
-		self._image 		= []
+
+		self._image 		= list()
 		self.new()
 
 
@@ -19,7 +20,7 @@ class Animations:
 		if image is not None:
 			self._image = image
 		else:
-			self._image = []
+			self._image = list()
 			for i in range(self._numLeds):
 				self._image.append([0, 0, 0, 0])
 
@@ -36,19 +37,22 @@ class Animations:
 		"""
 		self.new()
 
-		index = startAt
-
-		if direction == 1:
-			r = range(int(self._numLeds / 2) + 1)
+		if direction > 0:
+			r = range(int(round(self._numLeds / 2)) + 1)
 		else:
-			r = reversed(range(int(self._numLeds / 2) + 1))
+			r = reversed(range(int(round(self._numLeds / 2)) + 1))
 
+		index = startAt
+		oppositeLed = self._oppositeLed(startAt)
 		for i in r:
-			if i == 0 or i == int(self._numLeds / 2):
-				self._controller.setLedRGB(i, [color[0], color[1], color[2]], color[3])
+			positive = self._normalizeIndex(index + i)
+			negative = self._normalizeIndex(index - i)
+
+			if positive == startAt or positive == oppositeLed:
+				self._controller.setLedRGB(positive, [color[0], color[1], color[2]], color[3])
 			else:
-				self._controller.setLedRGB(self._normalizeIndex(index + i), [color[0], color[1], color[2]], color[3])
-				self._controller.setLedRGB(self._normalizeIndex(index - i), [color[0], color[1], color[2]], color[3])
+				self._controller.setLedRGB(positive, [color[0], color[1], color[2]], color[3])
+				self._controller.setLedRGB(negative, [color[0], color[1], color[2]], color[3])
 
 			self._controller.show()
 			time.sleep(1.0 / abs(speed))
@@ -60,7 +64,7 @@ class Animations:
 		:param color: array RBGW
 		:param speed: float, in l/s or led per second
 		:param minBrightness: int
-		:param maxBrigthness: int
+		:param maxBrightness: int
 		:return:
 		"""
 
@@ -336,3 +340,7 @@ class Animations:
 			return index - self._numLeds
 		else:
 			return index
+
+
+	def _oppositeLed(self, index):
+		return self._normalizeIndex(index + int(round(self._numLeds / 2)))

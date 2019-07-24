@@ -17,7 +17,7 @@
 		"name": "ReSpeaker 4",
 		"numberOfLeds": 12,
 		"interface": "apa102",
-		"doa": true,
+		"doa": false,
 		"endFrame": 255
 	},
 	"respeakerMicArrayV2": {
@@ -39,14 +39,24 @@
 		"name": "ReSpeaker 6-Mic Circular Array",
 		"numberOfLeds": 12,
 		"interface": "apa102",
-		"doa": true,
-		"endFrame": 255
+		"doa": "doa_respeaker_v2_6mic_array",
+		"rate": 16000,
+		"channels": 8,
+		"endFrame": 255,
+		"extras": {
+			"buttons": {
+				"button1": {
+					"bcm_gpio": 26,
+					"function": "onButton1"
+				}
+			}
+		}
 	},
 	"respeaker7MicArray": {
 		"name": "ReSpeaker 7-Mic Array",
 		"numberOfLeds": 12,
 		"interface": "respeaker7MicArray",
-		"doa": true,
+		"doa": false,
 		"extras": {
 			"volume": {
 				"min": 0,

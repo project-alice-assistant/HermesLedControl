@@ -101,7 +101,7 @@ class LedsController:
 		try:
 			if self._hardware['interface'] == Interfaces.APA102:
 				from interfaces.apa102 import APA102
-				self._interface = APA102(numLed=self._hardware['numberOfLeds'], endFrame=self._hardware['endFrame'])
+				self._interface = APA102(numLed=self._hardware['numberOfLeds'], endFrame=self._hardware['endFrame'], hardware=self._hardware)
 
 			elif self._hardware['interface'] == Interfaces.NEOPIXELS:
 				from interfaces.neopixels import Neopixels
@@ -432,6 +432,15 @@ class LedsController:
 
 	def show(self):
 		self._interface.show()
+
+
+	def doa(self):
+		if self.hardware['doa']:
+			angle = self._interface.doa()
+			if angle > 0:
+				return int(round(angle / (360 / self.hardware['numberOfLeds'])))
+
+		return 0
 
 
 	def _runButtons(self):
