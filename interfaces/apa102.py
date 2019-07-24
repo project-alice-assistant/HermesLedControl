@@ -29,7 +29,6 @@ class APA102(Interface):
 				self._logger.info('Device not using gpiozero or mraa, ignore power: {}'.format(e))
 
 		self._hardware = hardware
-		self._doa = None
 		self._src = None
 		if 'doa' in hardware and hardware['doa']:
 			self._logger.info('Hardware is DOA capable')

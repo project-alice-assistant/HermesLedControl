@@ -12,8 +12,6 @@ class Interface(object):
 		self._leds 		= None
 		self._power 	= None
 		self._doa 		= False
-		self._audioChunks = []
-
 
 	@property
 	def leds(self):
@@ -53,10 +51,3 @@ class Interface(object):
 					self._power.write(1)
 				except:
 					pass
-
-	def getDoA(self):
-		pass
-
-	def initDoA(self):
-		self._doa = True
-		self._audioChunks = []
