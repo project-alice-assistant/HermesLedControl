@@ -7,6 +7,18 @@ fi
 
 VENV=venv
 
+PYTHON=$(command -v python3.7)
+if [[ -z "$PYTHON" ]]; then
+    PYTHON=$(command -v python3.6)
+    if [[ -z "$PYTHON" ]]; then
+        PYTHON=$(command -v python3.5)
+        if [[ -z "$PYTHON" ]]; then
+            echo "Please make sur to have python 3.5 at least"
+            exit
+        fi
+    fi
+fi
+
 if [[ -z "$1" ]]; then
     echo "No version supplied"
     exit
@@ -44,31 +56,25 @@ apt-get update
 apt-get install -y git mosquitto mosquitto-clients portaudio19-dev python-numpy
 
 FVENV=${USERDIR}'/snipsLedControl_'${VERSION}'/'${VENV}
-PYTHON=$(command -v python3.5)
 
-if [[ -f "$PYTHON" ]]; then
-    apt-get install -y python3-pip
+apt-get install -y python3-pip
 
-    if [[ -d "$FVENV" ]]; then
-        rm -rf ${FVENV}
-    fi
-
-    pip3 install virtualenv
-    virtualenv -p ${PYTHON} ${FVENV}
-    . ${FVENV}/bin/activate
-else
-    echo "Please make sure you have Python 3.5 installed"
-    exit
+if [[ -d "$FVENV" ]]; then
+    rm -rf ${FVENV}
 fi
 
-pip3.5 --no-cache-dir install RPi.GPIO
-pip3.5 --no-cache-dir install spidev
-pip3.5 --no-cache-dir install gpiozero
-pip3.5 --no-cache-dir install paho-mqtt
-pip3.5 --no-cache-dir install toml
+pip3 install virtualenv
+virtualenv -p ${PYTHON} ${FVENV}
+. ${FVENV}/bin/activate
+
+pip3 --no-cache-dir install RPi.GPIO
+pip3 --no-cache-dir install spidev
+pip3 --no-cache-dir install gpiozero
+pip3 --no-cache-dir install paho-mqtt
+pip3 --no-cache-dir install toml
 
 systemctl is-active -q pixel_ring_server && systemctl disable pixel_ring_server
-pip3.5 uninstall -y pixel_ring
+pip3 uninstall -y pixel_ring
 
 mkdir -p logs
 chown ${USER} logs

@@ -11,9 +11,9 @@ select channels in "1" "6"; do
     esac
 done
 
-pip3.5 install click
-pip3.5 install pyusb
-pip3.5 install python3-numpy
+pip3 install click
+pip3 install pyusb
+pip3 install python3-numpy
 cd /home/${USER}
 rm -rf /home/${USER}/usb_4_mic_array
 git clone https://github.com/respeaker/usb_4_mic_array.git

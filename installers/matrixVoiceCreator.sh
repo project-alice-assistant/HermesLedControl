@@ -7,7 +7,7 @@ echo "deb https://apt.matrix.one/raspbian $(lsb_release -sc) main" | sudo tee /e
 apt-get update
 apt-get install -y matrixio-creator-init libmatrixio-creator-hal libmatrixio-creator-hal-dev
 
-pip3.5 --no-cache-dir install matrix-lite
+pip3 --no-cache-dir install matrix-lite
 
 echo "######################## All done! ########################"
 echo "####### After the install is over, please reboot! #########"

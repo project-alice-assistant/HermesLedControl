@@ -22,6 +22,7 @@ class ProjectAlicePattern(LedPattern):
 
 	def __init__(self, controller):
 		super().__init__(controller)
+		self._dnd = False
 
 
 	def wakeup(self, *args):
@@ -127,4 +128,9 @@ class ProjectAlicePattern(LedPattern):
 
 
 	def onButton1(self, *args):
-		pass
+		if self._dnd:
+			self._controller.clearLeds()
+		else:
+			self._controller.dnd()
+
+		self._dnd = not self._dnd
