@@ -4,6 +4,7 @@
 		"numberOfLeds": 3,
 		"interface": "apa102",
 		"endFrame": 255,
+		"doa": false,
 		"extras": {
 			"buttons": {
 				"button1": {
@@ -17,13 +18,18 @@
 		"name": "ReSpeaker 4",
 		"numberOfLeds": 12,
 		"interface": "apa102",
-		"doa": false,
+		"doa": "doa_respeaker_4mic_array",
+		"rate": 16000,
+		"channels": 4,
 		"endFrame": 255
 	},
 	"respeakerMicArrayV2": {
 		"name": "ReSpeaker Mic array v2",
 		"numberOfLeds": 12,
 		"interface": "respeakerMicArrayV2",
+		"doa": "doa_respeaker_6p1_mic_array",
+		"rate": 16000,
+		"channels": 8,
 		"vid": "0x2886",
 		"pid": "0x0018",
 		"endFrame": 0,
@@ -68,7 +74,9 @@
 		"name": "Respeaker Core v2",
 		"numberOfLeds": 12,
 		"interface": "apa102",
-		"doa": false,
+		"doa": "doa_respeaker_v2_6mic_array",
+		"rate": 16000,
+		"channels": 8,
 		"endFrame": 0
 	},
   	"neoPixelsSK6812RGBW": {

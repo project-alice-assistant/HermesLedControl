@@ -10,7 +10,7 @@ except:
 		pass
 
 
-from libraries.apa102   import APA102       as AAPA102
+from libraries.apa102   import APA102 as AAPA102
 from models.Interface 	import Interface
 
 class APA102(Interface):
@@ -66,7 +66,7 @@ class APA102(Interface):
 
 
 	def onStop(self):
-		super(APA102, self).onStop()
+		super().onStop()
 		self.clearStrip()
 		self._leds.cleanup()
 		if self._src:

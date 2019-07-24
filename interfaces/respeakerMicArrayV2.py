@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import importlib
 
 from gpiozero import LED
 
@@ -9,15 +10,47 @@ from models.Interface import Interface
 
 class RespeakerMicArrayV2(Interface):
 
-	def __init__(self, numLeds, vid, pid):
-		super(RespeakerMicArrayV2, self).__init__(numLeds)
+	def __init__(self, hardware, vid, pid):
+		super(RespeakerMicArrayV2, self).__init__(self._hardware['numberOfLeds'])
 
 		self._leds = pixel_ring.find(vid=int(vid, 16), pid=int(pid, 16))
 
 		if self._leds is None:
 			raise InterfaceInitError('Respeaker Mic Array V2 not found using pid={} and vid={}'.format(pid, vid))
 
-		self._colors 	= self._newArray()
+		self._colors = self._newArray()
+
+		self._hardware = hardware
+		self._src = None
+		if 'doa' in hardware and hardware['doa']:
+			self._logger.info('Hardware is DOA capable')
+			from libraries.seeedstudios.channel_picker import ChannelPicker
+			from libraries.seeedstudios.source import Source
+
+			lib = importlib.import_module('libraries.seeedstudios.' + hardware['doa'])
+			klass = getattr(lib, 'DOA')
+
+			self._src = Source(rate=hardware['rate'], channels=hardware['channels'])
+			ch0 = ChannelPicker(channels=self._src.channels, pick=0)
+
+			self._doa = klass(rate=hardware['rate'])
+			self._src.link(ch0)
+			self._src.link(self._doa)
+
+
+	def onStart(self):
+		super().onStart()
+		if self._doa:
+			self._logger.info('Starting DOA')
+			self._src.recursive_start()
+
+
+	def onStop(self):
+		super().onStop()
+		self.clearStrip()
+		self._leds.cleanup()
+		if self._src:
+			self._src.recursive_stop()
 
 
 	def setPixel(self, ledNum, red, green, blue, brightness):
@@ -58,3 +91,13 @@ class RespeakerMicArrayV2(Interface):
 
 	def _newArray(self):
 		return [0, 0, 0, 0] * self._numLeds
+
+
+	def doa(self):
+		if self._doa:
+			try:
+				return self._doa.get_direction()
+			except:
+				pass
+
+		return 0
