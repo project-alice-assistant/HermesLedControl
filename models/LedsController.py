@@ -101,7 +101,7 @@ class LedsController:
 		try:
 			if self._hardware['interface'] == Interfaces.APA102:
 				from interfaces.apa102 import APA102
-				self._interface = APA102(numLed=self._hardware['numberOfLeds'], endFrame=self._hardware['endFrame'], hardware=self._hardware)
+				self._interface = APA102(hardware=self._hardware, endFrame=self._hardware['endFrame'])
 
 			elif self._hardware['interface'] == Interfaces.NEOPIXELS:
 				from interfaces.neopixels import Neopixels

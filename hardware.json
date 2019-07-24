@@ -68,7 +68,7 @@
 		"name": "Respeaker Core v2",
 		"numberOfLeds": 12,
 		"interface": "apa102",
-		"doa": true,
+		"doa": false,
 		"endFrame": 0
 	},
   	"neoPixelsSK6812RGBW": {

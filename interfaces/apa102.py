@@ -15,9 +15,9 @@ from models.Interface 	import Interface
 
 class APA102(Interface):
 
-	def __init__(self, numLed, global_brightness=AAPA102.MAX_BRIGHTNESS, order='rgb', bus=0, device=1, max_speed_hz=8000000, endFrame=255, hardware=None):
-		super(APA102, self).__init__(numLed)
-		self._leds  = AAPA102(numLed, global_brightness=global_brightness, order=order, bus=bus, device=device, max_speed_hz=max_speed_hz, endFrame=endFrame)
+	def __init__(self, hardware, global_brightness=AAPA102.MAX_BRIGHTNESS, order='rgb', bus=0, device=1, max_speed_hz=8000000, endFrame=255):
+		super(APA102, self).__init__(hardware['numberOfLeds'])
+		self._leds  = AAPA102(hardware['numberOfLeds'], global_brightness=global_brightness, order=order, bus=bus, device=device, max_speed_hz=max_speed_hz, endFrame=endFrame)
 
 		try:
 			self._power = LED(5)
@@ -31,7 +31,7 @@ class APA102(Interface):
 		self._hardware = hardware
 		self._doa = None
 		self._src = None
-		if hardware and hardware['doa']:
+		if 'doa' in hardware and hardware['doa']:
 			self._logger.info('Hardware is DOA capable')
 			from libraries.seeedstudios.channel_picker import ChannelPicker
 			from libraries.seeedstudios.source import Source
