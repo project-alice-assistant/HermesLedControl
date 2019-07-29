@@ -435,7 +435,7 @@ class LedsController:
 
 
 	def doa(self):
-		if self.hardware['doa']:
+		if 'doa' in self.hardware.keys() and self.hardware['doa']:
 			angle = self._interface.doa()
 			if angle > 0:
 				return int(round(angle / (360 / self.hardware['numberOfLeds'])))
