@@ -210,17 +210,21 @@ class Animations:
 		:param startAt: int, the led index where the animation starts
 		:return:
 		"""
-		if backgroundColor is None:
-			backgroundColor = [0, 0, 0, 0]
 
 		self.new()
+
+		if backgroundColor is None:
+			backgroundColor = [0, 0, 0, 0]
+		else:
+			for i in range(self._numLeds):
+				self._setPixel(i, backgroundColor)
+
 		self._setPixel(startAt, color)
 
 		index = startAt
 		self._animationFlag.set()
 		while self._animationFlag.isSet():
 			self._displayImage()
-			self._setPixel(startAt, [0, 0, 0, 0])
 			step = 0
 			while self._animationFlag.isSet() and step != round(self._numLeds / 2):
 				step += 1
@@ -230,8 +234,8 @@ class Animations:
 				self._setPixel(rightIndex, color)
 				self._displayImage()
 				time.sleep(1.0 / abs(speed))
-				self._setPixel(leftIndex, [0, 0, 0, 0])
-				self._setPixel(rightIndex, [0, 0, 0, 0])
+				self._setPixel(leftIndex, backgroundColor)
+				self._setPixel(rightIndex, backgroundColor)
 			while self._animationFlag.isSet() and step >= 0:
 				step -= 1
 				leftIndex = self._normalizeIndex(index + step)
@@ -240,8 +244,8 @@ class Animations:
 				self._setPixel(rightIndex, color)
 				self._displayImage()
 				time.sleep(1.0 / abs(speed))
-				self._setPixel(leftIndex, [0, 0, 0, 0])
-				self._setPixel(rightIndex, [0, 0, 0, 0])
+				self._setPixel(leftIndex, backgroundColor)
+				self._setPixel(rightIndex, backgroundColor)
 
 
 	def waitWheel(self, color, speed=10, backgroundColor=None, startAt=0):

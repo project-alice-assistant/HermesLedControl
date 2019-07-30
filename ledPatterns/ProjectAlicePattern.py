@@ -84,7 +84,7 @@ class ProjectAlicePattern(LedPattern):
 
 
 	def setupMode(self, *args):
-		self._animator.doublePingPong(color=[0, 0, 255, 40], speed=20)
+		self._animator.doublePingPong(color=[0, 0, 255, 10], speed=20, backgroundColor=[255, 255, 255, 5])
 
 
 	def dnd(self, *args):
