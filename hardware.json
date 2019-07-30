@@ -100,7 +100,7 @@
 	},
 	"matrixcreator": {
 		"name": "Matrix Creator",
-		"numberOfLeds": 18,
+		"numberOfLeds": 35,
 		"interface": "matrixvoice"
 	},
 	"googleAIY": {
