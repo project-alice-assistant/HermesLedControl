@@ -13,7 +13,7 @@ done
 
 pip3 install click
 pip3 install pyusb
-pip3 --no-cache-dir install python-numpy
+pip3 --no-cache-dir install numpy
 cd /home/${USER}
 rm -rf /home/${USER}/usb_4_mic_array
 git clone https://github.com/respeaker/usb_4_mic_array.git

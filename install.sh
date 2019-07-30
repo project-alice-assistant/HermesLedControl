@@ -53,7 +53,7 @@ fi
 systemctl is-active -q snipsledcontrol && systemctl stop snipsledcontrol
 
 apt-get update
-apt-get install -y git mosquitto mosquitto-clients portaudio19-dev python-numpy
+apt-get install -y git mosquitto mosquitto-clients portaudio19-dev numpy
 
 FVENV=${USERDIR}'/snipsLedControl_'${VERSION}'/'${VENV}
 

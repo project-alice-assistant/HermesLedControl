@@ -6,7 +6,7 @@ pip3 uninstall -y gpiozero
 pip3 uninstall -y RPi.GPIO
 
 pip3 --no-cache-dir install respeaker
-pip3 --no-cache-dir install python-numpy
+pip3 --no-cache-dir install numpy
 
 echo "############################## All done! ##############################"
 echo "############## Don't forget to turn on the SPI interface! #############"
