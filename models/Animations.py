@@ -222,7 +222,7 @@ class Animations:
 			self._displayImage()
 			self._setPixel(startAt, [0, 0, 0, 0])
 			step = 0
-			while self._animationFlag.isSet() and step != self._numLeds / 2:
+			while self._animationFlag.isSet() and step != round(self._numLeds / 2):
 				step += 1
 				leftIndex = self._normalizeIndex(index - step)
 				rightIndex = self._normalizeIndex(index + step)
