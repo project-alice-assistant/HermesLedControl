@@ -2,9 +2,13 @@
 echo "######################### Respeakers installation #########################"
 echo "#################### Please run this script with sudo #####################"
 
-USER=$(logname)
+USER=$1
+FVENV=$2
 
-pip3 --no-cache-dir install numpy
+sudo -u ${USER} bash <<EOF
+    source ${FVENV}/bin/activate
+    pip3 --no-cache-dir install numpy
+EOF
 
 cd /home/${USER}
 rm -rf /home/${USER}/seeed-voicecard

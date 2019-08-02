@@ -63,17 +63,21 @@ if [[ -d "$FVENV" ]]; then
     rm -rf ${FVENV}
 fi
 
-pip3 install virtualenv
-virtualenv -p ${PYTHON} ${FVENV}
-. ${FVENV}/bin/activate
-
-pip3 --no-cache-dir install RPi.GPIO
-pip3 --no-cache-dir install spidev
-pip3 --no-cache-dir install gpiozero
-pip3 --no-cache-dir install paho-mqtt
-pip3 --no-cache-dir install toml
-
 systemctl is-active -q pixel_ring_server && systemctl disable pixel_ring_server
+
+sudo -u ${USER} bash <<EOF
+    pip3 install virtualenv
+    virtualenv -p ${PYTHON} ${FVENV}
+    source ${FVENV}/bin/activate
+
+    pip3 --no-cache-dir install RPi.GPIO
+    pip3 --no-cache-dir install spidev
+    pip3 --no-cache-dir install gpiozero
+    pip3 --no-cache-dir install paho-mqtt
+    pip3 --no-cache-dir install toml
+    pip3 uninstall -y pixel_ring
+EOF
+
 pip3 uninstall -y pixel_ring
 
 mkdir -p logs
@@ -117,51 +121,51 @@ select answer in "yes" "no" "cancel"; do
             case "$device" in
                 matrixvoice)
                     chmod +x ./installers/matrixVoiceCreator.sh
-                    ./installers/matrixVoiceCreator.sh
+                    ./installers/matrixVoiceCreator.sh USER FVENV
                     break
                     ;;
                 matrixcreator)
                     chmod +x ./installers/matrixVoiceCreator.sh
-                    ./installers/matrixVoiceCreator.sh
+                    ./installers/matrixVoiceCreator.sh USER FVENV
                     break
                     ;;
                 respeaker2)
-                    chmod +x ./installers/respeakers.sh
+                    chmod +x ./installers/respeakers.sh USER FVENV
                     ./installers/respeakers.sh
                     break
                     ;;
                 respeaker4)
-                    chmod +x ./installers/respeakers.sh
+                    chmod +x ./installers/respeakers.sh USER FVENV
                     ./installers/respeakers.sh
                     break
                     ;;
                 respeaker6MicArray)
-                    chmod +x ./installers/respeakers.sh
+                    chmod +x ./installers/respeakers.sh USER FVENV
                     ./installers/respeakers.sh
                     break
                     ;;
                 neoPixelsSK6812RGBW)
-                    chmod +x ./installers/neopixels.sh
+                    chmod +x ./installers/neopixels.sh USER FVENV
                     ./installers/neopixels.sh
                     break
                     ;;
                 neoPixelsWS2812RGB)
-                    chmod +x ./installers/neopixels.sh
+                    chmod +x ./installers/neopixels.sh USER FVENV
                     ./installers/neopixels.sh
                     break
                     ;;
                 respeakerMicArrayV2)
-                    chmod +x ./installers/respeakerMicArrayV2.sh
+                    chmod +x ./installers/respeakerMicArrayV2.sh USER FVENV
                     ./installers/respeakerMicArrayV2.sh
                     break
                     ;;
                 respeakerCoreV2)
-                    chmod +x ./installers/respeakerCoreV2.sh
+                    chmod +x ./installers/respeakerCoreV2.sh USER FVENV
                     ./installers/respeakerCoreV2.sh
                     break
                     ;;
                 respeaker7MicArray)
-                    chmod +x ./installers/respeaker7MicArray.sh
+                    chmod +x ./installers/respeaker7MicArray.sh USER FVENV
                     ./installers/respeaker7MicArray.sh
                     break
                     ;;
