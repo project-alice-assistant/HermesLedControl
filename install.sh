@@ -67,9 +67,10 @@ systemctl is-active -q pixel_ring_server && systemctl disable pixel_ring_server
 
 chown -R ${USER} ${USERDIR}/snipsLedControl_${VERSION}
 
+pip3 install virtualenv
+virtualenv -p ${PYTHON} ${FVENV}
+
 sudo -u ${USER} bash <<EOF
-    pip3 install virtualenv
-    virtualenv -p ${PYTHON} ${FVENV}
     source ${FVENV}/bin/activate
 
     pip3 --no-cache-dir install RPi.GPIO
