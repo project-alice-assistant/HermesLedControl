@@ -3,6 +3,7 @@
 import json
 import logging
 import sys
+import time
 
 import os
 import paho.mqtt.client as mqtt
@@ -208,6 +209,7 @@ class SnipsLedControl:
 
 
 	def onConnect(self, client, userdata, flags, rc):
+		time.sleep(0.1)
 		self._mqttClient.subscribe([
 			(self._SUB_ON_HOTWORD, 0),
 			(self._SUB_ON_SAY, 0),
