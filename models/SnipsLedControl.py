@@ -215,6 +215,8 @@ class SnipsLedControl:
 			(self._SUB_ON_SAY, 0),
 			(self._SUB_ON_THINK, 0),
 			(self._SUB_ON_LISTENING, 0),
+			(self._SUB_ON_PLAY_FINISHED, 0),
+			(self._SUB_ON_TTS_FINISHED, 0),
 			(self._SUB_ON_LEDS_TOGGLE_ON, 0),
 			(self._SUB_ON_LEDS_TOGGLE_OFF, 0),
 			(self._SUB_ON_LEDS_TOGGLE, 0),
