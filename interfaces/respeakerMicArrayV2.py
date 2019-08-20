@@ -11,6 +11,7 @@ from models.Interface import Interface
 class RespeakerMicArrayV2(Interface):
 
 	def __init__(self, hardware, vid, pid):
+		self._hardware = hardware
 		super(RespeakerMicArrayV2, self).__init__(self._hardware['numberOfLeds'])
 
 		self._leds = pixel_ring.find(vid=int(vid, 16), pid=int(pid, 16))
@@ -20,7 +21,6 @@ class RespeakerMicArrayV2(Interface):
 
 		self._colors = self._newArray()
 
-		self._hardware = hardware
 		self._src = None
 		if 'doa' in hardware and hardware['doa']:
 			self._logger.info('Hardware is DOA capable')
