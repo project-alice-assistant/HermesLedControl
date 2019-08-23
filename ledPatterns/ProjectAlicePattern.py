@@ -65,11 +65,11 @@ class ProjectAlicePattern(LedPattern):
 
 	def updating(self, *args):
 		image = [
-			[0, 0, 255, 2],
-			[0, 0, 255, 40],
-			[0, 0, 255, 100],
-			[0, 0, 255, 40],
-			[0, 0, 255, 2]
+			[255, 0, 0, 2],
+			[255, 0, 0, 40],
+			[255, 0, 0, 100],
+			[255, 0, 0, 40],
+			[255, 0, 0, 2]
 		]
 
 		if len(image) < self._numLeds:
@@ -79,12 +79,12 @@ class ProjectAlicePattern(LedPattern):
 		self._animator.new(image=image)
 		self.animation.set()
 		while self.animation.isSet():
-			self._animator.rotateImage(1)
+			self._animator.rotateImage(-1)
 			time.sleep(0.05)
 
 
 	def setupMode(self, *args):
-		self._animator.doublePingPong(color=[0, 0, 255, 10], speed=20, backgroundColor=[255, 255, 255, 5])
+		self._animator.doublePingPong(color=[0, 0, 255, 10], speed=20)
 
 
 	def dnd(self, *args):
