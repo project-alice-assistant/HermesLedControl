@@ -29,6 +29,7 @@ class SnipsLedControl:
 	_SUB_ON_LEDS_TOGGLE 			= 'hermes/leds/toggle'
 	_SUB_ON_LEDS_TOGGLE_ON 			= 'hermes/leds/toggleOn'
 	_SUB_ON_LEDS_TOGGLE_OFF 		= 'hermes/leds/toggleOff'
+	_SUB_ON_LEDS_CLEAR 				= 'hermes/leds/clear'
 	_SUB_UPDATING 					= 'hermes/leds/systemUpdate'
 	_SUB_ON_CALL 					= 'hermes/leds/onCall'
 	_SUB_SETUP_MODE 				= 'hermes/leds/setupMode'
@@ -231,7 +232,8 @@ class SnipsLedControl:
 			(self._SUB_ON_MESSAGE, 0),
 			(self._SUB_ON_DND, 0),
 			(self._SUB_VOLUME_SET, 0),
-			(self._SUB_VADLED_SET, 0)
+			(self._SUB_VADLED_SET, 0),
+			(self._SUB_ON_LEDS_CLEAR, 0)
 		])
 
 		self._mqttClient.subscribe(self._params.offListener)
@@ -451,6 +453,16 @@ class SnipsLedControl:
 			else:
 				if self._params.debug:
 					self._logger.debug("On vad led set received but it wasn't for me")
+
+		elif message.topic == self._SUB_ON_LEDS_CLEAR:
+			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On leds clear triggered')
+				else:
+					self._ledsController.clearLeds()
+			else:
+				if self._params.debug:
+					self._logger.debug("On leds clear received but it wasn't for me")
 
 
 	@property
