@@ -59,6 +59,7 @@ class SnipsLedControl:
 		self._mqttPort 				= 1883
 		self._mqttUsername 			= ''
 		self._mqttPassword 			= ''
+		self._tlsFile 				= ''
 
 		self._hotwordRegex = re.compile(self._SUB_ON_HOTWORD.replace('+', '(.*)'))
 
@@ -82,6 +83,9 @@ class SnipsLedControl:
 
 					if 'mqtt_password' in self._snipsConfigs['snips-common'] and params.mqttPassword is None:
 						self._mqttPassword = self._snipsConfigs['snips-common']['mqtt_password']
+
+					if 'mqtt_tls_cafile' in self._snipsConfigs['snips-common']:
+						self._tlsFile = self._snipsConfigs['snips-common']['mqtt_tls_cafile']
 
 			except:
 				self._logger.info('- Falling back to default config for mqtt server')
@@ -196,6 +200,11 @@ class SnipsLedControl:
 			mqttClient.on_log = self.onLog
 			mqttClient.on_connect = self.onConnect
 			mqttClient.on_message = self.onMessage
+
+			if self._tlsFile:
+				mqttClient.tls_set(certfile=self._tlsFile)
+				mqttClient.tls_insecure_set(False)
+
 			mqttClient.connect(self._mqttServer, int(self._mqttPort))
 			mqttClient.loop_start()
 			return mqttClient
