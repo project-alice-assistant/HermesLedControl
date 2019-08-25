@@ -213,11 +213,13 @@ class SnipsLedControl:
 			self.onStop()
 
 
+	# noinspection PyUnusedLocal
 	def onLog(self, client, userdata, level, buf):
 		if level != 16:
 			self._logger.error(buf)
 
 
+	# noinspection PyUnusedLocal
 	def onConnect(self, client, userdata, flags, rc):
 		time.sleep(0.1)
 		self._mqttClient.subscribe([
@@ -248,22 +250,28 @@ class SnipsLedControl:
 		self._mqttClient.subscribe(self._params.offListener)
 
 
+	# noinspection PyUnusedLocal
 	def onMessage(self, client, userdata, message: MQTTMessage):
 		payload = None
 
 		if hasattr(message, 'payload') and message.payload:
 			payload = json.loads(message.payload.decode('UTF-8'))
 
-		if payload is not None and 'siteId' in payload:
-			siteId = payload['siteId']
-		else:
-			siteId = None
+		siteId = None
+		sticky = False
+		if payload is not None:
+			if 'siteId' in payload:
+				siteId = payload['siteId']
+
+			if 'sticky' in payload:
+				sticky = True
+
 
 		if self._hotwordRegex.match(message.topic):
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On hotword triggered')
-				self._ledsController.wakeup()
+				self._ledsController.wakeup(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On hotword received but it wasn't for me")
@@ -272,7 +280,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On listen triggered')
-				self._ledsController.listen()
+				self._ledsController.listen(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On listen received but it wasn't for me")
@@ -281,7 +289,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On say triggered')
-				self._ledsController.speak()
+				self._ledsController.speak(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On say received but it wasn't for me")
@@ -290,7 +298,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On think triggered')
-				self._ledsController.think()
+				self._ledsController.think(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On think received but it wasn't for me")
@@ -353,7 +361,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On success triggered')
-				self._ledsController.onSuccess()
+				self._ledsController.onSuccess(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On success received but it wasn't for me")
@@ -362,7 +370,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On error triggered')
-				self._ledsController.onError()
+				self._ledsController.onError(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On error received but it wasn't for me")
@@ -371,7 +379,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On updating triggered')
-				self._ledsController.updating()
+				self._ledsController.updating(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On updating received but it wasn't for me")
@@ -380,7 +388,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On call triggered')
-				self._ledsController.call()
+				self._ledsController.call(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On call received but it wasn't for me")
@@ -389,7 +397,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On setup mode triggered')
-				self._ledsController.setupMode()
+				self._ledsController.setupMode(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On setup mode received but it wasn't for me")
@@ -398,7 +406,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On connection error triggered')
-				self._ledsController.conError()
+				self._ledsController.conError(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On connection error received but it wasn't for me")
@@ -407,7 +415,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On message triggered')
-				self._ledsController.message()
+				self._ledsController.message(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On message received but it wasn't for me")
@@ -416,7 +424,7 @@ class SnipsLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On do not disturb triggered')
-				self._ledsController.dnd()
+				self._ledsController.dnd(sticky)
 			else:
 				if self._params.debug:
 					self._logger.debug("On do not disturb received but it wasn't for me")
@@ -464,6 +472,7 @@ class SnipsLedControl:
 					self._logger.debug("On vad led set received but it wasn't for me")
 
 		elif message.topic == self._SUB_ON_LEDS_CLEAR:
+			self._ledsController.stickyAnimation = None
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On leds clear triggered')

@@ -35,6 +35,7 @@ class LedsController:
 		self._interface 		= None
 		self._running 			= False
 		self._defaultBrightness = self._params.defaultBrightness
+		self._stickyAnimation 	= None
 
 		self._active = threading.Event()
 		if self._params.defaultState == 'on':
@@ -75,6 +76,16 @@ class LedsController:
 		self._queue = Queue.Queue()
 		self._animationThread = threading.Thread(target=self._runAnimation)
 		self._animationThread.setDaemon(True)
+
+
+	@property
+	def stickyAnimation(self):
+		return self._stickyAnimation
+
+
+	@stickyAnimation.setter
+	def stickyAnimation(self, value):
+		self._stickyAnimation = value
 
 
 	@property
@@ -163,7 +174,10 @@ class LedsController:
 			self._logger.warning('Tried to set vad led on an unsupported device')
 
 
-	def wakeup(self):
+	def wakeup(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.wakeup
+
 		if self._params.wakeupPattern is None:
 			self._put(self._pattern.wakeup)
 		else:
@@ -175,7 +189,10 @@ class LedsController:
 				self._put(self._pattern.wakeup)
 
 
-	def listen(self):
+	def listen(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.listen
+
 		if self._params.listenPattern is None:
 			self._put(self._pattern.listen)
 		else:
@@ -187,7 +204,10 @@ class LedsController:
 				self._put(self._pattern.listen)
 
 
-	def think(self):
+	def think(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.think
+
 		if self._params.thinkPattern is None:
 			self._put(self._pattern.think)
 		else:
@@ -199,7 +219,10 @@ class LedsController:
 				self._put(self._pattern.think)
 
 
-	def speak(self):
+	def speak(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.speak
+
 		if self._params.speakPattern is None:
 			self._put(self._pattern.speak)
 		else:
@@ -212,18 +235,24 @@ class LedsController:
 
 
 	def idle(self):
-		if self._params.idlePattern is None:
-			self._put(self._pattern.idle)
+		if self._stickyAnimation:
+			self._put(self._stickyAnimation)
 		else:
-			try:
-				func = getattr(self._pattern, self._params.idlePattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.idlePattern))
+			if self._params.idlePattern is None:
 				self._put(self._pattern.idle)
+			else:
+				try:
+					func = getattr(self._pattern, self._params.idlePattern)
+					self._put(func)
+				except AttributeError:
+					self._logger.error("Can't find {} method in pattern".format(self._params.idlePattern))
+					self._put(self._pattern.idle)
 
 
-	def onError(self):
+	def onError(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.onError
+
 		if self._params.errorPattern is None:
 			self._put(self._pattern.onError)
 		else:
@@ -235,7 +264,10 @@ class LedsController:
 				self._put(self._pattern.onError)
 
 
-	def onSuccess(self):
+	def onSuccess(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.onSuccess
+
 		if self._params.successPattern is None:
 			self._put(self._pattern.onSuccess)
 		else:
@@ -247,7 +279,10 @@ class LedsController:
 				self._put(self._pattern.onSuccess)
 
 
-	def updating(self):
+	def updating(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.updating
+
 		if self._params.updatingPattern is None:
 			self._put(self._pattern.updating)
 		else:
@@ -259,7 +294,10 @@ class LedsController:
 				self._put(self._pattern.updating)
 
 
-	def call(self):
+	def call(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.call
+
 		if self._params.updatingPattern is None:
 			self._put(self._pattern.call)
 		else:
@@ -271,7 +309,10 @@ class LedsController:
 				self._put(self._pattern.call)
 
 
-	def setupMode(self):
+	def setupMode(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.setupMode
+
 		if self._params.updatingPattern is None:
 			self._put(self._pattern.setupMode)
 		else:
@@ -283,7 +324,10 @@ class LedsController:
 				self._put(self._pattern.setupMode)
 
 
-	def conError(self):
+	def conError(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.conError
+
 		if self._params.conErrorPattern is None:
 			self._put(self._pattern.conError)
 		else:
@@ -295,7 +339,10 @@ class LedsController:
 				self._put(self._pattern.conError)
 
 
-	def message(self):
+	def message(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.message
+
 		if self._params.updatingPattern is None:
 			self._put(self._pattern.message)
 		else:
@@ -307,7 +354,10 @@ class LedsController:
 				self._put(self._pattern.message)
 
 
-	def dnd(self):
+	def dnd(self, sticky: bool):
+		if sticky:
+			self._stickyAnimation = self._pattern.dnd
+
 		if self._params.updatingPattern is None:
 			self._put(self._pattern.dnd)
 		else:
