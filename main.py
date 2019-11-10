@@ -82,6 +82,7 @@ def main():
 							'hermes/tts/sayFinished',
 							'hermes/audioServer/playFinished'
 						])
+	parser.add_argument('--enableDoA', help='Enables sound direction of arrival on hardware capable of it. Resources greedy!', type=bool, default=False)
 	parser.add_argument('--startPattern', help='Define a program start led pattern', type=str)
 	parser.add_argument('--stopPattern', help='Define a prorgam stop led pattern', type=str)
 	parser.add_argument('--offPattern', help='Define an off led pattern', type=str)

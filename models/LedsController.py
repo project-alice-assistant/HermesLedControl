@@ -2,14 +2,12 @@
 
 import queue as Queue
 import threading
-import time
 
 from ledPatterns.AlexaLedPattern import AlexaLedPattern
 from ledPatterns.CustomLedPattern import CustomLedPattern
 from ledPatterns.GoogleLedPattern import GoogleHomeLedPattern
 from ledPatterns.KiboostLedPattern import KiboostLedPattern
 from ledPatterns.ProjectAlicePattern import ProjectAlicePattern
-import logging
 from models.Exceptions import InterfaceInitError
 from models.Interfaces import Interfaces
 from models.SnipsLedControl import *
@@ -485,7 +483,7 @@ class LedsController:
 
 
 	def doa(self):
-		if 'doa' in self.hardware.keys() and self.hardware['doa']:
+		if self._params.enableDoA and 'doa' in self.hardware.keys() and self.hardware['doa']:
 			angle = self._interface.doa()
 			if angle > 0:
 				return int(round(angle / (360 / self.hardware['numberOfLeds'])))
