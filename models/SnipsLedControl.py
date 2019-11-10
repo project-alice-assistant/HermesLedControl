@@ -76,7 +76,7 @@ class SnipsLedControl:
 		if params.mqttServer is None:
 			try:
 				if 'snips-common' in self._snipsConfigs and 'mqtt' in self._snipsConfigs['snips-common']:
-					self._mqttServer = self._snipsConfigs['snips-common']['mqtt'].replace(':1883', '')
+					self._mqttServer = self._snipsConfigs['snips-common']['mqtt'].split(':')[0]
 
 					if 'mqtt_username' in self._snipsConfigs['snips-common'] and params.mqttUsername is None:
 						self._mqttUsername = self._snipsConfigs['snips-common']['mqtt_username']
