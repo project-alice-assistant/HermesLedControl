@@ -327,6 +327,8 @@ class Animations:
 
 	def _displayImage(self):
 		for i, led in enumerate(self._image):
+			if i >= self._numLeds:
+				break
 			self._controller.setLedRGB(i, led)
 
 		self._controller.show()
