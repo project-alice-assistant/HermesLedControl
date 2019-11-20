@@ -35,6 +35,9 @@ class LedsController:
 		self._defaultBrightness = self._params.defaultBrightness
 		self._stickyAnimation 	= None
 
+		if not self._params.enableDoA and 'doa' in self._hardware.keys():
+			self._hardware['doa'] = False
+
 		self._active = threading.Event()
 		if self._params.defaultState == 'on':
 			self._active.set()
@@ -483,10 +486,10 @@ class LedsController:
 
 
 	def doa(self):
-		if self._params.enableDoA and 'doa' in self.hardware.keys() and self.hardware['doa']:
+		if self._params.enableDoA and 'doa' in self._hardware.keys() and self._hardware['doa']:
 			angle = self._interface.doa()
 			if angle > 0:
-				return int(round(angle / (360 / self.hardware['numberOfLeds'])))
+				return int(round(angle / (360 / self._hardware['numberOfLeds'])))
 
 		return 0
 
