@@ -172,7 +172,7 @@ class LedsController:
 			self._logger.warning('Tried to set vad led on an unsupported device')
 
 
-	def wakeup(self, sticky: bool):
+	def wakeup(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.wakeup
 
@@ -187,7 +187,7 @@ class LedsController:
 				self._put(self._pattern.wakeup)
 
 
-	def listen(self, sticky: bool):
+	def listen(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.listen
 
@@ -202,7 +202,7 @@ class LedsController:
 				self._put(self._pattern.listen)
 
 
-	def think(self, sticky: bool):
+	def think(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.think
 
@@ -217,7 +217,7 @@ class LedsController:
 				self._put(self._pattern.think)
 
 
-	def speak(self, sticky: bool):
+	def speak(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.speak
 
@@ -247,7 +247,7 @@ class LedsController:
 					self._put(self._pattern.idle)
 
 
-	def onError(self, sticky: bool):
+	def onError(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.onError
 
@@ -262,7 +262,7 @@ class LedsController:
 				self._put(self._pattern.onError)
 
 
-	def onSuccess(self, sticky: bool):
+	def onSuccess(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.onSuccess
 
@@ -277,7 +277,7 @@ class LedsController:
 				self._put(self._pattern.onSuccess)
 
 
-	def updating(self, sticky: bool):
+	def updating(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.updating
 
@@ -292,7 +292,7 @@ class LedsController:
 				self._put(self._pattern.updating)
 
 
-	def call(self, sticky: bool):
+	def call(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.call
 
@@ -307,7 +307,7 @@ class LedsController:
 				self._put(self._pattern.call)
 
 
-	def setupMode(self, sticky: bool):
+	def setupMode(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.setupMode
 
@@ -322,7 +322,7 @@ class LedsController:
 				self._put(self._pattern.setupMode)
 
 
-	def conError(self, sticky: bool):
+	def conError(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.conError
 
@@ -337,7 +337,7 @@ class LedsController:
 				self._put(self._pattern.conError)
 
 
-	def message(self, sticky: bool):
+	def message(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.message
 
@@ -352,7 +352,7 @@ class LedsController:
 				self._put(self._pattern.message)
 
 
-	def dnd(self, sticky: bool):
+	def dnd(self, sticky: bool = False):
 		if sticky:
 			self._stickyAnimation = self._pattern.dnd
 
