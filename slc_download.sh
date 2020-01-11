@@ -5,11 +5,11 @@ if [[ "$EUID" -ne 0 ]]
   exit
 fi
 
-url=$(curl --silent "https://api.github.com/repos/Psychokiller1888/snipsLedControl/releases/latest" | grep -Po '"tarball_url": "\K.*?(?=")')
-latest=$(curl --silent "https://api.github.com/repos/Psychokiller1888/snipsLedControl/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+url=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep -Po '"tarball_url": "\K.*?(?=")')
+latest=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 
 path='/home/'$(logname)
-dest=${path}/snipsLedControl_${latest}
+dest=${path}/hermesLedControl_${latest}
 rm ${latest}
 rm -rf ${dest}
 mkdir -p ${dest}
