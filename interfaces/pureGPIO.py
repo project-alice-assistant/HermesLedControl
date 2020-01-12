@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from gpiozero import LED
 
 from models.Exceptions import InterfaceInitError

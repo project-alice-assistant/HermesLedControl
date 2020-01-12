@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import queue as Queue
 import threading
 
@@ -35,7 +33,7 @@ class LedsController:
 		self._defaultBrightness = self._params.defaultBrightness
 		self._stickyAnimation 	= None
 
-		if not self._params.enableDoA and 'doa' in self._hardware.keys():
+		if not self._params.enableDoA and 'doa' in self._hardware:
 			self._hardware['doa'] = False
 
 		self._active = threading.Event()
@@ -459,11 +457,10 @@ class LedsController:
 
 
 	def setLedRGB(self, ledNum, color, brightness=-1):
-		if brightness == -1:
-			brightness = self.defaultBrightness
-
 		if len(color) > 3:
 			brightness = color[3]
+		elif brightness == -1:
+			brightness = self.defaultBrightness
 
 		self.setLed(ledNum, color[0], color[1], color[2], brightness)
 
@@ -486,7 +483,7 @@ class LedsController:
 
 
 	def doa(self):
-		if self._params.enableDoA and 'doa' in self._hardware.keys() and self._hardware['doa']:
+		if self._params.enableDoA and self._hardware.get('doa'):
 			angle = self._interface.doa()
 			if angle > 0:
 				return int(round(angle / (360 / self._hardware['numberOfLeds'])))

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import math
 
 from libraries.neopixel import *
@@ -35,7 +33,7 @@ class Neopixels(Interface):
 	def __init__(self, numLeds, stripType, pin):
 		super(Neopixels, self).__init__(numLeds)
 
-		if stripType not in self._STRIP_TYPES.keys():
+		if stripType not in self._STRIP_TYPES:
 			raise InterfaceInitError('Unsupported neopixel type "{}"'.format(stripType))
 
 		self._type 	= stripType

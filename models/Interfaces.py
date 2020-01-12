@@ -1,6 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 class Interfaces:
 	APA102 					= 'apa102'
 	NEOPIXELS 				= 'neopixels'

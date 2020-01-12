@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import logging
 import math
 import time
@@ -20,9 +18,7 @@ class Animations:
 		if image is not None:
 			self._image = image
 		else:
-			self._image = list()
-			for i in range(self._numLeds):
-				self._image.append([0, 0, 0, 0])
+			self._image = [[0, 0, 0, 0] for _ in range(self._numLeds)]
 
 
 	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10):
@@ -37,10 +33,9 @@ class Animations:
 		"""
 		self.new()
 
-		if direction > 0:
-			r = range(int(round(self._numLeds / 2)) + 1)
-		else:
-			r = reversed(range(int(round(self._numLeds / 2)) + 1))
+		r = range(int(round(self._numLeds / 2)) + 1)
+		if direction <= 0:
+			r = reversed(r)
 
 		index = startAt
 		oppositeLed = self._oppositeLed(startAt)
@@ -68,9 +63,7 @@ class Animations:
 		:return:
 		"""
 
-		image = list()
-		for _ in range(self._numLeds):
-			image.append(color)
+		image = [color for _ in range(self._numLeds)]
 
 		self.new(image)
 
@@ -102,13 +95,11 @@ class Animations:
 			return
 
 		if step < 0:
-			for i in range(0, step, -1):
-				insertBack = self._image.pop(0)
-				self._image.insert(len(self._image), insertBack)
+			for _ in range(0, step, -1):
+				self._image.append(self._image.pop(0))
 		else:
-			for i in range(step):
-				insertBack = self._image.pop()
-				self._image.insert(0, insertBack)
+			for _ in range(step):
+				self._image.insert(0, self._image.pop())
 		self._displayImage()
 
 
@@ -326,9 +317,7 @@ class Animations:
 
 
 	def _displayImage(self):
-		for i, led in enumerate(self._image):
-			if i >= self._numLeds:
-				break
+		for i, led in enumerate(self._image[:self._numLeds]):
 			self._controller.setLedRGB(i, led)
 
 		self._controller.show()

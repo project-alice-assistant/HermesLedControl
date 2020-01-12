@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import json
 import logging
 import sys
@@ -87,17 +85,12 @@ class HermesLedControl:
 		else:
 			self._hardware = self._hardwareReference[self._params.hardware]
 
-		self._mqttServer = self._configs['mqttServer'] if not params.mqttServer else params.mqttServer
-		self._mqttPort = int(self._configs['mqttPort']) if not params.mqttPort else int(params.mqttPort)
-		self._mqttUsername = self._configs['mqttUsername'] if not params.mqttUsername else params.mqttUsername
-		self._mqttPassword = self._configs['mqttPassword'] if not params.mqttPassword else params.mqttPassword
-
+		self._mqttServer = params.mqttServer or self._configs['mqttServer']
+		self._mqttPort = int(params.mqttPort or self._configs['mqttPort'])
+		self._mqttUsername = params.mqttUsername or self._configs['mqttUsername']
+		self._mqttPassword = params.mqttPassword or self._configs['mqttPassword']
 		self._tlsFile = self._configs['mqttTLSCAFile']
-
-		if not params.clientId:
-			self._me = self._configs['deviceName']
-		else:
-			self._me = params.clientId
+		self._me = params.clientId or self._configs['deviceName']
 
 		self._SUB_ON_PLAY_FINISHED = self._SUB_ON_PLAY_FINISHED.format(self._me)
 
@@ -112,20 +105,14 @@ class HermesLedControl:
 		self._logger.info('- Client id set to {}'.format(self._me))
 		self._logger.info('- Hardware set to {}'.format(self._hardware['name']))
 
-		string = '- Using {} as pattern with {} leds'
 		if params.leds is not None:
-			self._logger.info(string.format(params.pattern, params.leds))
 			self._hardware['numberOfLeds'] = params.leds
-		else:
-			self._logger.info(string.format(params.pattern, self._hardware['numberOfLeds']))
+		self._logger.info('- Using {} as pattern with {} leds'.format(params.pattern, self._hardware['numberOfLeds']))
 
 		if 'gpioPin' in self._hardware:
-			string = 'Using pin #{}'
 			if params.gpioPin is not None:
-				self._logger.info(string.format(params.gpioPin))
 				self._hardware['gpioPin'] = params.gpioPin
-			else:
-				self._logger.info(string.format(self._hardware['gpioPin']))
+			self._logger.info('Using pin #{}'.format(self._hardware['gpioPin']))
 
 		if 'vid' in self._hardware and params.vid is not None:
 			self._hardware['vid'] = params.vid
@@ -133,7 +120,7 @@ class HermesLedControl:
 		if 'gpios' in self._hardware and len(params.pureGpioPinout) > 0:
 			self.hardware['gpios'] = params.pureGpioPinout
 
-		if 'activeHigh' in self._hardware and params.activeHigh != self._hardware['activeHigh']:
+		if 'activeHigh' in self._hardware:
 			self._hardware['activeHigh'] = params.activeHigh
 
 		if 'endFrame' in self._hardware and params.endFrame is not None:
@@ -221,19 +208,13 @@ class HermesLedControl:
 
 	# noinspection PyUnusedLocal
 	def onMessage(self, client, userdata, message: MQTTMessage):
-		payload = None
+		payload = dict()
 
 		if hasattr(message, 'payload') and message.payload:
 			payload = json.loads(message.payload.decode('UTF-8'))
 
-		siteId = None
-		sticky = False
-		if payload is not None:
-			if 'siteId' in payload:
-				siteId = payload['siteId']
-
-			if 'sticky' in payload:
-				sticky = True
+		siteId = payload.get('siteId')
+		sticky = 'sticky' in payload
 
 
 		if self._hotwordRegex.match(message.topic):

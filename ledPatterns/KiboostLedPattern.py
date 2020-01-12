@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ###########################################################################################################
 # SUBMIT YOUR OWN CUSTOM PATTERN AND SHARE WITH THE WORLD YOUR LED ANIMATIONS!
 # Visit https://github.com/project-alice-assistant/HermesLedControl/issues/new?template=custom-pattern-proposal.md
@@ -33,13 +31,10 @@ class KiboostLedPattern(LedPattern):
 		color as array [r,g,b]
 		leds as array of index
 		"""
-		if leds is None:
-			leds = []
+		if not leds:
+			leds = [i for i in range(self._numLeds)]
 		if color is None:
 			color = [0, 0, 40]
-
-		if len(leds) == 0:
-			leds = [i for i in range(self._numLeds)]
 
 		pause = float(duration / 200.00)
 		direction = 1
@@ -123,13 +118,10 @@ class KiboostLedPattern(LedPattern):
 		color as array [r,g,b]
 		leds as array of index
 		"""
-		if leds is None:
-			leds = []
+		if not leds:
+			leds = [int(self._numLeds / 2)]
 		if color is None:
 			color = [0, 0, 40]
-
-		if len(leds) == 0:
-			leds = [int(self._numLeds / 2)]
 
 		pause = float(duration / (self._numLeds + 1))
 		refs = [0 for i in range(self._numLeds)]

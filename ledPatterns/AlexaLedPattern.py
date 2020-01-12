@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 import time
 
 from models.LedPattern import LedPattern

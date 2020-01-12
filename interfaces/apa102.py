@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import importlib
 
 try:
@@ -30,7 +29,7 @@ class APA102(Interface):
 
 		self._hardware = hardware
 		self._src = None
-		if 'doa' in hardware and hardware['doa']:
+		if hardware.get('doa'):
 			self._logger.info('Hardware is DOA capable')
 			from libraries.seeedstudios.channel_picker import ChannelPicker
 			from libraries.seeedstudios.source import Source

@@ -13,7 +13,7 @@ if [[ -z "$PYTHON" ]]; then
     if [[ -z "$PYTHON" ]]; then
         PYTHON=$(command -v python3.5)
         if [[ -z "$PYTHON" ]]; then
-            echo "Please make sur to have python 3.5 at least"
+            echo "Please make sure to have python 3.5 at least"
             exit
         fi
     fi

@@ -28,7 +28,7 @@ class ProjectAlice:
 		"""
 
 		self._logger.info('Loading configurations')
-		path = Path('/etc/snips.toml') if not params.pathToConfig else params.pathToConfig
+		path = params.pathToConfig or Path('/etc/snips.toml')
 
 		configs = dict()
 
@@ -37,11 +37,14 @@ class ProjectAlice:
 				conf = toml.load(confFile)
 
 				try:
-					configs['mqttServer'], configs['mqttPort'] = conf['snips-common']['mqtt'].split(':')
-					configs['mqttUsername'] = conf.get('snips-common', dict()).get('mqtt_username', '')
-					configs['mqttPassword'] = conf.get('snips-common', dict()).get('mqtt_password', '')
-					configs['mqttTLSCAFile'] = conf.get('snips-common', dict()).get('mqtt_tls_cafile', '')
-					configs['deviceName'] = conf.get('snips-audio-server', dict()).get('bind', 'default').replace('@mqtt', '')
+					snipsCommons = conf['snips-common']
+					configs['mqttServer'], configs['mqttPort'] = snipsCommons['mqtt'].split(':')
+					configs['mqttUsername'] = snipsCommons.get('mqtt_username', '')
+					configs['mqttPassword'] = snipsCommons.get('mqtt_password', '')
+					configs['mqttTLSCAFile'] = snipsCommons.get('mqtt_tls_cafile', '')
+
+					snipsAudioServer = conf.get('snips-audio-server', dict())
+					configs['deviceName'] = snipsAudioServer.get('bind', 'default').replace('@mqtt', '')
 
 					return configs
 				except:

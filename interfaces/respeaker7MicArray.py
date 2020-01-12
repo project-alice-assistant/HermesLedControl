@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import respeaker.usb_hid
 
 from models.Exceptions import InterfaceInitError

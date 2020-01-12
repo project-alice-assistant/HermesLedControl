@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from models.Animations import Animations
 from models.LedsController import *
 import logging

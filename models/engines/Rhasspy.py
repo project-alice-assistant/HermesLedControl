@@ -33,7 +33,7 @@ class Rhasspy:
 
 		userHomePath = os.path.expanduser('~')
 		configPath = userHomePath + '/.config/rhasspy/profiles/en/profile.json'
-		path = Path(configPath) if not params.pathToConfig else Path(params.pathToConfig)
+		path = Path(params.pathToConfig or configPath)
 
 		configs = dict()
 
@@ -43,11 +43,11 @@ class Rhasspy:
 
 				try:
 					configs['mqttServer'] = conf['mqtt']['host']
-					configs['mqttPort'] = conf['mqtt']['port'] if 'port' in conf['mqtt'] else 1883
-					configs['mqttUsername'] = conf['mqtt']['username'] if 'username' in conf['mqtt'] else ''
-					configs['mqttPassword'] = conf['mqtt']['password'] if 'password' in conf['mqtt'] else ''
+					configs['mqttPort'] = conf['mqtt'].get('port', 1883)
+					configs['mqttUsername'] = conf['mqtt'].get('username', '')
+					configs['mqttPassword'] = conf['mqtt'].get('password', '')
 					configs['mqttTLSCAFile'] = ''
-					configs['deviceName'] = conf['mqtt']['site_id'] if 'site_id' in conf['mqtt'] else 'default'
+					configs['deviceName'] = conf['mqtt'].get('site_id', 'default')
 
 					return configs
 				except:
