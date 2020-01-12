@@ -28,7 +28,7 @@ class Snips:
 		"""
 
 		self._logger.info('Loading configurations')
-		path = Path('/etc/snips.toml')
+		path = Path('/etc/snips.toml') if not params.pathToConfig else params.pathToConfig
 
 		configs = dict()
 

@@ -50,6 +50,7 @@ def main():
 		"rhasspy",
 		"snips"
 	])
+	parser.add_argument('--pathToConfig', help='Defines where the mqtt configuration file is to be found', type=str, default='/etc/snips.toml')
 	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides any config file', type=str)
 	parser.add_argument('--mqttPort', help='Defines what port to use to connect to mqtt. Overrides any config file', type=str)
 	parser.add_argument('--mqttUsername', help='Mqtt username if required. Overrides any config file', type=str)
