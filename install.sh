@@ -40,6 +40,8 @@ done
 pathToConfig="/etc/snips.toml"
 echo "What's the path to your assistant config file?"
 read -pr "Path: (/etc/snips.toml)" pathToConfig
+echo "Path: $pathToConfig"
+pathToConfig=${pathToConfig//\//\\/}
 
 echo "What device do you wish to control with SLC?"
 select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
