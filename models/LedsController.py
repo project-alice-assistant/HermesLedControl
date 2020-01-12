@@ -10,17 +10,17 @@ from ledPatterns.KiboostLedPattern import KiboostLedPattern
 from ledPatterns.ProjectAlicePattern import ProjectAlicePattern
 from models.Exceptions import InterfaceInitError
 from models.Interfaces import Interfaces
-from models.SnipsLedControl import *
+from models.HermesLedControl import *
 
 
 class LedsController:
 	INSTANCE = None
 
 	def __init__(self, mainClass):
-		self._logger = logging.getLogger('SnipsLedControl')
+		self._logger = logging.getLogger('HermesLedControl')
 		self._logger.info('Initializing leds controller')
 
-		self._mainClass = mainClass # type: SnipsLedControl
+		self._mainClass = mainClass # type: HermesLedControl
 
 		if self.INSTANCE is None:
 			self.INSTANCE = self

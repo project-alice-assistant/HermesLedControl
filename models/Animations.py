@@ -6,7 +6,7 @@ import time
 
 class Animations:
 	def __init__(self, animationFlag, controller):
-		self._logger 		= logging.getLogger('SnipsLedControl')
+		self._logger 		= logging.getLogger('HermesLedControl')
 		self._animationFlag = animationFlag
 		self._controller 	= controller
 		self._numLeds 		= self._controller.hardware['numberOfLeds']

@@ -1,7 +1,5 @@
 [Unit]
-Description=Snips Led Control
-Wants=mosquitto.service snips-audio-server.service
-After=mosquitto.service snips-audio-server.service
+Description=Hermes Led Control
 
 [Service]
 WorkingDirectory=%WORKING_DIR%

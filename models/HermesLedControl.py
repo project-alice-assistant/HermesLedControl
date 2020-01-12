@@ -5,16 +5,14 @@ import logging
 import sys
 import time
 
-import os
 import paho.mqtt.client as mqtt
 import re
-import toml
 from paho.mqtt.client import MQTTMessage
 
 from models.LedsController import LedsController
 
 
-class SnipsLedControl:
+class HermesLedControl:
 
 	_SUB_ON_HOTWORD 				= 'hermes/hotword/+/detected'
 	_SUB_ON_SAY 					= 'hermes/tts/say'
@@ -44,15 +42,13 @@ class SnipsLedControl:
 
 
 	def __init__(self, params):
-		self._logger = logging.getLogger('SnipsLedControl')
-		self._logger.info('Initializing SnipsLedControl')
+		self._logger = logging.getLogger('HermesLedControl')
+		self._logger.info('Initializing HermesLedControl')
 
 		self._mqttClient 			= None
 		self._hardwareReference 	= None
 		self._ledsController 		= None
 		self._params 				= params
-
-		self._snipsConfigs 	= self.loadConfigs()
 
 		self._mqttServer 			= 'localhost'
 		self._me 					= 'default'
@@ -61,7 +57,22 @@ class SnipsLedControl:
 		self._mqttPassword 			= ''
 		self._tlsFile 				= ''
 
-		self._hotwordRegex = re.compile(self._SUB_ON_HOTWORD.replace('+', '(.*)'))
+		self._hotwordRegex          = re.compile(self._SUB_ON_HOTWORD.replace('+', '(.*)'))
+
+		if params.engine == 'projectalice':
+			from models.engines.ProjectAlice import ProjectAlice
+			engine = ProjectAlice()
+		elif params.engine == 'snips':
+			from models.engines.Snips import Snips
+			engine = Snips()
+		else:
+			self._logger.error(f'Unsupported assistant engine {params.engine}')
+			self.onStop()
+			return
+
+		self._configs = engine.loadConfig(params)
+		if not self._configs:
+			self.onStop()
 
 		with open('hardware.json') as f:
 			self._hardwareReference = json.load(f)
@@ -73,47 +84,34 @@ class SnipsLedControl:
 		else:
 			self._hardware = self._hardwareReference[self._params.hardware]
 
-		if params.mqttServer is None:
-			try:
-				if 'snips-common' in self._snipsConfigs and 'mqtt' in self._snipsConfigs['snips-common']:
-					self._mqttServer = self._snipsConfigs['snips-common']['mqtt'].split(':')[0]
-
-					if 'mqtt_username' in self._snipsConfigs['snips-common'] and params.mqttUsername is None:
-						self._mqttUsername = self._snipsConfigs['snips-common']['mqtt_username']
-
-					if 'mqtt_password' in self._snipsConfigs['snips-common'] and params.mqttPassword is None:
-						self._mqttPassword = self._snipsConfigs['snips-common']['mqtt_password']
-
-					if 'mqtt_tls_cafile' in self._snipsConfigs['snips-common']:
-						self._tlsFile = self._snipsConfigs['snips-common']['mqtt_tls_cafile']
-
-			except:
-				self._logger.info('- Falling back to default config for mqtt server')
+		if not params.mqttServer:
+			self._mqttServer = self._configs['mqttServer']
 		else:
 			self._mqttServer = params.mqttServer
 
+		if not params.mqttPort:
+			self._mqttPort = int(self._configs['mqttPort'])
+		else:
+			self._mqttPort = int(params.mqttPort)
 
-		if params.clientId is None:
-			try:
-				if 'snips-audio-server' in self._snipsConfigs and 'bind' in self._snipsConfigs['snips-audio-server']:
-					self._me = self._snipsConfigs['snips-audio-server']['bind'].replace('@mqtt', '')
-			except:
-				self._logger.info('- Falling back to default config for client id')
+		if not params.mqttUsername:
+			self._mqttUsername = self._configs['mqttUsername']
+		else:
+			self._mqttUsername = params.mqttUsername
+
+		if not params.mqttPassword:
+			self._mqttPassword = self._configs['mqttPassword']
+		else:
+			self._mqttPassword = params.mqttPassword
+
+		self._tlsFile = self._configs['mqttTLSCAFile']
+
+		if not params.clientId:
+			self._me = self._configs['deviceName']
 		else:
 			self._me = params.clientId
 
-
 		self._SUB_ON_PLAY_FINISHED = self._SUB_ON_PLAY_FINISHED.format(self._me)
-
-
-		if params.mqttPort is None:
-			try:
-				if 'snips-common' in self._snipsConfigs and 'mqtt' in self._snipsConfigs['snips-common']:
-					self._mqttPort = self._snipsConfigs['snips-common']['mqtt'].split(':')[1]
-			except:
-				self._logger.info('- Falling back to default config for mqtt port')
-		else:
-			self._mqttPort = params.mqttPort
 
 		self._logger.info('- Mqtt server set to {}'.format(self._mqttServer))
 		self._logger.info('- Mqtt port set to {}'.format(self._mqttPort))
@@ -160,7 +158,7 @@ class SnipsLedControl:
 
 	def onStart(self):
 		self._ledsController.onStart()
-		self._logger.info('Snips Led Control started')
+		self._logger.info('Hermes Led Control started')
 
 
 	def onStop(self):
@@ -171,23 +169,6 @@ class SnipsLedControl:
 			self._ledsController.onStop()
 
 		sys.exit(0)
-
-
-	def loadConfigs(self):
-		self._logger.info('Loading configurations')
-
-		if os.path.isfile('/etc/snips.toml'):
-			with open('/etc/snips.toml') as confFile:
-				configs = toml.load(confFile)
-				return configs
-		else:
-			if self.params.debug:
-				self._logger.info('No snips config found but debug mode, allow to continue')
-				return None
-			else:
-				self._logger.fatal('Error loading configurations')
-				self.onStop()
-				return None
 
 
 	def connectMqtt(self):

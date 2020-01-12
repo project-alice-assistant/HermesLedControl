@@ -30,7 +30,7 @@ sudo -u ${USER} bash <<EOF
     fi
 EOF
 
-sed -i -e "s/User="${USER}"/User=root/" /etc/systemd/system/snipsledcontrol.service
+sed -i -e "s/User="${USER}"/User=root/" /etc/systemd/system/hermesledcontrol.service
 
 echo "############################## All done! ##############################"
 echo "############## Don't forget to turn on the SPI interface! #############"

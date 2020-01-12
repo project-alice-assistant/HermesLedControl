@@ -50,12 +50,12 @@ if [[ "$device" != "don't overwrite existing parameters" ]]; then
     done
 fi
 
-systemctl is-active -q snipsledcontrol && systemctl stop snipsledcontrol
+systemctl is-active -q hermesledcontrol && systemctl stop hermesledcontrol
 
 apt-get update
 apt-get install -y git mosquitto mosquitto-clients portaudio19-dev python3-numpy
 
-FVENV=${USERDIR}'/snipsLedControl_'${VERSION}'/'${VENV}
+FVENV=${USERDIR}'/hermesLedControl_'${VERSION}'/'${VENV}
 
 apt-get install -y python3-pip
 
@@ -65,7 +65,7 @@ fi
 
 systemctl is-active -q pixel_ring_server && systemctl disable pixel_ring_server
 
-chown -R ${USER} ${USERDIR}/snipsLedControl_${VERSION}
+chown -R ${USER} ${USERDIR}/hermesLedControl_${VERSION}
 
 pip3 install virtualenv
 
@@ -86,23 +86,23 @@ pip3 uninstall -y pixel_ring
 mkdir -p logs
 chown ${USER} logs
 
-if [[ "$device" != "don't overwrite existing parameters" && -f /etc/systemd/system/snipsledcontrol.service ]]; then
-    rm /etc/systemd/system/snipsledcontrol.service
+if [[ "$device" != "don't overwrite existing parameters" && -f /etc/systemd/system/hermesledcontrol.service ]]; then
+    rm /etc/systemd/system/hermesledcontrol.service
 fi
 
-if [[ ! -f /etc/systemd/system/snipsledcontrol.service ]]; then
-    cp snipsledcontrol.service /etc/systemd/system
+if [[ ! -f /etc/systemd/system/hermesledcontrol.service ]]; then
+    cp hermesledcontrol.service /etc/systemd/system
 fi
 
 escaped=${USERDIR//\//\\/}
-sed -i -e "s/%WORKING_DIR%/"${escaped}"\/snipsLedControl_"${VERSION}"/" /etc/systemd/system/snipsledcontrol.service
-sed -i -e "s/%USER%/"${USER}"/" /etc/systemd/system/snipsledcontrol.service
+sed -i -e "s/%WORKING_DIR%/"${escaped}"\/hermesLedControl_"${VERSION}"/" /etc/systemd/system/hermesledcontrol.service
+sed -i -e "s/%USER%/"${USER}"/" /etc/systemd/system/hermesledcontrol.service
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
-    sed -i -e "s/%EXECSTART%/"${escaped}"\/snipsLedControl_"${VERSION}"\/venv\/bin\/python3 main.py --hardware="${device}" --pattern="${pattern}"/" /etc/systemd/system/snipsledcontrol.service
+    sed -i -e "s/%EXECSTART%/"${escaped}"\/hermesLedControl_"${VERSION}"\/venv\/bin\/python3 main.py --hardware="${device}" --pattern="${pattern}"/" /etc/systemd/system/hermesledcontrol.service
 fi
 
-if [[ -d "/var/lib/snips/skills/snips-skill-respeaker" ]]; then
+if [[ -d "/var/lib/hermes/skills/snips-skill-respeaker" ]]; then
     echo "snips-skill-respeaker detected, do you want to remove it? Leaving it be might result in weird behaviors..."
     select answer in "yes" "no" "cancel"; do
         case "$answer" in
@@ -173,11 +173,11 @@ select answer in "yes" "no" "cancel"; do
     esac
 done
 
-chown -R ${USER} ${USERDIR}/snipsLedControl_${VERSION}
+chown -R ${USER} ${USERDIR}/hermesLedControl_${VERSION}
 
 systemctl daemon-reload
-systemctl enable snipsledcontrol
-systemctl start snipsledcontrol
+systemctl enable hermesledcontrol
+systemctl start hermesledcontrol
 
-echo "Finished installing Snips Led Control "${VERSION}
+echo "Finished installing Hermes Led Control "${VERSION}
 echo "You may want to copy over your custom led patterns to the new version"

@@ -7,11 +7,11 @@ import signal
 import time
 from datetime import datetime
 
-from models.SnipsLedControl import SnipsLedControl
+from models.HermesLedControl import HermesLedControl
 
 formatter = logging.Formatter('%(asctime)s [%(threadName)s] - [%(levelname)s] - %(message)s')
 
-_logger = logging.getLogger('SnipsLedControl')
+_logger = logging.getLogger('HermesLedControl')
 
 _logger.setLevel(logging.DEBUG)
 
@@ -39,17 +39,22 @@ def onStop():
 
 
 def main():
-	_logger.info('Starting Snips Led Control v. 1.9.12')
+	_logger.info('Starting Hermes Led Control v. 2.0.0')
 
 	signal.signal(signal.SIGINT, stopHandler)
 	signal.signal(signal.SIGTERM, stopHandler)
 
-	parser = argparse.ArgumentParser(prog='Snips Led Control')
-	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides snips.toml', type=str)
-	parser.add_argument('--mqttPort', help='Defines what port to use to connect to mqtt. Overrides snips.toml', type=str)
-	parser.add_argument('--mqttUsername', help='Mqtt username if required. Overrides snips.toml', type=str)
-	parser.add_argument('--mqttPassword', help='Mqtt password if required. Overrides snips.toml', type=str)
-	parser.add_argument('--clientId', help='Defines a client id. Overrides snips.toml', type=str)
+	parser = argparse.ArgumentParser(prog='Hermes Led Control')
+	parser.add_argument('--engine', help='What assistant engine are you using?', type=str, default='projectalice', choices= [
+		"projectalice",
+		"rhasspy",
+		"snips"
+	])
+	parser.add_argument('--mqttServer', help='Defines to what mqtt server SLC should connect. Overrides any config file', type=str)
+	parser.add_argument('--mqttPort', help='Defines what port to use to connect to mqtt. Overrides any config file', type=str)
+	parser.add_argument('--mqttUsername', help='Mqtt username if required. Overrides any config file', type=str)
+	parser.add_argument('--mqttPassword', help='Mqtt password if required. Overrides any config file', type=str)
+	parser.add_argument('--clientId', help='Defines a client id. Overrides any config file', type=str)
 	parser.add_argument('--hardware', help='Type of hardware in use', type=str, default='respeaker2',
 						choices=[
 							"respeaker2",
@@ -110,7 +115,7 @@ def main():
 	parser.add_argument('--debug', help='Enable the debug mode for the console to return more informations', type=bool, default=False)
 	args = parser.parse_args()
 
-	slc = SnipsLedControl(args)
+	slc = HermesLedControl(args)
 	slc.onStart()
 
 	try:
@@ -119,7 +124,7 @@ def main():
 	except KeyboardInterrupt:
 		pass
 	finally:
-		_logger.info('Shutting down Snips Led Control')
+		_logger.info('Shutting down Hermes Led Control')
 		slc.onStop()
 
 

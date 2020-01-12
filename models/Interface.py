@@ -8,7 +8,7 @@ class Interface(object):
 	def __init__(self, numLeds):
 		self._numLeds 	= numLeds
 
-		self._logger 	= logging.getLogger('SnipsLedControl')
+		self._logger 	= logging.getLogger('HermesLedControl')
 		self._leds 		= None
 		self._power 	= None
 		self._doa 		= False

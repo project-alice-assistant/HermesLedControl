@@ -7,7 +7,7 @@ import logging
 class LedPattern(object):
 
 	def __init__(self, controller):
-		self._logger 				= logging.getLogger('SnipsLedControl')
+		self._logger 				= logging.getLogger('HermesLedControl')
 		self._controller 			= controller # type: LedsController
 		self._numLeds 				= self._controller.interface.numLeds
 		self._animation 			= threading.Event()

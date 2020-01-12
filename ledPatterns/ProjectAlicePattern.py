@@ -2,7 +2,7 @@
 
 ###########################################################################################################
 # SUBMIT YOUR OWN CUSTOM PATTERN AND SHARE WITH THE WORLD YOUR LED ANIMATIONS!
-# Visit https://github.com/Psychokiller1888/snipsLedControl/issues/new?template=custom-pattern-proposal.md
+# Visit https://github.com/project-alice-assistant/HermesLedControl/issues/new?template=custom-pattern-proposal.md
 # for more informations
 #
 # Check models/LedPattern.py for the available functions
@@ -10,7 +10,7 @@
 # It could cause a deadlock! Instead, call self._controller.THE_METHOD_YOU_WANT
 #
 # @author: Psychokiller1888
-# @weblink: https://github.com/project-alice-powered-by-snips
+# @weblink: https://projectalice.io
 # @email: laurentchervet@bluewin.ch
 #
 ###########################################################################################################
