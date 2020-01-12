@@ -62,6 +62,9 @@ class HermesLedControl:
 		if params.engine == 'projectalice':
 			from models.engines.ProjectAlice import ProjectAlice
 			engine = ProjectAlice()
+		elif params.engine == 'rhasspy':
+			from models.engines.Rhasspy import Rhasspy
+			engine = Rhasspy()
 		elif params.engine == 'snips':
 			from models.engines.Snips import Snips
 			engine = Snips()
