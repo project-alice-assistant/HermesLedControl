@@ -29,6 +29,18 @@ fi
 USER=$(logname)
 USERDIR='/home/'${USER}
 
+echo "What assistant engine are you using?"
+select engine in "projectalice" "rhasspy" "snips" "cancel"; do
+    case "$engine" in
+        cancel) exit;;
+        *) break;;
+    esac
+done
+
+pathToConfig="/etc/snips.toml"
+echo "What's the path to your assistant config file?"
+read -pr "Path: (/etc/snips.toml)" pathToConfig
+
 echo "What device do you wish to control with SLC?"
 select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
     case "$device" in
@@ -99,7 +111,7 @@ sed -i -e "s/%WORKING_DIR%/"${escaped}"\/hermesLedControl_"${VERSION}"/" /etc/sy
 sed -i -e "s/%USER%/"${USER}"/" /etc/systemd/system/hermesledcontrol.service
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
-    sed -i -e "s/%EXECSTART%/"${escaped}"\/hermesLedControl_"${VERSION}"\/venv\/bin\/python3 main.py --hardware="${device}" --pattern="${pattern}"/" /etc/systemd/system/hermesledcontrol.service
+    sed -i -e "s/%EXECSTART%/"${escaped}"\/hermesLedControl_"${VERSION}"\/venv\/bin\/python3 main.py --engine="${engine}" --pathToConfig="${pathToConfig}" --hardware="${device}" --pattern="${pattern}"/" /etc/systemd/system/hermesledcontrol.service
 fi
 
 if [[ -d "/var/lib/hermes/skills/snips-skill-respeaker" ]]; then
