@@ -31,9 +31,7 @@ class Rhasspy:
 
 		self._logger.info('Loading configurations')
 
-		userHomePath = os.path.expanduser('~')
-		configPath = userHomePath + '/.config/rhasspy/profiles/en/profile.json'
-		path = Path(configPath) if not params.pathToConfig else Path(params.pathToConfig)
+		path = Path(f'{os.path.expanduser("~")}/.config/rhasspy/profiles/en/profile.json') if not params.pathToConfig else Path(params.pathToConfig)
 
 		configs = dict()
 
