@@ -49,7 +49,7 @@ class Snips:
 					return None
 		else:
 			if params.debug:
-				self._logger.info('No Project Alice config found but debug mode, allow to continue')
+				self._logger.info('No Snips config found but debug mode, allow to continue')
 				return dict()
 			else:
 				self._logger.fatal('Error loading configurations, file does not exist')
