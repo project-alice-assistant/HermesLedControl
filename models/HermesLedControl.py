@@ -84,25 +84,10 @@ class HermesLedControl:
 		else:
 			self._hardware = self._hardwareReference[self._params.hardware]
 
-		if not params.mqttServer:
-			self._mqttServer = self._configs['mqttServer']
-		else:
-			self._mqttServer = params.mqttServer
-
-		if not params.mqttPort:
-			self._mqttPort = int(self._configs['mqttPort'])
-		else:
-			self._mqttPort = int(params.mqttPort)
-
-		if not params.mqttUsername:
-			self._mqttUsername = self._configs['mqttUsername']
-		else:
-			self._mqttUsername = params.mqttUsername
-
-		if not params.mqttPassword:
-			self._mqttPassword = self._configs['mqttPassword']
-		else:
-			self._mqttPassword = params.mqttPassword
+		self._mqttServer = self._configs['mqttServer'] if not params.mqttServer else params.mqttServer
+		self._mqttPort = int(self._configs['mqttPort']) if not params.mqttPort else int(params.mqttPort)
+		self._mqttUsername = self._configs['mqttUsername'] if not params.mqttUsername else params.mqttUsername
+		self._mqttPassword = self._configs['mqttPassword'] if not params.mqttPassword else params.mqttPassword
 
 		self._tlsFile = self._configs['mqttTLSCAFile']
 
