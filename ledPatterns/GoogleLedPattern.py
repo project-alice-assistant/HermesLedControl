@@ -42,11 +42,11 @@ class GoogleHomeLedPattern(LedPattern):
 		steps = int(math.ceil(angle / degreesPerLed))
 
 		if steps < 0:
-			for i in range(0, steps, -1):
+			for _ in range(0, steps, -1):
 				insertBack = self._image.pop(0)
 				self._image.insert(len(self._image), insertBack)
 		else:
-			for i in range(steps):
+			for _ in range(steps):
 				insertBack = self._image.pop()
 				self._image.insert(0, insertBack)
 
@@ -67,7 +67,7 @@ class GoogleHomeLedPattern(LedPattern):
 
 		degreesPerLed = 360 / self._numLeds
 		steps = int(math.ceil(90 / degreesPerLed))
-		for i in range(steps):
+		for _ in range(steps):
 			self._rotateImage(degreesPerLed)
 			self._displayImage()
 			time.sleep(0.02)
@@ -104,8 +104,8 @@ class GoogleHomeLedPattern(LedPattern):
 
 		while brightness < self._controller.defaultBrightness:
 			brightness += 1
-			for i, led in enumerate(self._image):
-				self._image[i][3] = brightness
+			for led in self._image:
+				led[3] = brightness
 			self._displayImage()
 			time.sleep(0.002)
 
@@ -125,7 +125,7 @@ class GoogleHomeLedPattern(LedPattern):
 		diff = 360 - angle
 		steps = int(math.ceil(diff / degreesPerLed))
 
-		for i in range(steps):
+		for _ in range(steps):
 			self._rotateImage(degreesPerLed)
 			self._displayImage()
 			time.sleep(0.02)

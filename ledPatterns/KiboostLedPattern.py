@@ -32,7 +32,7 @@ class KiboostLedPattern(LedPattern):
 		leds as array of index
 		"""
 		if not leds:
-			leds = [i for i in range(self._numLeds)]
+			leds = list(range(self._numLeds))
 		if color is None:
 			color = [0, 0, 40]
 
@@ -76,8 +76,7 @@ class KiboostLedPattern(LedPattern):
 			self._controller.setLed(i, color[0], color[1], color[2], 0)
 		self._controller.show()
 
-		refs = [0 for i in range(self._numLeds)]
-		refs[0] = 100
+		refs = [100] + [0]*(self._numLeds-1)
 
 		for i in range(self._numLeds):
 			if not self._animation.isSet(): break
@@ -99,7 +98,7 @@ class KiboostLedPattern(LedPattern):
 			refs.pop()
 			refs.insert(0, 0)
 
-		for i in range(self._numLeds):
+		for _ in range(self._numLeds):
 			if not self._animation.isSet(): break
 			if invert: refs = list(reversed(refs))
 			for l in range(self._numLeds):
@@ -124,13 +123,9 @@ class KiboostLedPattern(LedPattern):
 			color = [0, 0, 40]
 
 		pause = float(duration / (self._numLeds + 1))
-		refs = [0 for i in range(self._numLeds)]
+		refs = [100 if i in leds else 0 for i in range(self._numLeds)]
 
-		for i in range(self._numLeds):
-			if i in leds:
-				refs[i] = 100
-
-		for i in range(self._numLeds + 1):
+		for _ in range(self._numLeds + 1):
 			if not self._animation.isSet(): break
 			if invert: refs = list(reversed(refs))
 			for l in range(self._numLeds):
