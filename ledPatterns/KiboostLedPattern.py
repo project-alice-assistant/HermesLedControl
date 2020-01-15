@@ -79,35 +79,39 @@ class KiboostLedPattern(LedPattern):
 		refs = [100] + [0]*(self._numLeds-1)
 
 		for i in range(self._numLeds):
-			if not self._animation.isSet(): break
+			if not self._animation.isSet():
+				break
 			for j in range(i, 0, -1):
 				if refs[j] >= step:
 					refs[j - 1] = refs[j] - step
 				else:
 					refs[j - 1] = 0
 
-			if invert: refs = list(reversed(refs))
+			self._setLedLoop(color, refs, invert)
 
-			for l in range(self._numLeds):
-				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
-			self._controller.show()
-
-			if invert: refs = list(reversed(refs))
-
-			if self._animation.isSet(): time.sleep(pause)
+			if self._animation.isSet():
+				time.sleep(pause)
 			refs.pop()
 			refs.insert(0, 0)
 
 		for _ in range(self._numLeds):
-			if not self._animation.isSet(): break
-			if invert: refs = list(reversed(refs))
-			for l in range(self._numLeds):
-				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
-			self._controller.show()
-			if invert: refs = list(reversed(refs))
+			if not self._animation.isSet():
+				break
+			
+			self._setLedLoop(color, refs, invert)
 			refs.pop()
 			refs.insert(0, 0)
-			if self._animation.isSet(): time.sleep(pause)
+			if self._animation.isSet():
+				time.sleep(pause)
+
+
+	def _setLedLoop(self, color, refs, invert):
+			if invert:
+				refs = list(reversed(refs))
+
+			for led in range(self._numLeds):
+				self._controller.setLed(led, color[0], color[1], color[2], refs[led])
+			self._controller.show()
 
 
 	def translate(self, duration=0.5, color=None, leds=None, invert=False):
@@ -126,12 +130,15 @@ class KiboostLedPattern(LedPattern):
 		refs = [100 if i in leds else 0 for i in range(self._numLeds)]
 
 		for _ in range(self._numLeds + 1):
-			if not self._animation.isSet(): break
-			if invert: refs = list(reversed(refs))
+			if not self._animation.isSet():
+				break
+			if invert:
+				refs = list(reversed(refs))
 			for l in range(self._numLeds):
 				self._controller.setLed(l, color[0], color[1], color[2], refs[l])
 				self._controller.show()
-			if invert: refs = list(reversed(refs))
+			if invert:
+				refs = list(reversed(refs))
 			if self._animation.isSet(): time.sleep(pause)
 			refs.pop()
 			refs.insert(0, 0)
