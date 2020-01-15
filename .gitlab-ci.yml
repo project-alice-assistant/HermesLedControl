@@ -1,0 +1,22 @@
+mypyValidation:
+  stage: test
+  image: python:slim-buster
+  before_script:
+  - python3 -m pip install --upgrade pip
+  - pip3 install mypy
+  script:
+  - mypy .
+
+
+sonarqube-check:
+  stage: test
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  variables:
+    SONAR_TOKEN: $SONAR_TOKEN
+    SONAR_HOST_URL: "https://sonarcloud.io"
+    GIT_DEPTH: 0
+  script:
+    - sonar-scanner -Dsonar.qualitygate.wait=true -Dsonar.projectKey=project-alice-assistant_HermesLedControl -Dsonar.organization=project-alice-assistant
+
