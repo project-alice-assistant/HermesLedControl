@@ -173,64 +173,35 @@ class LedsController:
 			self._logger.warning('Tried to set vad led on an unsupported device')
 
 
-	def wakeup(self, sticky: bool = False):
+	def putStickyPattern(self, pattern, patternMethod, sticky):
 		if sticky:
-			self._stickyAnimation = self._pattern.wakeup
+			self._stickyAnimation = pattern
 
-		if self._params.wakeupPattern is None:
-			self._put(self._pattern.wakeup)
+		if patternMethod is None:
+			self._put(pattern)
 		else:
 			try:
-				func = getattr(self._pattern, self._params.wakeupPattern)
+				func = getattr(self._pattern, patternMethod)
 				self._put(func)
 			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.wakeupPattern))
-				self._put(self._pattern.wakeup)
+				self._logger.error("Can't find {} method in pattern".format(patternMethod))
+				self._put(pattern)
+
+
+	def wakeup(self, sticky: bool = False):
+		self.putStickyPattern(self._pattern.wakeup, self._params.wakeupPattern, sticky)
 
 
 	def listen(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.listen
-
-		if self._params.listenPattern is None:
-			self._put(self._pattern.listen)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.listenPattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.listenPattern))
-				self._put(self._pattern.listen)
+		self.putStickyPattern(self._pattern.listen, self._params.listenPattern, sticky)
 
 
 	def think(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.think
-
-		if self._params.thinkPattern is None:
-			self._put(self._pattern.think)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.thinkPattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.thinkPattern))
-				self._put(self._pattern.think)
+		self.putStickyPattern(self._pattern.think, self._params.thinkPattern, sticky)
 
 
 	def speak(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.speak
-
-		if self._params.speakPattern is None:
-			self._put(self._pattern.speak)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.speakPattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.speakPattern))
-				self._put(self._pattern.speak)
+		self.putStickyPattern(self._pattern.speak, self._params.speakPattern, sticky)
 
 
 	def idle(self):
@@ -249,123 +220,35 @@ class LedsController:
 
 
 	def onError(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.onError
-
-		if self._params.errorPattern is None:
-			self._put(self._pattern.onError)
-		else:
-			try:
-				funct = getattr(self._pattern, self._params.errorPattern)
-				self._put(funct)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.errorPattern))
-				self._put(self._pattern.onError)
+		self.putStickyPattern(self._pattern.onError, self._params.errorPattern, sticky)
 
 
 	def onSuccess(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.onSuccess
-
-		if self._params.successPattern is None:
-			self._put(self._pattern.onSuccess)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.successPattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.successPattern))
-				self._put(self._pattern.onSuccess)
+		self.putStickyPattern(self._pattern.onSuccess, self._params.successPattern, sticky)
 
 
 	def updating(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.updating
-
-		if self._params.updatingPattern is None:
-			self._put(self._pattern.updating)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.updatingPattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.updatingPattern))
-				self._put(self._pattern.updating)
+		self.putStickyPattern(self._pattern.updating, self._params.updatingPattern, sticky)
 
 
 	def call(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.call
-
-		if self._params.updatingPattern is None:
-			self._put(self._pattern.call)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.callPattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.callPattern))
-				self._put(self._pattern.call)
+		self.putStickyPattern(self._pattern.call, self._params.callPattern, sticky)
 
 
 	def setupMode(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.setupMode
-
-		if self._params.updatingPattern is None:
-			self._put(self._pattern.setupMode)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.setupModePattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.setupModePattern))
-				self._put(self._pattern.setupMode)
+		self.putStickyPattern(self._pattern.setupMode, self._params.setupModePattern, sticky)
 
 
 	def conError(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.conError
-
-		if self._params.conErrorPattern is None:
-			self._put(self._pattern.conError)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.conErrorPattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.conErrorPattern))
-				self._put(self._pattern.conError)
+		self.putStickyPattern(self._pattern.conError, self._params.conErrorPattern, sticky)
 
 
 	def message(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.message
-
-		if self._params.updatingPattern is None:
-			self._put(self._pattern.message)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.messagePattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.messagePattern))
-				self._put(self._pattern.message)
+		self.putStickyPattern(self._pattern.message, self._params.messagePattern, sticky)
 
 
 	def dnd(self, sticky: bool = False):
-		if sticky:
-			self._stickyAnimation = self._pattern.dnd
-
-		if self._params.updatingPattern is None:
-			self._put(self._pattern.dnd)
-		else:
-			try:
-				func = getattr(self._pattern, self._params.dndPattern)
-				self._put(func)
-			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.dndPattern))
-				self._put(self._pattern.dnd)
+		self.putStickyPattern(self._pattern.dnd, self._params.dndPattern, sticky)
 
 
 	def off(self):
