@@ -50,8 +50,8 @@ class Rhasspy:
 					configs['deviceName'] = conf['mqtt'].get('site_id', 'default')
 
 					return configs
-				except:
-					self._logger.info('Error loading configurations')
+				except Exception as e:
+					self._logger.info('Error loading configurations: {}'.format(e))
 					return None
 		else:
 			if params.debug:

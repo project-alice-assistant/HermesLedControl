@@ -38,7 +38,7 @@ class ProjectAlice:
 
 				try:
 					snipsCommons = conf['snips-common']
-					configs['mqttServer'], configs['mqttPort'] = snipsCommons['mqtt'].split(':')
+					configs['mqttServer'], configs['mqttPort'] = snipsCommons.get('mqtt', 'localhost:1880').split(':')
 					configs['mqttUsername'] = snipsCommons.get('mqtt_username', '')
 					configs['mqttPassword'] = snipsCommons.get('mqtt_password', '')
 					configs['mqttTLSCAFile'] = snipsCommons.get('mqtt_tls_cafile', '')
@@ -47,8 +47,8 @@ class ProjectAlice:
 					configs['deviceName'] = snipsAudioServer.get('bind', 'default').replace('@mqtt', '')
 
 					return configs
-				except:
-					self._logger.info('Error loading configurations')
+				except Exception as e:
+					self._logger.info('Error loading configurations: {}'.format(e))
 					return None
 		else:
 			if params.debug:
