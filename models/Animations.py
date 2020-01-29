@@ -125,14 +125,11 @@ class Animations:
 		# Create an image
 		index = startAt
 		self._setPixel(index, color)
+		rotationSign = 1 if speed >=0 else -1
 		if trail > 0:
 			fullBrightness = self._controller.defaultBrightness if len(color) < 4 else color[3]
 			for i in range(1, trail + 1):
-				if speed >= 0:
-					trailIndex = self._normalizeIndex(index - i)
-				else:
-					trailIndex = self._normalizeIndex(index + i)
-
+				trailIndex = self._normalizeIndex(index - i * rotationSign)
 				color[3] = int(math.ceil(float(fullBrightness / (i + 1))))
 				self._setPixel(trailIndex, color)
 
@@ -141,10 +138,7 @@ class Animations:
 		self._animationFlag.set()
 		while self._animationFlag.isSet():
 			time.sleep(1.0 / abs(speed))
-			if speed >= 0:
-				self.rotateImage(1)
-			else:
-				self.rotateImage(-1)
+			self.rotateImage(rotationSign)
 
 
 	def relayRace(self, color, relayColor, backgroundColor=None, speed=10, startAt=0):
@@ -164,32 +158,24 @@ class Animations:
 
 		index = startAt
 		self._animationFlag.set()
+
+		speedIncrement = 1 if speed >=0 else -1
 		while self._animationFlag.isSet():
 			self._setPixel(index, color)
-			if speed >= 0:
-				relayIndex = self._normalizeIndex(index + 1)
-			else:
-				relayIndex = self._normalizeIndex(index - 1)
+			relayIndex = self._normalizeIndex(index + speedIncrement)
 
 			self._setPixel(relayIndex, relayColor)
 			self._displayImage()
 			while self._animationFlag.isSet() and relayIndex != index:
 				time.sleep(1.0 / abs(speed))
 				self._setPixel(relayIndex, backgroundColor)
-
-				if speed >= 0:
-					relayIndex = self._normalizeIndex(relayIndex + 1)
-				else:
-					relayIndex = self._normalizeIndex(relayIndex - 1)
+				relayIndex = self._normalizeIndex(relayIndex + speedIncrement)
 
 				self._setPixel(relayIndex, relayColor)
 				self._displayImage()
 
 			self._setPixel(index, backgroundColor)
-			if speed >= 0:
-				index = self._normalizeIndex(index + 1)
-			else:
-				index = self._normalizeIndex(index - 1)
+			index = self._normalizeIndex(index + speedIncrement)
 
 
 	def doublePingPong(self, color, speed=10, backgroundColor=None, startAt=0):
@@ -280,33 +266,32 @@ class Animations:
 
 		if repeat == -1:
 			self.breath(color=color, maxBrightness=maxBrightness, minBrightness=minBrightness, speed=speed)
-		else:
-			image = list()
-			for _ in range(self._numLeds):
-				image.append(color)
+			return
+		
+		image = [color]*self._numLeds
 
-			self.new(image)
+		self.new(image)
 
-			for _ in range(repeat):
+		for _ in range(repeat):
+			bri = self._image[0][3]
+
+			while bri < maxBrightness:
 				bri = self._image[0][3]
 
-				while bri < maxBrightness:
-					bri = self._image[0][3]
+				for i in range(self._numLeds):
+					self._image[i] = color[0], color[1], color[2], bri + 1
 
-					for i in range(self._numLeds):
-						self._image[i] = color[0], color[1], color[2], bri + 1
+				self._displayImage()
+				time.sleep(1.0 / abs(speed))
 
-					self._displayImage()
-					time.sleep(1.0 / abs(speed))
+			while bri > minBrightness:
+				bri = self._image[0][3]
 
-				while bri > minBrightness:
-					bri = self._image[0][3]
+				for i in range(self._numLeds):
+					self._image[i] = color[0], color[1], color[2], bri - 1
 
-					for i in range(self._numLeds):
-						self._image[i] = color[0], color[1], color[2], bri - 1
-
-					self._displayImage()
-					time.sleep(1.0 / abs(speed))
+				self._displayImage()
+				time.sleep(1.0 / abs(speed))
 
 
 	def _setPixel(self, index, color):

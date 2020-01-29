@@ -33,7 +33,4 @@ class MatrixVoice(Interface):
 
 	@staticmethod
 	def _newArray():
-		arr = []
-		for i in range(0, led.length):
-			arr.append((0, 0, 0, 0))
-		return arr
+		return [(0, 0, 0, 0) for _ in range(led.length)]

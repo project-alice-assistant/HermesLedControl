@@ -36,7 +36,7 @@ class AlexaLedPattern(LedPattern):
 
 
 	def listen(self):
-		pass
+		""" there is no listen animation for this led pattern """
 
 
 	def think(self):

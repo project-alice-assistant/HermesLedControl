@@ -1,5 +1,5 @@
 # HLC - Hermes Led Control
-Provides an easy way to control your device leds on an hermes environement. It is highly customizable and beginner friendly
+Provides an easy way to control your device leds in an hermes environment. It is highly customizable and beginner friendly
 
 **Do not simply clone the master and use it unless you know what you are doing!!** Check out the [wiki](https://github.com/project-alice-assistant/HermesLedControl/wiki) for all the informations about how to install and use
 
