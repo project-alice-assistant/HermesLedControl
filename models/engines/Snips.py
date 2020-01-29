@@ -38,7 +38,7 @@ class Snips:
 
 				try:
 					snipsCommons = conf['snips-common']
-					configs['mqttServer'], configs['mqttPort'] = snipsCommons.get('mqtt', 'localhost:1880').split(':')
+					configs['mqttServer'], configs['mqttPort'] = snipsCommons.get('mqtt', 'localhost:1883').split(':')
 					configs['mqttUsername'] = snipsCommons.get('mqtt_username', '')
 					configs['mqttPassword'] = snipsCommons.get('mqtt_password', '')
 					configs['mqttTLSCAFile'] = snipsCommons.get('mqtt_tls_cafile', '')
