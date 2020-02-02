@@ -47,7 +47,8 @@ class Rhasspy:
 					configs['mqttUsername'] = conf['mqtt'].get('username', '')
 					configs['mqttPassword'] = conf['mqtt'].get('password', '')
 					configs['mqttTLSCAFile'] = ''
-					configs['deviceName'] = conf['mqtt'].get('site_id', 'default')
+					siteId = conf['mqtt'].get('site_id', 'default')
+					configs['deviceName'] = siteId.split(',')[0]
 
 					return configs
 				except Exception as e:
