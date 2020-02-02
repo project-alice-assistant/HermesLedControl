@@ -39,7 +39,7 @@ done
 
 pathToConfig="/etc/snips.toml"
 echo "What's the path to your assistant config file?"
-read -pr "Path: (/etc/snips.toml)" pathToConfig
+read -p "Path: (For Snips and ProjectAlice = /etc/snips.toml)" pathToConfig
 echo "Path: $pathToConfig"
 pathToConfig=${pathToConfig//\//\\/}
 
