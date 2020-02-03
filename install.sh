@@ -37,9 +37,15 @@ select engine in "projectalice" "rhasspy" "snips" "cancel"; do
     esac
 done
 
+if [[ "$engine" == 'rhasspy' ]]; then
+    defaultPath='/.config/rhasspy/profiles/en/profile.json'
+else
+    defaultPath='/etc/snips.toml'
+fi
+
 pathToConfig="/etc/snips.toml"
 echo "What's the path to your assistant config file?"
-read -p "Path: (For Snips and ProjectAlice = /etc/snips.toml)" pathToConfig
+read -p "Path: (${defaultPath})" pathToConfig
 echo "Path: $pathToConfig"
 pathToConfig=${pathToConfig//\//\\/}
 
