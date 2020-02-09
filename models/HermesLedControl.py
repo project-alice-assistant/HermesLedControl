@@ -67,7 +67,7 @@ class HermesLedControl:
 			from models.engines.Snips import Snips
 			engine = Snips()
 		else:
-			self._logger.error(f'Unsupported assistant engine {params.engine}')
+			self._logger.error('Unsupported assistant engine "{}"'.format(params.engine))
 			self.onStop()
 			return
 
