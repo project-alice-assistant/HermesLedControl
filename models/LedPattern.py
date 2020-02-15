@@ -1,8 +1,9 @@
 from models.Animations import Animations
 from models.LedsController import *
 import logging
+import threading
 
-class LedPattern(object):
+class LedPattern:
 
 	def __init__(self, controller):
 		self._logger 				= logging.getLogger('HermesLedControl')
