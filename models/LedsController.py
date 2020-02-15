@@ -1,5 +1,7 @@
 import queue as Queue
+import logging
 import threading
+import time
 
 from ledPatterns.AlexaLedPattern import AlexaLedPattern
 from ledPatterns.CustomLedPattern import CustomLedPattern
@@ -412,7 +414,7 @@ class LedsController:
 		self._running = False
 		self._interface.onStop()
 
-		if self._animationThread is not None and self._animationThread.isAlive():
+		if self._animationThread is not None and self._animationThread.is_alive():
 			self._animationThread.join(timeout=2)
-		if self._buttonsThread is not None and self._buttonsThread.isAlive():
+		if self._buttonsThread is not None and self._buttonsThread.is_alive():
 			self._buttonsThread.join(timeout=2)
