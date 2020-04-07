@@ -109,7 +109,6 @@ class HermesLedControl:
 			self._hardware['numberOfLeds'] = params.leds
 		self._logger.info('- Using {} as pattern with {} leds'.format(params.pattern, self._hardware['numberOfLeds']))
 
-
 		if 'gpioPin' in self._hardware:
 			if params.gpioPin is not None:
 				self._hardware['gpioPin'] = params.gpioPin
