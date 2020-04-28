@@ -180,19 +180,19 @@ class LedsController:
 			self._logger.warning('Tried to set vad led on an unsupported device')
 
 
-	def putStickyPattern(self, pattern, patternMethod, sticky):
+	def putStickyPattern(self, pattern, patternMethod = None, sticky: bool = False, flush: bool = False, **kwargs):
 		if sticky:
-			self._stickyAnimation = pattern
+			self._stickyAnimation = {"func": pattern, "args": kwargs}
 
 		if patternMethod is None:
-			self._put(pattern)
+			self._put(pattern, flush=flush, **kwargs)
 		else:
 			try:
 				func = getattr(self._pattern, patternMethod)
-				self._put(func)
+				self._put(func, flush=flush, **kwargs)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(patternMethod))
-				self._put(pattern)
+				self._put(pattern, flush=flush, **kwargs)
 
 
 	def wakeup(self, sticky: bool = False):
@@ -213,7 +213,7 @@ class LedsController:
 
 	def idle(self):
 		if self._stickyAnimation:
-			self._put(self._stickyAnimation)
+			self._put(self._stickyAnimation['func'], flush=False, **self._stickyAnimation['args'])
 		else:
 			if self._params.idlePattern is None:
 				self._put(self._pattern.idle)

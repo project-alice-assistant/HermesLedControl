@@ -436,7 +436,6 @@ class HermesLedControl:
 					self._logger.debug("On leds clear received but it wasn't for me")
 
 		elif message.topic == self._SUB_MANUAL_ANIMATIONS_SET:
-			self._ledsController.stickyAnimation = None
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On manual animation leds set triggered')
@@ -445,21 +444,30 @@ class HermesLedControl:
 					self._logger.error('Missing "animation" in payload for set manual animation leds')
 				else:
 					if 'duration' in payload:
-						threading.Timer(interval=int(payload['duration']), function=self._ledsController.off, args=[]).start()
+						threading.Timer(interval=int(payload['duration']), function=self._ledsController.idle, args=[]).start()
+
+					flush = 'flush' in payload and payload['flush']
+					sticky = 'sticky' in payload and payload['sticky']
+					clear = 'clear' in payload and payload['clear']
+
+					if clear:
+						self._ledsController.stickyAnimation = None
 
 					if payload['animation'] == 'breath':
-						self._ledsController._put(
-							func=self._ledsController.pattern.animator.breath,
-							flush='flush' in payload,
+						self._ledsController.putStickyPattern(
+							pattern=self._ledsController.pattern.animator.breath,
+							sticky=sticky,
+							flush=flush,
 							color = self.safePayloadColor(payload, 'color'),
 							minBrightness = self.safePayloadNumber(payload, 'minBrightness', 2),
 							maxBrightness = self.safePayloadNumber(payload, 'maxBrightness', 20),
 							speed = self.safePayloadNumber(payload, 'speed', 40)
 						)
 					elif payload['animation'] == 'blink':
-						self._ledsController._put(
-							func=self._ledsController.pattern.animator.blink,
-							flush='flush' in payload,
+						self._ledsController.putStickyPattern(
+							pattern=self._ledsController.pattern.animator.blink,
+							sticky=sticky,
+							flush=flush,
 							color = self.safePayloadColor(payload, 'color'),
 							minBrightness = self.safePayloadNumber(payload, 'minBrightness', 2),
 							maxBrightness = self.safePayloadNumber(payload, 'maxBrightness', 20),
@@ -467,45 +475,50 @@ class HermesLedControl:
 							repeat = self.safePayloadNumber(payload, 'repeat', 3)
 						)
 					elif payload['animation'] == 'rotate':
-						self._ledsController._put(
-							func=self._ledsController.pattern.animator.rotate,
-							flush='flush' in payload,
+						self._ledsController.putStickyPattern(
+							pattern=self._ledsController.pattern.animator.rotate,
+							sticky=sticky,
+							flush=flush,
 							color = self.safePayloadColor(payload, 'color'),
 							speed = self.safePayloadNumber(payload, 'speed', 20),
 							trail = self.safePayloadNumber(payload, 'trail', 1),
 							startAt = self.safePayloadNumber(payload, 'startAt', 0)
 						)
 					elif payload['animation'] == 'doubleSidedFilling':
-						self._ledsController._put(
-							func=self._ledsController.pattern.animator.doubleSidedFilling,
-							flush='flush' in payload,
+						self._ledsController.putStickyPattern(
+							pattern=self._ledsController.pattern.animator.doubleSidedFilling,
+							sticky=sticky,
+							flush=flush,
 							color = self.safePayloadColor(payload, 'color'),
 							startAt = self.safePayloadNumber(payload, 'startAt', 0),
 							direction = self.safePayloadNumber(payload, 'direction', 1),
 							speed = self.safePayloadNumber(payload, 'speed', 50)
 						)
 					elif payload['animation'] == 'doublePingPong':
-						self._ledsController._put(
-							func=self._ledsController.pattern.animator.doublePingPong,
-							flush='flush' in payload,
+						self._ledsController.putStickyPattern(
+							pattern=self._ledsController.pattern.animator.doublePingPong,
+							sticky=sticky,
+							flush=flush,
 							color = self.safePayloadColor(payload, 'color'),
 							speed = self.safePayloadNumber(payload, 'speed', 20),
 							backgroundColor = self.safePayloadColor(payload, 'backgroundColor'),
 							startAt = self.safePayloadNumber(payload, 'startAt', 0)
 						)
 					elif payload['animation'] == 'waitWheel':
-						self._ledsController._put(
-							func=self._ledsController.pattern.animator.waitWheel,
-							flush='flush' in payload,
+						self._ledsController.putStickyPattern(
+							pattern=self._ledsController.pattern.animator.waitWheel,
+							sticky=sticky,
+							flush=flush,
 							color = self.safePayloadColor(payload, 'color'),
 							speed = self.safePayloadNumber(payload, 'speed', 20),
 							backgroundColor = self.safePayloadColor(payload, 'backgroundColor'),
 							startAt = self.safePayloadNumber(payload, 'startAt', 0)
 						)
 					elif payload['animation'] == 'relayRace':
-						self._ledsController._put(
-							func=self._ledsController.pattern.animator.relayRace,
-							flush='flush' in payload,
+						self._ledsController.putStickyPattern(
+							pattern=self._ledsController.pattern.animator.relayRace,
+							sticky=sticky,
+							flush=flush,
 							color = self.safePayloadColor(payload, 'color'),
 							relayColor = self.safePayloadColor(payload, 'relayColor'),
 							backgroundColor = self.safePayloadColor(payload, 'backgroundColor'),
