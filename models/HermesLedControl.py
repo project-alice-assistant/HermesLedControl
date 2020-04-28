@@ -1,6 +1,7 @@
 import json
 import logging
 import sys
+import threading
 import time
 
 import paho.mqtt.client as mqtt
@@ -447,11 +448,23 @@ class HermesLedControl:
 					color = payload.get('color', defaultColor)
 
 					if len(color) == 3:
-						self._logger.warning(f"Missing white channel in RGBW format, appending default value")
+						self._logger.warning(f"Missing white channel in 'color' attribute (RGBW format), appending default value")
 						color = color + [255]
 					elif len(color) != 4:
 						self._logger.error(f"Bad color '{color}' switching to default '{defaultColor}'")
 						color = defaultColor
+
+					backgroundColor = payload.get('backgroundColor', None)
+
+					if backgroundColor and len(backgroundColor) == 3:
+						self._logger.warning(f"Missing white channel in 'backgroundColor' attribute (RGBW format), appending default value")
+						backgroundColor = backgroundColor + [255]
+					elif len(backgroundColor) != 4:
+						self._logger.error(f"Bad backgroundColor '{backgroundColor}' switching to default '{defaultColor}'")
+						backgroundColor = defaultColor
+
+					if 'duration' in payload:
+						threading.Timer(interval=int(payload['duration']), function=self._ledsController.off, args=[]).start()
 
 					if payload['animation'] == 'breath':
 						self._ledsController._put(
@@ -496,7 +509,7 @@ class HermesLedControl:
 							flush='flush' in payload,
 							color=color,
 							speed=payload.get('speed', 20),
-							backgroundColor=payload.get('backgroundColor', None),
+							backgroundColor=backgroundColor,
 							startAt=payload.get('startAt', 0)
 						)
 					elif payload['animation'] == 'waitWheel':
@@ -505,7 +518,7 @@ class HermesLedControl:
 							flush='flush' in payload,
 							color=color,
 							speed=payload.get('speed', 20),
-							backgroundColor=payload.get('backgroundColor', None),
+							backgroundColor=backgroundColor,
 							startAt=payload.get('startAt', 0)
 						)
 					elif payload['animation'] == 'relayRace':
@@ -514,7 +527,7 @@ class HermesLedControl:
 							flush='flush' in payload,
 							color=color,
 							relayColor=payload.get('color', [255, 0, 0, 2]),
-							backgroundColor=payload.get('backgroundColor', None),
+							backgroundColor=backgroundColor,
 							speed=payload.get('speed', 20),
 							startAt=payload.get('startAt', 0)
 						)
