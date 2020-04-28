@@ -109,6 +109,11 @@ class LedsController:
 		return self._interface
 
 
+	@property
+	def pattern(self):
+		return self._pattern
+
+
 	def initHardware(self):
 		try:
 			if self._hardware['interface'] == Interfaces.APA102:
@@ -312,7 +317,7 @@ class LedsController:
 			self.toggleStateOn()
 
 
-	def _put(self, func, flush=False):
+	def _put(self, func, flush=False, **kwargs):
 		self._pattern.animation.clear()
 
 		if not self.active:
@@ -321,14 +326,14 @@ class LedsController:
 		if flush:
 			self._queue.empty()
 
-		self._queue.put(func)
+		self._queue.put({"func": func, "args": kwargs})
 
 
 	def _runAnimation(self):
 		while self._running:
 			self._pattern.animation.clear()
-			func = self._queue.get()
-			func()
+			funcRecipe = self._queue.get()
+			funcRecipe['func'](**funcRecipe['args'])
 
 
 	def setLed(self, ledNum, red, green, blue, brightness=-1):

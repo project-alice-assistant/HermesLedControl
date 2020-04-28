@@ -37,6 +37,7 @@ class HermesLedControl:
 
 	_SUB_VOLUME_SET 				= 'hermes/volume/set'
 	_SUB_VADLED_SET 				= 'hermes/leds/vadLed'
+	_SUB_MANUAL_ANIMATIONS_SET		= 'hermes/leds/manual/animations'
 
 
 	def __init__(self, params):
@@ -200,7 +201,8 @@ class HermesLedControl:
 			(self._SUB_ON_DND, 0),
 			(self._SUB_VOLUME_SET, 0),
 			(self._SUB_VADLED_SET, 0),
-			(self._SUB_ON_LEDS_CLEAR, 0)
+			(self._SUB_ON_LEDS_CLEAR, 0),
+			(self._SUB_MANUAL_ANIMATIONS_SET, 0),
 		])
 
 		self._mqttClient.subscribe(self._params.offListener)
@@ -431,6 +433,94 @@ class HermesLedControl:
 			else:
 				if self._params.debug:
 					self._logger.debug("On leds clear received but it wasn't for me")
+
+		elif message.topic == self._SUB_MANUAL_ANIMATIONS_SET:
+			self._ledsController.stickyAnimation = None
+			if siteId == self._me:
+				if self._params.debug:
+					self._logger.debug('On manual animation leds set triggered')
+
+				if 'animation' not in payload:
+					self._logger.error('Missing "animation" in payload for set manual animation leds')
+				else:
+					defaultColor = [255, 255, 255, 2]
+					color = payload.get('color', defaultColor)
+
+					if len(color) == 3:
+						self._logger.warning(f"Missing white channel in RGBW format, appending default value")
+						color = color + [255]
+					elif len(color) != 4:
+						self._logger.error(f"Bad color '{color}' switching to default '{defaultColor}'")
+						color = defaultColor
+
+					if payload['animation'] == 'breath':
+						self._ledsController._put(
+							func=self._ledsController.pattern.animator.breath,
+							flush='flush' in payload,
+							color = color,
+							minBrightness = payload.get('minBrightness', 2),
+							maxBrightness = payload.get('maxBrightness', 20),
+							speed = payload.get('speed', 40)
+						)
+					elif payload['animation'] == 'blink':
+						self._ledsController._put(
+							func=self._ledsController.pattern.animator.blink,
+							flush='flush' in payload,
+							color=color,
+							minBrightness=payload.get('minBrightness', 2),
+							maxBrightness=payload.get('maxBrightness', 20),
+							speed=payload.get('speed', 300),
+							repeat=payload.get('repeat', 3)
+						)
+					elif payload['animation'] == 'rotate':
+						self._ledsController._put(
+							func=self._ledsController.pattern.animator.rotate,
+							flush='flush' in payload,
+							color=color,
+							speed=payload.get('speed', 20),
+							trail=payload.get('trail', 1),
+							startAt=payload.get('startAt', 0)
+						)
+					elif payload['animation'] == 'doubleSidedFilling':
+						self._ledsController._put(
+							func=self._ledsController.pattern.animator.doubleSidedFilling,
+							flush='flush' in payload,
+							color=color,
+							startAt=payload.get('startAt', 0),
+							direction=payload.get('direction', 1),
+							speed=payload.get('speed', 50)
+						)
+					elif payload['animation'] == 'doublePingPong':
+						self._ledsController._put(
+							func=self._ledsController.pattern.animator.doublePingPong,
+							flush='flush' in payload,
+							color=color,
+							speed=payload.get('speed', 20),
+							backgroundColor=payload.get('backgroundColor', None),
+							startAt=payload.get('startAt', 0)
+						)
+					elif payload['animation'] == 'waitWheel':
+						self._ledsController._put(
+							func=self._ledsController.pattern.animator.waitWheel,
+							flush='flush' in payload,
+							color=color,
+							speed=payload.get('speed', 20),
+							backgroundColor=payload.get('backgroundColor', None),
+							startAt=payload.get('startAt', 0)
+						)
+					elif payload['animation'] == 'relayRace':
+						self._ledsController._put(
+							func=self._ledsController.pattern.animator.relayRace,
+							flush='flush' in payload,
+							color=color,
+							relayColor=payload.get('color', [255, 0, 0, 2]),
+							backgroundColor=payload.get('backgroundColor', None),
+							speed=payload.get('speed', 20),
+							startAt=payload.get('startAt', 0)
+						)
+			else:
+				if self._params.debug:
+					self._logger.debug("On manual animation leds received but it wasn't for me")
 
 
 	@property
