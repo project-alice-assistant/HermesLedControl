@@ -444,25 +444,6 @@ class HermesLedControl:
 				if 'animation' not in payload:
 					self._logger.error('Missing "animation" in payload for set manual animation leds')
 				else:
-					defaultColor = [255, 255, 255, 2]
-					color = payload.get('color', defaultColor)
-
-					if len(color) == 3:
-						self._logger.warning(f"Missing white channel in 'color' attribute (RGBW format), appending default value")
-						color = color + [255]
-					elif len(color) != 4:
-						self._logger.error(f"Bad color '{color}' switching to default '{defaultColor}'")
-						color = defaultColor
-
-					backgroundColor = payload.get('backgroundColor', None)
-
-					if backgroundColor and len(backgroundColor) == 3:
-						self._logger.warning(f"Missing white channel in 'backgroundColor' attribute (RGBW format), appending default value")
-						backgroundColor = backgroundColor + [255]
-					elif len(backgroundColor) != 4:
-						self._logger.error(f"Bad backgroundColor '{backgroundColor}' switching to default '{defaultColor}'")
-						backgroundColor = defaultColor
-
 					if 'duration' in payload:
 						threading.Timer(interval=int(payload['duration']), function=self._ledsController.off, args=[]).start()
 
@@ -470,71 +451,94 @@ class HermesLedControl:
 						self._ledsController._put(
 							func=self._ledsController.pattern.animator.breath,
 							flush='flush' in payload,
-							color = color,
-							minBrightness = payload.get('minBrightness', 2),
-							maxBrightness = payload.get('maxBrightness', 20),
-							speed = payload.get('speed', 40)
+							color = self.safePayloadColor(payload, 'color'),
+							minBrightness = self.safePayloadNumber(payload, 'minBrightness', 2),
+							maxBrightness = self.safePayloadNumber(payload, 'maxBrightness', 20),
+							speed = self.safePayloadNumber(payload, 'speed', 40)
 						)
 					elif payload['animation'] == 'blink':
 						self._ledsController._put(
 							func=self._ledsController.pattern.animator.blink,
 							flush='flush' in payload,
-							color=color,
-							minBrightness=payload.get('minBrightness', 2),
-							maxBrightness=payload.get('maxBrightness', 20),
-							speed=payload.get('speed', 300),
-							repeat=payload.get('repeat', 3)
+							color = self.safePayloadColor(payload, 'color'),
+							minBrightness = self.safePayloadNumber(payload, 'minBrightness', 2),
+							maxBrightness = self.safePayloadNumber(payload, 'maxBrightness', 20),
+							speed = self.safePayloadNumber(payload, 'speed', 300),
+							repeat = self.safePayloadNumber(payload, 'repeat', 3)
 						)
 					elif payload['animation'] == 'rotate':
 						self._ledsController._put(
 							func=self._ledsController.pattern.animator.rotate,
 							flush='flush' in payload,
-							color=color,
-							speed=payload.get('speed', 20),
-							trail=payload.get('trail', 1),
-							startAt=payload.get('startAt', 0)
+							color = self.safePayloadColor(payload, 'color'),
+							speed = self.safePayloadNumber(payload, 'speed', 20),
+							trail = self.safePayloadNumber(payload, 'trail', 1),
+							startAt = self.safePayloadNumber(payload, 'startAt', 0)
 						)
 					elif payload['animation'] == 'doubleSidedFilling':
 						self._ledsController._put(
 							func=self._ledsController.pattern.animator.doubleSidedFilling,
 							flush='flush' in payload,
-							color=color,
-							startAt=payload.get('startAt', 0),
-							direction=payload.get('direction', 1),
-							speed=payload.get('speed', 50)
+							color = self.safePayloadColor(payload, 'color'),
+							startAt = self.safePayloadNumber(payload, 'startAt', 0),
+							direction = self.safePayloadNumber(payload, 'direction', 1),
+							speed = self.safePayloadNumber(payload, 'speed', 50)
 						)
 					elif payload['animation'] == 'doublePingPong':
 						self._ledsController._put(
 							func=self._ledsController.pattern.animator.doublePingPong,
 							flush='flush' in payload,
-							color=color,
-							speed=payload.get('speed', 20),
-							backgroundColor=backgroundColor,
-							startAt=payload.get('startAt', 0)
+							color = self.safePayloadColor(payload, 'color'),
+							speed = self.safePayloadNumber(payload, 'speed', 20),
+							backgroundColor = self.safePayloadColor(payload, 'backgroundColor'),
+							startAt = self.safePayloadNumber(payload, 'startAt', 0)
 						)
 					elif payload['animation'] == 'waitWheel':
 						self._ledsController._put(
 							func=self._ledsController.pattern.animator.waitWheel,
 							flush='flush' in payload,
-							color=color,
-							speed=payload.get('speed', 20),
-							backgroundColor=backgroundColor,
-							startAt=payload.get('startAt', 0)
+							color = self.safePayloadColor(payload, 'color'),
+							speed = self.safePayloadNumber(payload, 'speed', 20),
+							backgroundColor = self.safePayloadColor(payload, 'backgroundColor'),
+							startAt = self.safePayloadNumber(payload, 'startAt', 0)
 						)
 					elif payload['animation'] == 'relayRace':
 						self._ledsController._put(
 							func=self._ledsController.pattern.animator.relayRace,
 							flush='flush' in payload,
-							color=color,
-							relayColor=payload.get('color', [255, 0, 0, 2]),
-							backgroundColor=backgroundColor,
-							speed=payload.get('speed', 20),
-							startAt=payload.get('startAt', 0)
+							color = self.safePayloadColor(payload, 'color'),
+							relayColor = self.safePayloadColor(payload, 'relayColor'),
+							backgroundColor = self.safePayloadColor(payload, 'backgroundColor'),
+							speed = self.safePayloadNumber(payload, 'speed', 20),
+							startAt = self.safePayloadNumber(payload, 'startAt', 0)
 						)
 			else:
 				if self._params.debug:
 					self._logger.debug("On manual animation leds received but it wasn't for me")
 
+	def safePayloadColor(self, payload, attributeName, default=None):
+		color = payload.get(attributeName, [255, 255, 255, 2] if not default else default)
+
+		if len(color) == 3:
+			self._logger.warning(f"Missing white channel in '{attributeName}' attribute (RGBW format), appending default value")
+			color = color + [255]
+		elif len(color) != 4:
+			self._logger.error(f"Bad color '{color}' for '{attributeName}' attribute (RGBW format), switching to default: '{default}'")
+			color = default
+
+		return color
+
+
+	def safePayloadNumber(self, payload, attributeName, default=None):
+		number = payload.get(attributeName, default)
+
+		try:
+			number = int(number)
+		except:
+			self._logger.error(f"Bad value '{number}' for '{attributeName}' attribute (number format), switching to default: '{default}'")
+			number = default
+
+		return number
 
 	@property
 	def params(self):
