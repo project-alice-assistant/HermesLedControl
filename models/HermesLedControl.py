@@ -516,8 +516,12 @@ class HermesLedControl:
 				if self._params.debug:
 					self._logger.debug("On manual animation leds received but it wasn't for me")
 
+
 	def safePayloadColor(self, payload, attributeName, default=None):
 		color = payload.get(attributeName, [255, 255, 255, 2] if not default else default)
+
+		if type(color) == str and ',' in color:
+			color = [int(c) for c in color.split(",")]
 
 		if len(color) == 3:
 			self._logger.warning(f"Missing white channel in '{attributeName}' attribute (RGBW format), appending default value")
