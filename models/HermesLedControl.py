@@ -29,6 +29,7 @@ class HermesLedControl:
 	_SUB_ON_LEDS_TOGGLE_ON 			= 'hermes/leds/toggleOn'
 	_SUB_ON_LEDS_TOGGLE_OFF 		= 'hermes/leds/toggleOff'
 	_SUB_ON_LEDS_CLEAR 				= 'hermes/leds/clear'
+	_SUB_ON_LEDS_IDLE 				= 'hermes/leds/idle'
 	_SUB_UPDATING 					= 'hermes/leds/systemUpdate'
 	_SUB_ON_CALL 					= 'hermes/leds/onCall'
 	_SUB_SETUP_MODE 				= 'hermes/leds/setupMode'
@@ -205,6 +206,7 @@ class HermesLedControl:
 			(self._SUB_VOLUME_SET, 0),
 			(self._SUB_VADLED_SET, 0),
 			(self._SUB_ON_LEDS_CLEAR, 0),
+			(self._SUB_ON_LEDS_IDLE, 0),
 			(self._SUB_MANUAL_ANIMATIONS_SET, 0),
 		])
 
@@ -430,6 +432,16 @@ class HermesLedControl:
 			else:
 				if self._params.debug:
 					self._logger.debug("On vad led set received but it wasn't for me")
+	
+		elif message.topic == self._SUB_ON_LEDS_IDLE:
+			if isForMe:
+				if self._params.debug:
+					self._logger.debug('On leds idle triggered')
+				else:
+					self._ledsController.idle()
+			else:
+				if self._params.debug:
+					self._logger.debug("On leds idle received but it wasn't for me")
 
 		elif message.topic == self._SUB_ON_LEDS_CLEAR:
 			self._ledsController.stickyAnimation = None
