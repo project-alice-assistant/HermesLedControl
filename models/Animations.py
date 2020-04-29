@@ -21,7 +21,7 @@ class Animations:
 			self._image = [[0, 0, 0, 0] for _ in range(self._numLeds)]
 
 
-	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10):
+	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10, new=True):
 		"""
 		Fills the strip from both sides
 		:param startAt: int
@@ -31,7 +31,8 @@ class Animations:
 		:param startAt: int, the led index where the animation starts
 		:return:
 		"""
-		self.new()
+		if new:
+			self.new()
 
 		r = range(int(round(self._numLeds / 2)) + 1)
 		if direction <= 0:
