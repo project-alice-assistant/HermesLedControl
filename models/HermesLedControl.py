@@ -437,8 +437,7 @@ class HermesLedControl:
 			if isForMe:
 				if self._params.debug:
 					self._logger.debug('On leds idle triggered')
-				else:
-					self._ledsController.idle()
+				self._ledsController.idle()
 			else:
 				if self._params.debug:
 					self._logger.debug("On leds idle received but it wasn't for me")
