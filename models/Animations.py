@@ -63,6 +63,10 @@ class Animations:
 		:return:
 		"""
 
+		if len(color) > 3:
+			color[3] = maxBrightness if color[3] > maxBrightness else color[3]
+			color[3] = minBrightness if color[3] < minBrightness else color[3]
+			
 		image = [color for _ in range(self._numLeds)]
 
 		self.new(image)
@@ -264,6 +268,10 @@ class Animations:
 		:return:
 		"""
 
+		if len(color) > 3:
+			color[3] = maxBrightness if color[3] > maxBrightness else color[3]
+			color[3] = minBrightness if color[3] < minBrightness else color[3]
+			
 		if repeat == -1:
 			self.breath(color=color, maxBrightness=maxBrightness, minBrightness=minBrightness, speed=speed)
 			return
