@@ -426,8 +426,7 @@ class HermesLedControl:
 			if siteId == self._me:
 				if self._params.debug:
 					self._logger.debug('On leds clear triggered')
-				else:
-					self._ledsController.clearLeds()
+				self._ledsController.clearLeds()
 			else:
 				if self._params.debug:
 					self._logger.debug("On leds clear received but it wasn't for me")
