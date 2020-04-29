@@ -76,6 +76,8 @@ class RespeakerMicArrayV2(Interface):
 
 	def show(self):
 		self._leds.customize(self._colors)
+		self._leds.set_brightness(self._colors[3])
+		
 
 
 	def setVolume(self, volume):
