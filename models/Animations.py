@@ -21,6 +21,30 @@ class Animations:
 			self._image = [[0, 0, 0, 0] for _ in range(self._numLeds)]
 
 
+	def rainbow(self, brightness=255, speed=100):
+		rainbowColors = [
+			[255, 0, 0], 	# RED
+			[255, 127, 0], 	# ORANGE
+			[255, 255, 0],	# YELLOW
+			[0, 255, 0], 	# GREEN
+			[0, 255, 127], 	# LIME
+			[0, 255, 255],	# CYAN
+			[0, 0, 255],	# BLUE
+			[127, 0, 255],	# PURPLE
+			[255, 0, 255], 	# PINK
+			[255, 0, 127],	# FUCHSIA
+		]
+
+		self._animationFlag.set()
+
+		while self._animationFlag.isSet():
+			for color in rainbowColors:
+				for ledX in range(0, self._numLeds):
+					self._controller.setLedRGB(ledX, [color[0], color[1], color[2]], brightness)
+					time.sleep(1.0 / abs(speed))
+					self._controller.show()
+
+
 	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10):
 		"""
 		Fills the strip from both sides

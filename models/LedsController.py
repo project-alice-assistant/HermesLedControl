@@ -2,6 +2,7 @@ import queue as Queue
 import logging
 import threading
 import time
+import uuid
 
 from ledPatterns.AlexaLedPattern import AlexaLedPattern
 from ledPatterns.CustomLedPattern import CustomLedPattern
@@ -34,6 +35,7 @@ class LedsController:
 		self._running 			= False
 		self._defaultBrightness = self._params.defaultBrightness
 		self._stickyAnimation 	= None
+		self._runningRequestId 	= None
 
 		if not self._params.enableDoA and 'doa' in self._hardware:
 			self._hardware['doa'] = False
@@ -180,19 +182,19 @@ class LedsController:
 			self._logger.warning('Tried to set vad led on an unsupported device')
 
 
-	def putStickyPattern(self, pattern, patternMethod = None, sticky: bool = False, flush: bool = False, **kwargs):
+	def putStickyPattern(self, pattern, patternMethod = None, sticky: bool = False, flush: bool = False, duration:int = 0, **kwargs):
 		if sticky:
-			self._stickyAnimation = {"func": pattern, "args": kwargs}
+			self._stickyAnimation = {"func": pattern, "args": kwargs, "duration": duration}
 
 		if patternMethod is None:
-			self._put(pattern, flush=flush, **kwargs)
+			self._put(pattern, flush=flush, duration=duration, **kwargs)
 		else:
 			try:
 				func = getattr(self._pattern, patternMethod)
-				self._put(func, flush=flush, **kwargs)
+				self._put(func, flush=flush, duration=duration, **kwargs)
 			except AttributeError:
 				self._logger.error("Can't find {} method in pattern".format(patternMethod))
-				self._put(pattern, flush=flush, **kwargs)
+				self._put(pattern, flush=flush, duration=duration, **kwargs)
 
 
 	def wakeup(self, sticky: bool = False):
@@ -213,7 +215,7 @@ class LedsController:
 
 	def idle(self):
 		if self._stickyAnimation:
-			self._put(self._stickyAnimation['func'], flush=False, **self._stickyAnimation['args'])
+			self._put(self._stickyAnimation['func'], flush=False, duration=self._stickyAnimation['duration'], **self._stickyAnimation['args'])
 		else:
 			if self._params.idlePattern is None:
 				self._put(self._pattern.idle)
@@ -317,7 +319,7 @@ class LedsController:
 			self.toggleStateOn()
 
 
-	def _put(self, func, flush=False, **kwargs):
+	def _put(self, func, flush=False, duration: int = 0, **kwargs):
 		self._pattern.animation.clear()
 
 		if not self.active:
@@ -326,14 +328,25 @@ class LedsController:
 		if flush:
 			self._queue.empty()
 
-		self._queue.put({"func": func, "args": kwargs})
+		requestId = str(uuid.uuid4())
+
+		if duration:
+			threading.Timer(interval=int(duration), function=self.scheduledEndAnimation, args=[requestId]).start()
+
+		self._queue.put({"func": func, "args": kwargs, "duration": duration, "requestId": requestId})
 
 
 	def _runAnimation(self):
 		while self._running:
 			self._pattern.animation.clear()
 			funcRecipe = self._queue.get()
+			self._runningRequestId = funcRecipe["requestId"]
 			funcRecipe['func'](**funcRecipe['args'])
+
+
+	def scheduledEndAnimation(self, requestId):
+		if self._runningRequestId == requestId:
+			self.idle()
 
 
 	def setLed(self, ledNum, red, green, blue, brightness=-1):
