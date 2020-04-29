@@ -271,11 +271,13 @@ class Animations:
 		image = [color]*self._numLeds
 
 		self.new(image)
+		
+		self._animationFlag.set()
 
 		for _ in range(repeat):
 			bri = self._image[0][3]
 
-			while bri < maxBrightness:
+			while self._animationFlag.isSet() and bri < maxBrightness:
 				bri = self._image[0][3]
 
 				for i in range(self._numLeds):
@@ -284,7 +286,7 @@ class Animations:
 				self._displayImage()
 				time.sleep(1.0 / abs(speed))
 
-			while bri > minBrightness:
+			while self._animationFlag.isSet() and bri > minBrightness:
 				bri = self._image[0][3]
 
 				for i in range(self._numLeds):
@@ -292,6 +294,8 @@ class Animations:
 
 				self._displayImage()
 				time.sleep(1.0 / abs(speed))
+
+		self.new()
 
 
 	def _setPixel(self, index, color):
