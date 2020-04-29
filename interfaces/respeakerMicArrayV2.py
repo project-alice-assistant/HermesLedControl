@@ -48,7 +48,7 @@ class RespeakerMicArrayV2(Interface):
 	def onStop(self):
 		super().onStop()
 		self.clearStrip()
-		self._leds.cleanup()
+		self._leds.close()
 		if self._src:
 			self._src.recursive_stop()
 
