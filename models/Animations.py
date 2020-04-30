@@ -119,7 +119,7 @@ class Animations:
 		:param maxBrightness: int
 		:return:
 		"""
-
+			
 		if duration:
 			return self._controller.putStickyPattern(
 				pattern=self.breath,
@@ -129,7 +129,11 @@ class Animations:
 				maxBrightness=maxBrightness,
 				speed=speed
 			)
-
+    
+    if len(color) > 3:
+			color[3] = maxBrightness if color[3] > maxBrightness else color[3]
+			color[3] = minBrightness if color[3] < minBrightness else color[3]
+    
 		image = [color for _ in range(self._numLeds)]
 
 		self.new(image)
@@ -386,6 +390,10 @@ class Animations:
 				speed=speed
 			)
 
+    if len(color) > 3:
+			color[3] = maxBrightness if color[3] > maxBrightness else color[3]
+			color[3] = minBrightness if color[3] < minBrightness else color[3]
+    
 		if repeat == -1:
 			self.breath(color=color, maxBrightness=maxBrightness, minBrightness=minBrightness, speed=speed, duration=duration)
 			return
