@@ -512,7 +512,8 @@ class HermesLedControl:
 							color=self.safePayloadColor(payload, 'color'),
 							startAt=self.safePayloadNumber(payload, 'startAt', 0),
 							direction=self.safePayloadNumber(payload, 'direction', 1),
-							speed=self.safePayloadNumber(payload, 'speed', 50)
+							speed=self.safePayloadNumber(payload, 'speed', 50),
+							new=payload.get('new', True)
 						)
 					elif payload['animation'] == 'doublePingPong':
 						self._ledsController.putStickyPattern(
