@@ -567,6 +567,18 @@ class HermesLedControl:
 							brightness=self.safePayloadNumber(payload, 'brightness', 255),
 							speed=self.safePayloadNumber(payload, 'speed', 100)
 						)
+					elif payload['animation'] == 'windmill':
+						self._ledsController.putStickyPattern(
+							pattern=self._ledsController.pattern.animator.windmill,
+							sticky=sticky,
+							duration=duration,
+							flush=flush,
+							colors=payload['colors'],
+							smooth=payload.get('smooth', True),
+							trail=self.safePayloadNumber(payload, 'trail', 0),
+							trailAttenuation=self.safePayloadNumber(payload, 'trailAttenuation', 0, True),
+							speed=self.safePayloadNumber(payload, 'speed', 20)
+						)
 			else:
 				if self._params.debug:
 					self._logger.debug("On manual animation leds received but it wasn't for me")
@@ -587,17 +599,20 @@ class HermesLedControl:
 
 		return color
 
-
-	def safePayloadNumber(self, payload, attributeName, default=None):
+	def safePayloadNumber(self, payload, attributeName, default=None, float=False):
 		number = payload.get(attributeName, default)
 
 		try:
-			number = int(number)
+			if float:
+				number = float(number)
+			else:
+				number = int(number)
 		except:
 			self._logger.error(f"Bad value '{number}' for '{attributeName}' attribute (number format), switching to default: '{default}'")
 			number = default
 
 		return number
+
 
 	@property
 	def params(self):
