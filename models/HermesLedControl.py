@@ -557,6 +557,16 @@ class HermesLedControl:
 							brightness=self.safePayloadNumber(payload, 'brightness', 255),
 							speed=self.safePayloadNumber(payload, 'speed', 100)
 						)
+					elif payload['animation'] == 'wheelOverlap':
+						self._ledsController.putStickyPattern(
+							pattern=self._ledsController.pattern.animator.wheelOverlap,
+							sticky=sticky,
+							duration=duration,
+							flush=flush,
+							colors=payload['colors'],
+							brightness=self.safePayloadNumber(payload, 'brightness', 255),
+							speed=self.safePayloadNumber(payload, 'speed', 100)
+						)
 			else:
 				if self._params.debug:
 					self._logger.debug("On manual animation leds received but it wasn't for me")

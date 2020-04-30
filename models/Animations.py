@@ -20,8 +20,35 @@ class Animations:
 		else:
 			self._image = [[0, 0, 0, 0] for _ in range(self._numLeds)]
 
+	def wheelOverlap(self, colors, brightness=255, speed=100, duration=0):
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.wheelOverlap,
+				duration=duration,
+				colors=colors,
+				brightness=brightness,
+				speed=speed
+			)
 
-	def rainbow(self, brightness=255, speed=100):
+		self._animationFlag.set()
+
+		while self._animationFlag.isSet():
+			for color in colors:
+				for ledX in range(0, self._numLeds):
+					self._controller.setLedRGB(ledX, [color[0], color[1], color[2]], brightness)
+					time.sleep(1.0 / abs(speed))
+					self._controller.show()
+
+
+	def rainbow(self, brightness=255, speed=100, duration=0):
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.rainbow,
+				duration=duration,
+				brightness=brightness,
+				speed=speed
+			)
+
 		rainbowColors = [
 			[255, 0, 0], 	# RED
 			[255, 127, 0], 	# ORANGE
@@ -35,17 +62,10 @@ class Animations:
 			[255, 0, 127],	# FUCHSIA
 		]
 
-		self._animationFlag.set()
-
-		while self._animationFlag.isSet():
-			for color in rainbowColors:
-				for ledX in range(0, self._numLeds):
-					self._controller.setLedRGB(ledX, [color[0], color[1], color[2]], brightness)
-					time.sleep(1.0 / abs(speed))
-					self._controller.show()
+		self.wheelOverlap(colors=rainbowColors, brightness=brightness, speed=100)
 
 
-	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10):
+	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10, new=True, duration=0):
 		"""
 		Fills the strip from both sides
 		:param startAt: int
@@ -55,7 +75,20 @@ class Animations:
 		:param startAt: int, the led index where the animation starts
 		:return:
 		"""
-		self.new()
+
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.doubleSidedFilling,
+				duration=duration,
+				color=color,
+				startAt=startAt,
+				direction=direction,
+				speed=speed,
+				new=new
+			)
+
+		if new:
+			self.new()
 
 		r = range(int(round(self._numLeds / 2)) + 1)
 		if direction <= 0:
@@ -77,7 +110,7 @@ class Animations:
 			time.sleep(1.0 / abs(speed))
 
 
-	def breath(self, color, minBrightness, maxBrightness, speed=10):
+	def breath(self, color, minBrightness, maxBrightness, speed=10, duration=0):
 		"""
 		Breathes the leds, from min to max brightness
 		:param color: array RBGW
@@ -86,6 +119,16 @@ class Animations:
 		:param maxBrightness: int
 		:return:
 		"""
+
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.breath,
+				duration=duration,
+				color=color,
+				minBrightness=minBrightness,
+				maxBrightness=maxBrightness,
+				speed=speed
+			)
 
 		image = [color for _ in range(self._numLeds)]
 
@@ -127,7 +170,7 @@ class Animations:
 		self._displayImage()
 
 
-	def rotate(self, color, speed=10, trail=0, startAt=0):
+	def rotate(self, color, speed=10, trail=0, startAt=0, duration=0):
 		"""
 		Makes a light circulate your strip
 		:param color: list, an array containing RGB or RGBW informations
@@ -135,6 +178,16 @@ class Animations:
 		:param trail: int, if greater than 0, leave a trail behind the moving light, with decreased brightness
 		:param startAt: int, the led index where the animation starts
 		"""
+
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.rotate,
+				duration=duration,
+				color=color,
+				trail=trail,
+				startAt=startAt,
+				speed=speed
+			)
 
 		if trail > self._numLeds or trail < 0:
 			self._logger.error("Trail can't be longer than amount of leds")
@@ -165,7 +218,7 @@ class Animations:
 			self.rotateImage(rotationSign)
 
 
-	def relayRace(self, color, relayColor, backgroundColor=None, speed=10, startAt=0):
+	def relayRace(self, color, relayColor, backgroundColor=None, speed=10, startAt=0, duration=0):
 		"""
 		:param color: array RGBW
 		:param relayColor: array RGBW
@@ -173,6 +226,18 @@ class Animations:
 		:param speed: float, in l/s or led per second
 		:param startAt: int, the led index where the animation starts
 		"""
+
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.relayRace,
+				duration=duration,
+				color=color,
+				relayColor=relayColor,
+				backgroundColor=backgroundColor,
+				startAt=startAt,
+				speed=speed
+			)
+
 		if backgroundColor is None:
 			backgroundColor = [0, 0, 0, 0]
 
@@ -202,7 +267,7 @@ class Animations:
 			index = self._normalizeIndex(index + speedIncrement)
 
 
-	def doublePingPong(self, color, speed=10, backgroundColor=None, startAt=0):
+	def doublePingPong(self, color, speed=10, backgroundColor=None, startAt=0, duration=0):
 		"""
 		Makes two balls ping pong
 		:param color: array RBGW
@@ -211,6 +276,16 @@ class Animations:
 		:param startAt: int, the led index where the animation starts
 		:return:
 		"""
+
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.doublePingPong,
+				duration=duration,
+				color=color,
+				backgroundColor=backgroundColor,
+				startAt=startAt,
+				speed=speed
+			)
 
 		self.new()
 
@@ -249,7 +324,7 @@ class Animations:
 				self._setPixel(rightIndex, backgroundColor)
 
 
-	def waitWheel(self, color, speed=10, backgroundColor=None, startAt=0):
+	def waitWheel(self, color, speed=10, backgroundColor=None, startAt=0, duration=0):
 		"""
 		Makes two balls ping pong
 		:param color: array RBGW
@@ -258,6 +333,17 @@ class Animations:
 		:param startAt: int, the led index where the animation starts
 		:return:
 		"""
+
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.waitWheel,
+				duration=duration,
+				color=color,
+				backgroundColor=backgroundColor,
+				startAt=startAt,
+				speed=speed
+			)
+
 		if backgroundColor is None:
 			backgroundColor = [0, 0, 0, 0]
 
@@ -278,7 +364,7 @@ class Animations:
 				self._setPixel(index, color)
 
 
-	def blink(self, color, minBrightness, maxBrightness, speed=200, repeat=-1, smooth=True):
+	def blink(self, color, minBrightness, maxBrightness, speed=200, repeat=-1, smooth=True, duration=0):
 		"""
 		:param color: array RBGW
 		:param minBrightness: int
@@ -288,8 +374,20 @@ class Animations:
 		:return:
 		"""
 
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.blink,
+				duration=duration,
+				color=color,
+				minBrightness=minBrightness,
+				maxBrightness=maxBrightness,
+				repeat=repeat,
+				smooth=smooth,
+				speed=speed
+			)
+
 		if repeat == -1:
-			self.breath(color=color, maxBrightness=maxBrightness, minBrightness=minBrightness, speed=speed)
+			self.breath(color=color, maxBrightness=maxBrightness, minBrightness=minBrightness, speed=speed, duration=duration)
 			return
 		
 		image = [color]*self._numLeds
