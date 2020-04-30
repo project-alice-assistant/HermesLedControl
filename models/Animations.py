@@ -122,7 +122,7 @@ class Animations:
 			[255, 0, 127],	# FUCHSIA
 		]
 
-		self.wheelOverlap(colors=rainbowColors, brightness=brightness, speed=100)
+		self.wheelOverlap(colors=rainbowColors, brightness=brightness, speed=speed)
 
 
 	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10, new=True, duration=0):
