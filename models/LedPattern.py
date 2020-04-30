@@ -14,6 +14,11 @@ class LedPattern:
 
 
 	@property
+	def animator(self):
+		return self._animator
+
+
+	@property
 	def animation(self):
 		return self._animation
 
