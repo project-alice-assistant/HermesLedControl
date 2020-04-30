@@ -19,6 +19,65 @@ class Animations:
 			self._image = image
 		else:
 			self._image = [[0, 0, 0, 0] for _ in range(self._numLeds)]
+			
+			
+		def newCardinalImage(self, colors, trail=0, trailAttenuation=0):
+		if trailAttenuation > 1:
+			trailAttenuation = 1
+		elif trailAttenuation < 0:
+			trailAttenuation = 0
+
+		maxTrail = 0 if len(colors) == 0 else (self._numLeds - len(colors)) /  len(colors)
+
+		if trail > maxTrail:
+			trail = maxTrail
+		elif trail < 0:
+			trail = 0
+
+		self.new()
+
+		cardinalSteps = int(math.ceil(self._numLeds / len(colors)))
+		self._image = []
+		j = 0
+		t = 0
+		trailBri = 0
+
+		for i in range(self._numLeds):
+			if i % cardinalSteps == 0:
+				self._image.append(colors[j])
+				t = trail
+				trailBri = colors[j][3] if len(colors[j]) > 3 else 255
+				j += 1
+			else:
+				interColor = [0, 0, 0, 0]
+
+				if t > 0:
+					interColor = colors[j-1] if len(colors[j-1]) > 3 else colors[j-1] + [255]
+					trailBri *= trailAttenuation
+					interColor[3] = int(trailBri)
+					t -= 1
+
+				self._image.append(interColor)
+
+				
+	def windmill(self, colors, speed=20, smooth=True, trail=0, trailAttenuation=1, duration=0):
+		if duration:
+			return self._controller.putStickyPattern(
+				pattern=self.windmill,
+				duration=duration,
+				colors=colors,
+				trail=trail,
+				trailAttenuation=trailAttenuation,
+				speed=speed
+			)
+
+		self.newCardinalImage(colors, trail, trailAttenuation)
+		degreesPerLed = 360 / (self._numLeds if smooth else len(colors))
+		self._animationFlag.set()
+
+		while self._animationFlag.isSet():
+			self.rotateImageByAngle(degreesPerLed)
+			time.sleep(1 / abs(speed))
 
 	def wheelOverlap(self, colors, brightness=255, speed=100, duration=0):
 		if duration:
