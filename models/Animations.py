@@ -278,7 +278,7 @@ class Animations:
 				self._setPixel(index, color)
 
 
-	def blink(self, color, minBrightness, maxBrightness, speed=200, repeat=-1):
+	def blink(self, color, minBrightness, maxBrightness, speed=200, repeat=-1, smooth=True):
 		"""
 		:param color: array RBGW
 		:param minBrightness: int
@@ -302,6 +302,9 @@ class Animations:
 			while bri < maxBrightness:
 				bri = self._image[0][3]
 
+				if not smooth:
+					bri = maxBrightness
+
 				for i in range(self._numLeds):
 					self._image[i] = color[0], color[1], color[2], bri + 1
 
@@ -310,6 +313,9 @@ class Animations:
 
 			while bri > minBrightness:
 				bri = self._image[0][3]
+
+				if not smooth:
+					bri = minBrightness
 
 				for i in range(self._numLeds):
 					self._image[i] = color[0], color[1], color[2], bri - 1

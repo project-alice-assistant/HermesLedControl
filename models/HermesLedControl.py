@@ -489,7 +489,8 @@ class HermesLedControl:
 							minBrightness=self.safePayloadNumber(payload, 'minBrightness', 2),
 							maxBrightness=self.safePayloadNumber(payload, 'maxBrightness', 20),
 							speed=self.safePayloadNumber(payload, 'speed', 300),
-							repeat=self.safePayloadNumber(payload, 'repeat', 3)
+							repeat=self.safePayloadNumber(payload, 'repeat', 3),
+							smooth=payload.get('smooth', True)
 						)
 					elif payload['animation'] == 'rotate':
 						self._ledsController.putStickyPattern(
