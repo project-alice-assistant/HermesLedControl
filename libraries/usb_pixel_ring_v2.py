@@ -43,6 +43,7 @@ class PixelRing:
 
 	def show(self, data):
 		self.write(6, data)
+		self.set_brightness(data[3])
 
 	customize = show
 
