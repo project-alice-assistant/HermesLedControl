@@ -28,9 +28,9 @@ class ProjectAlicePattern(LedPattern):
 		self.off()
 		self._animator.doubleSidedFilling(color=[255, 255, 255, 15], startAt=start, direction=1, speed=50)
 		time.sleep(0.1)
-		self._animator.doubleSidedFilling(color=[0, 0, 255, 25], startAt=start, direction=-1, speed=50)
+		self._animator.doubleSidedFilling(color=[0, 0, 255, 25], startAt=start, direction=-1, speed=50, new=False)
 		time.sleep(0.2)
-		self._animator.doubleSidedFilling(color=[0, 0, 0, 0], startAt=start, direction=1, speed=50)
+		self._animator.doubleSidedFilling(color=[0, 0, 0, 0], startAt=start, direction=1, speed=50, new=False)
 
 
 	def listen(self, *args):
