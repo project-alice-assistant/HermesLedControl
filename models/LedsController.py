@@ -9,6 +9,7 @@ from ledPatterns.CustomLedPattern import CustomLedPattern
 from ledPatterns.GoogleLedPattern import GoogleHomeLedPattern
 from ledPatterns.KiboostLedPattern import KiboostLedPattern
 from ledPatterns.ProjectAlicePattern import ProjectAlicePattern
+from ledPatterns.PgasPattern import PgasPattern
 from models.Exceptions import InterfaceInitError
 from models.Interfaces import Interfaces
 from models.HermesLedControl import *
@@ -61,6 +62,8 @@ class LedsController:
 			self._pattern = KiboostLedPattern(self)
 		elif self._params.pattern == 'projectalice':
 			self._pattern = ProjectAlicePattern(self)
+		elif self._params.pattern == 'pgas':
+			self._pattern = PgasPattern(self)
 		else:
 			self._pattern = CustomLedPattern(self)
 

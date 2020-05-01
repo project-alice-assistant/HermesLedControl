@@ -62,7 +62,7 @@ done
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
     echo "What pattern do you want to use?"
-    select pattern in "google" "alexa" "projectalice" "custom" "kiboost" "cancel"; do
+    select pattern in "google" "alexa" "projectalice" "pgas" "custom" "kiboost" "cancel"; do
         case "$pattern" in
             cancel) exit;;
             *) break;;
