@@ -50,7 +50,7 @@ echo "Path: $pathToConfig"
 pathToConfig=${pathToConfig//\//\\/}
 
 echo "What device do you wish to control with SLC?"
-select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
+select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "respeakerMicArrayV1" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
     case "$device" in
         "I'm using simple leds on GPIOs")
             device=puregpio
@@ -172,6 +172,10 @@ select answer in "yes" "no" "cancel"; do
                     ;;
                 respeakerMicArrayV2)
                     ./installers/respeakerMicArrayV2.sh ${USER} ${FVENV}
+                    break
+                    ;;
+                respeakerMicArrayV1)
+                    ./installers/respeakerMicArrayV1.sh ${USER} ${FVENV}
                     break
                     ;;
                 respeakerCoreV2)

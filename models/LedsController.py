@@ -130,6 +130,10 @@ class LedsController:
 				from interfaces.respeakerMicArrayV2 import RespeakerMicArrayV2
 				self._interface = RespeakerMicArrayV2(hardware=self._hardware, vid=self._hardware['vid'], pid=self._hardware['pid'])
 
+			elif self._hardware['interface'] == Interfaces.RESPEAKER_MIC_ARRAY_V1:
+				from interfaces.respeakerMicArrayV1 import RespeakerMicArrayV1
+				self._interface = RespeakerMicArrayV1(hardware=self._hardware, vid=self._hardware['vid'], pid=self._hardware['pid'])
+
 			elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
 				from interfaces.matrixvoice import MatrixVoice
 				self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'])

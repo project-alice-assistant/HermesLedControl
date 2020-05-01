@@ -41,6 +41,24 @@
 			"vadLed": true
 		}
 	},
+	"respeakerMicArrayV1": {
+		"name": "ReSpeaker Mic array v1",
+		"numberOfLeds": 12,
+		"interface": "respeakerMicArrayV1",
+		"doa": "doa_respeaker_6p1_mic_array",
+		"rate": 16000,
+		"channels": 8,
+		"vid": "0x2886",
+		"pid": "0x0007",
+		"endFrame": 0,
+		"extras": {
+			"volume": {
+				"min": 0,
+				"max": 12
+			},
+			"vadLed": true
+		}
+	},
 	"respeaker6MicArray": {
 		"name": "ReSpeaker 6-Mic Circular Array",
 		"numberOfLeds": 12,
