@@ -481,17 +481,16 @@ class Animations:
 			color[3] = maxBrightness if color[3] > maxBrightness else color[3]
 			color[3] = minBrightness if color[3] < minBrightness else color[3]
     
-		if repeat == -1:
+		if repeat == -1 and smooth:
 			self.breath(color=color, maxBrightness=maxBrightness, minBrightness=minBrightness, speed=speed, duration=duration)
 			return
-		
-		image = [color]*self._numLeds
 
+		image = [color] * self._numLeds
 		self.new(image)
-		
 		self._animationFlag.set()
+		turn = 0
 
-		for _ in range(repeat):
+		while self._animationFlag.isSet() and (turn < repeat or repeat == -1):
 			bri = self._image[0][3]
 
 			while self._animationFlag.isSet() and bri < maxBrightness:
@@ -517,6 +516,8 @@ class Animations:
 
 				self._displayImage()
 				time.sleep(1.0 / abs(speed))
+
+			turn +=1
 
 		self.new()
 
