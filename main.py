@@ -59,6 +59,7 @@ def main():
 							"respeaker2",
 							"respeaker4",
 							"respeakerMicArrayV2",
+							"respeakerMicArrayV1",
 							"respeakerCoreV2",
 							"respeaker6MicArray",
 							"respeaker7MicArray",
@@ -78,6 +79,7 @@ def main():
 							'alexa',
 							'kiboost',
 							'projectalice',
+							'pgas',
 							'custom'
 						])
 	parser.add_argument('--offListener', help='Allows you to define which topics will trigger the off pattern', type=str, default='hermes/hotword/toggleOn',

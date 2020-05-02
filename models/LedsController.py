@@ -9,6 +9,7 @@ from ledPatterns.CustomLedPattern import CustomLedPattern
 from ledPatterns.GoogleLedPattern import GoogleHomeLedPattern
 from ledPatterns.KiboostLedPattern import KiboostLedPattern
 from ledPatterns.ProjectAlicePattern import ProjectAlicePattern
+from ledPatterns.PgasPattern import PgasPattern
 from models.Exceptions import InterfaceInitError
 from models.Interfaces import Interfaces
 from models.HermesLedControl import *
@@ -61,6 +62,8 @@ class LedsController:
 			self._pattern = KiboostLedPattern(self)
 		elif self._params.pattern == 'projectalice':
 			self._pattern = ProjectAlicePattern(self)
+		elif self._params.pattern == 'pgas':
+			self._pattern = PgasPattern(self)
 		else:
 			self._pattern = CustomLedPattern(self)
 
@@ -129,6 +132,10 @@ class LedsController:
 			elif self._hardware['interface'] == Interfaces.RESPEAKER_MIC_ARRAY_V2:
 				from interfaces.respeakerMicArrayV2 import RespeakerMicArrayV2
 				self._interface = RespeakerMicArrayV2(hardware=self._hardware, vid=self._hardware['vid'], pid=self._hardware['pid'])
+
+			elif self._hardware['interface'] == Interfaces.RESPEAKER_MIC_ARRAY_V1:
+				from interfaces.respeakerMicArrayV1 import RespeakerMicArrayV1
+				self._interface = RespeakerMicArrayV1(hardware=self._hardware, vid=self._hardware['vid'], pid=self._hardware['pid'])
 
 			elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
 				from interfaces.matrixvoice import MatrixVoice
