@@ -6,6 +6,7 @@ Provides an easy way to control your device leds in an hermes environment. It is
 It currently supports these hardwares:
 - Respeaker 2
 - Respeaker 4
+- Respeaker Mic Array V1
 - Respeaker Mic Array V2
 - Respeaker 6 Mic Array
 - Respeaker core V2
