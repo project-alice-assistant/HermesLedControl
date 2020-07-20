@@ -599,11 +599,11 @@ class HermesLedControl:
 
 		return color
 
-	def safePayloadNumber(self, payload, attributeName, default=None, float=False):
+	def safePayloadNumber(self, payload, attributeName, default=None, isFloat=False):
 		number = payload.get(attributeName, default)
 
 		try:
-			if float:
+			if isFloat:
 				number = float(number)
 			else:
 				number = int(number)
