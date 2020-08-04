@@ -136,5 +136,13 @@
 		"interface": "pureGPIO",
 		"activeHigh": true,
 		"gpios": [14, 15, 18]
+	},
+	"dummy": {
+		"__comment__": "Dummy Device to prevent crashing. Used for a clean setup in custom environments",
+		"name": "dummy",
+		"numberOfLeds": 0,
+		"interface": "pureGPIO",
+		"activeHigh": true,
+		"gpios": []
 	}
 }

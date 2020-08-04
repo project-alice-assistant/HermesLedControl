@@ -68,7 +68,8 @@ def main():
 							"neoPixelsSK6812RGBW",
 							"neoPixelsWS2812RGB",
 							"googleAIY",
-							"puregpio"
+							"puregpio",
+							"dummy"
 						])
 	parser.add_argument('--leds', help='Override the amount of leds on your hardware', type=int)
 	parser.add_argument('--defaultBrightness', help='Set a default brightness for your leds', type=int, default=50)
