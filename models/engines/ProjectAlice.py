@@ -1,8 +1,10 @@
 import logging
 from pathlib import Path
 from typing import Optional
+import importlib.util
 
 import toml
+import json
 
 
 class ProjectAlice:
@@ -28,32 +30,22 @@ class ProjectAlice:
 		"""
 
 		self._logger.info('Loading configurations')
-		path = Path(params.pathToConfig or '/etc/snips.toml')
 
 		configs = dict()
+		try:
+			#params.pathToConfig or
+			with open('/home/pi/ProjectAlice/config.json') as jsonContent:
+				print(params)
+				conf = json.load(jsonContent)
+				configs['mqttServer'] = conf['mqttHost']
+				configs['mqttPort'] = conf['mqttPort']
+				configs['mqttUsername'] = conf['mqttUser']
+				configs['mqttPassword'] = conf['mqttPassword']
+				configs['mqttTLSCAFile'] = conf['mqttTLSFile']
 
-		if path.exists():
-			with path.open() as confFile:
-				conf = toml.load(confFile)
+				configs['deviceName'] = conf['uuid']
 
-				try:
-					snipsCommons = conf['snips-common']
-					configs['mqttServer'], configs['mqttPort'] = snipsCommons.get('mqtt', 'localhost:1883').split(':')
-					configs['mqttUsername'] = snipsCommons.get('mqtt_username', '')
-					configs['mqttPassword'] = snipsCommons.get('mqtt_password', '')
-					configs['mqttTLSCAFile'] = snipsCommons.get('mqtt_tls_cafile', '')
-
-					snipsAudioServer = conf.get('snips-audio-server', dict())
-					configs['deviceName'] = snipsAudioServer.get('bind', 'default').replace('@mqtt', '')
-
-					return configs
-				except Exception as e:
-					self._logger.info('Error loading configurations: {}'.format(e))
-					return None
-		else:
-			if params.debug:
-				self._logger.info('No Project Alice config found but debug mode, allow to continue')
-				return dict()
-			else:
-				self._logger.fatal('Error loading configurations, file does not exist')
-				return None
+			return configs
+		except Exception as e:
+			self._logger.info('Error loading configurations: {}'.format(e))
+			return None
