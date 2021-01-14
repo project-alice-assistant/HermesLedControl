@@ -42,7 +42,7 @@ class Rhasspy:
 				conf = json.load(confFile)
 
 				try:
-					configs['mqttServer'] = conf['mqtt']['host']
+					configs['mqttServer'] = conf['mqtt'].get('host', 'localhost')
 					configs['mqttPort'] = conf['mqtt'].get('port', 1883)
 					configs['mqttUsername'] = conf['mqtt'].get('username', '')
 					configs['mqttPassword'] = conf['mqtt'].get('password', '')
