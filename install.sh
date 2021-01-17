@@ -126,7 +126,7 @@ if [[ "$device" != "don't overwrite existing parameters" && -f ${configurationPa
     rm ${configurationPath}
 fi
 
-if [[ ! -f ${configurationPath} ]]; then
+if [[ "$device" != "don't overwrite existing parameters" && ! -f ${configurationPath} ]]; then
     cp configuration.yml ${configurationPath}
 	chown ${USER} ${configurationPath}
 fi
