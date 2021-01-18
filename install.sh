@@ -43,11 +43,11 @@ else
     defaultPath='/etc/snips.toml'
 fi
 
-pathToConfig="/etc/snips.toml"
+pathToAssistantConfig="/etc/snips.toml"
 echo "What's the path to your assistant config file?"
-read -p "Path: (${defaultPath})" pathToConfig
-echo "Path: $pathToConfig"
-pathToConfig=${pathToConfig//\//\\/}
+read -p "Path: (${defaultPath})" pathToAssistantConfig
+echo "Path: $pathToAssistantConfig"
+pathToAssistantConfig=${pathToAssistantConfig//\//\\/}
 
 echo "What device do you wish to control with SLC?"
 select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "respeakerMicArrayV1" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
@@ -68,6 +68,13 @@ if [[ "$device" != "don't overwrite existing parameters" ]]; then
             *) break;;
         esac
     done
+
+	defaultConfigurationPath=${USERDIR}'/.config/hermesLedControl/configuration.yml'
+	echo "Where should the configuration be saved to?"
+	read -p "Path (${defaultConfigurationPath})" configurationPath
+	configurationPath=${configurationPath:-$defaultConfigurationPath}
+	echo "Path: $configurationPath"
+	escapedConfigurationPath=${configurationPath//\//\\/}
 fi
 
 systemctl is-active -q hermesledcontrol && systemctl stop hermesledcontrol
@@ -98,6 +105,7 @@ sudo -u ${USER} bash <<EOF
     pip3 --no-cache-dir install gpiozero
     pip3 --no-cache-dir install paho-mqtt
     pip3 --no-cache-dir install toml
+	pip3 --no-cache-dir install pyyaml
     pip3 uninstall -y pixel_ring
 EOF
 
@@ -114,12 +122,26 @@ if [[ ! -f /etc/systemd/system/hermesledcontrol.service ]]; then
     cp hermesledcontrol.service /etc/systemd/system
 fi
 
+if [[ "$device" != "don't overwrite existing parameters" && -f ${configurationPath} ]]; then
+    rm ${configurationPath}
+fi
+
+if [[ "$device" != "don't overwrite existing parameters" && ! -f ${configurationPath} ]]; then
+    cp configuration.yml ${configurationPath}
+	chown ${USER} ${configurationPath}
+fi
+
 escaped=${USERDIR//\//\\/}
 sed -i -e "s/%WORKING_DIR%/"${escaped}"\/hermesLedControl_"${VERSION}"/" /etc/systemd/system/hermesledcontrol.service
 sed -i -e "s/%USER%/"${USER}"/" /etc/systemd/system/hermesledcontrol.service
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
-    sed -i -e "s/%EXECSTART%/"${escaped}"\/hermesLedControl_"${VERSION}"\/venv\/bin\/python3 main.py --engine="${engine}" --pathToConfig="${pathToConfig}" --hardware="${device}" --pattern="${pattern}"/" /etc/systemd/system/hermesledcontrol.service
+	sed -i -e "s/%ENGINE%/"${engine}"/" ${configurationPath}
+	sed -i -e "s/%PATHTOCONFIG%/"${pathToAssistantConfig}"/" ${configurationPath}
+	sed -i -e "s/%DEVICE%/"${device}"/" ${configurationPath}
+	sed -i -e "s/%PATTERN%/"${pattern}"/" ${configurationPath}
+
+    sed -i -e "s/%EXECSTART%/"${escaped}"\/hermesLedControl_"${VERSION}"\/venv\/bin\/python3 main.py --hermesLedControlConfig="${escapedConfigurationPath}"/" /etc/systemd/system/hermesledcontrol.service
 fi
 
 if [[ -d "/var/lib/hermes/skills/snips-skill-respeaker" ]]; then

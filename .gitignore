@@ -3,3 +3,4 @@ config.py
 *.pyc
 /ledPatterns/CustomLedPattern.py
 .mypy_cache/
+/venv
