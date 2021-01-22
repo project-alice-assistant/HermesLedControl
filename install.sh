@@ -77,6 +77,23 @@ if [[ "$device" != "don't overwrite existing parameters" ]]; then
 	escapedConfigurationPath=${configurationPath//\//\\/}
 fi
 
+doaConfigValue="false"
+if [[ "$device" == "respeaker4" || "$device" == "respeakerMicArrayV2" || "$device" == "respeakerMicArrayV1" || "$device" == "respeaker6MicArray" || "$device" == "respeakerCoreV2" ]]; then
+	echo "Your device supports Direction of Arrival (DoA). Do you want to enable DoA now?"
+	select enableDoA in "yes" "no" "install dependencies only" "cancel"; do
+		case "$enableDoA" in
+			"yes") doaConfigValue="true";&
+			"install dependencies only")
+				apt-get update
+				apt-get install -y libatlas-base-dev
+				pipNumpy="pip3 --no-cache-dir install numpy"
+				break;;
+			cancel) exit;;
+			*) break;;
+		esac
+	done
+fi
+
 systemctl is-active -q hermesledcontrol && systemctl stop hermesledcontrol
 
 apt-get update
@@ -106,6 +123,7 @@ sudo -u ${USER} bash <<EOF
     pip3 --no-cache-dir install paho-mqtt
     pip3 --no-cache-dir install toml
 	pip3 --no-cache-dir install pyyaml
+	${pipNumpy}
     pip3 uninstall -y pixel_ring
 EOF
 
@@ -140,6 +158,7 @@ if [[ "$device" != "don't overwrite existing parameters" ]]; then
 	sed -i -e "s/%PATHTOCONFIG%/"${pathToAssistantConfig}"/" ${configurationPath}
 	sed -i -e "s/%DEVICE%/"${device}"/" ${configurationPath}
 	sed -i -e "s/%PATTERN%/"${pattern}"/" ${configurationPath}
+	sed -i -e "s/%DOA%/"${doaConfigValue}"/" ${configurationPath}
 
     sed -i -e "s/%EXECSTART%/"${escaped}"\/hermesLedControl_"${VERSION}"\/venv\/bin\/python3 main.py --hermesLedControlConfig="${escapedConfigurationPath}"/" /etc/systemd/system/hermesledcontrol.service
 fi
