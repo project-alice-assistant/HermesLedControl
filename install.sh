@@ -122,8 +122,8 @@ sudo -u ${USER} bash <<EOF
     pip3 --no-cache-dir install gpiozero
     pip3 --no-cache-dir install paho-mqtt
     pip3 --no-cache-dir install toml
-	pip3 --no-cache-dir install pyyaml
-	${pipNumpy}
+    pip3 --no-cache-dir install pyyaml
+    ${pipNumpy}
     pip3 uninstall -y pixel_ring
 EOF
 
