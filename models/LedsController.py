@@ -224,7 +224,7 @@ class LedsController:
 
 	def idle(self):
 		if self._stickyAnimation:
-			self._put(self._stickyAnimation['func'], flush=False, duration=self._stickyAnimation['duration'], noTimeout=True **self._stickyAnimation['args'])
+			self._put(self._stickyAnimation['func'], flush=False, duration=self._stickyAnimation['duration'], noTimeout=True, **self._stickyAnimation['args'])
 		else:
 			if self._params.idlePattern is None:
 				self._put(self._pattern.idle, noTimeout=True)
