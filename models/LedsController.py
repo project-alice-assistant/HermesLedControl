@@ -14,7 +14,6 @@ from models.Exceptions import InterfaceInitError
 from models.Interfaces import Interfaces
 from models.HermesLedControl import *
 
-
 class LedsController:
 	INSTANCE = None
 
@@ -78,6 +77,9 @@ class LedsController:
 			self._buttonsThread = threading.Thread(target=self._runButtons)
 			self._buttonsThread.setDaemon(True)
 
+		self._timeout = 0
+		if self._params.timeout and self._params.timeout > 0:
+			self._timeout = self._params.timeout
 
 		self._queue = Queue.Queue()
 		self._animationThread = threading.Thread(target=self._runAnimation)
@@ -222,17 +224,17 @@ class LedsController:
 
 	def idle(self):
 		if self._stickyAnimation:
-			self._put(self._stickyAnimation['func'], flush=False, duration=self._stickyAnimation['duration'], **self._stickyAnimation['args'])
+			self._put(self._stickyAnimation['func'], flush=False, duration=self._stickyAnimation['duration'], noTimeout=True, **self._stickyAnimation['args'])
 		else:
 			if self._params.idlePattern is None:
-				self._put(self._pattern.idle)
+				self._put(self._pattern.idle, noTimeout=True)
 			else:
 				try:
 					func = getattr(self._pattern, self._params.idlePattern)
-					self._put(func)
+					self._put(func, noTimeout=True)
 				except AttributeError:
 					self._logger.error("Can't find {} method in pattern".format(self._params.idlePattern))
-					self._put(self._pattern.idle)
+					self._put(self._pattern.idle, noTimeout=True)
 
 
 	def onError(self, sticky: bool = False):
@@ -326,7 +328,7 @@ class LedsController:
 			self.toggleStateOn()
 
 
-	def _put(self, func, flush=False, duration: int = 0, **kwargs):
+	def _put(self, func, flush=False, duration: int = 0, noTimeout: bool = False, **kwargs):
 		self._pattern.animation.clear()
 
 		if not self.active:
@@ -336,6 +338,11 @@ class LedsController:
 			self._queue.empty()
 
 		requestId = str(uuid.uuid4())
+		self._logger.debug(f'New animation {func} has id {requestId}')
+
+		if not noTimeout and self._timeout and (not duration or duration > self._timeout):
+			self._logger.debug(f'Timeout is setting duration from {duration} to {self._timeout}')
+			duration = self._timeout
 
 		if duration:
 			threading.Timer(interval=int(duration), function=self.scheduledEndAnimation, args=[requestId]).start()
@@ -350,9 +357,9 @@ class LedsController:
 			self._runningRequestId = funcRecipe["requestId"]
 			funcRecipe['func'](**funcRecipe['args'])
 
-
 	def scheduledEndAnimation(self, requestId):
 		if self._runningRequestId == requestId:
+			self._logger.debug(f'Request {requestId} animation ended or timed out')
 			self.idle()
 
 
