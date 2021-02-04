@@ -21,6 +21,7 @@ defaultValues = {
 	"everloopPort": 20021,
 	"activeHigh": True,
 	"debug": False,
+	"timeout": 120
 }
 
 choices = {
@@ -255,6 +256,11 @@ def parseArguments():
 		"--activeHigh",
 		help="[Pure GPIO] - Define how your leds are controlled",
 		type=bool,
+	)
+	parser.add_argument(
+		"--timeout",
+		help="Animation timeout in seconds. After the specified time without animation change this will transition to idle. Defaults to 120 seconds. Use 0 or negative values to disable.",
+		type=int
 	)
 	parser.add_argument(
 		"--hermesLedControlConfig",
