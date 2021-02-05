@@ -69,12 +69,13 @@ if [[ "$device" != "don't overwrite existing parameters" ]]; then
         esac
     done
 
-	defaultConfigurationPath=${USERDIR}'/.config/hermesLedControl/configuration.yml'
+	defaultConfigurationPath=${USERDIR}'/.config/hermesLedControl'
 	echo "Where should the configuration be saved to?"
 	read -p "Path (${defaultConfigurationPath})" configurationPath
 	configurationPath=${configurationPath:-$defaultConfigurationPath}
+	configurationFile=${configurationPath}/configuration.yml
 	echo "Path: $configurationPath"
-	escapedConfigurationPath=${configurationPath//\//\\/}
+	escapedConfigurationFile=${configurationFile//\//\\/}
 fi
 
 doaConfigValue="false"
@@ -140,13 +141,20 @@ if [[ ! -f /etc/systemd/system/hermesledcontrol.service ]]; then
     cp hermesledcontrol.service /etc/systemd/system
 fi
 
-if [[ "$device" != "don't overwrite existing parameters" && -f ${configurationPath} ]]; then
-    rm ${configurationPath}
+if [[ "$device" != "don't overwrite existing parameters" && -f ${configurationFile} ]]; then
+    rm ${configurationFile}
 fi
 
-if [[ "$device" != "don't overwrite existing parameters" && ! -f ${configurationPath} ]]; then
+if [[ "$device" != "don't overwrite existing parameters" && ! -f ${configurationFile} ]]; then
+	mkdir -p ${configurationPath}
     cp configuration.yml ${configurationPath}
-	chown ${USER} ${configurationPath}
+	chown ${USER} ${configurationFile}
+
+	sed -i -e "s/%ENGINE%/"${engine}"/" ${configurationFile}
+	sed -i -e "s/%PATHTOCONFIG%/"${pathToAssistantConfig}"/" ${configurationFile}
+	sed -i -e "s/%DEVICE%/"${device}"/" ${configurationFile}
+	sed -i -e "s/%PATTERN%/"${pattern}"/" ${configurationFile}
+	sed -i -e "s/%DOA%/"${doaConfigValue}"/" ${configurationFile}
 fi
 
 escaped=${USERDIR//\//\\/}
@@ -154,13 +162,7 @@ sed -i -e "s/%WORKING_DIR%/"${escaped}"\/hermesLedControl_"${VERSION}"/" /etc/sy
 sed -i -e "s/%USER%/"${USER}"/" /etc/systemd/system/hermesledcontrol.service
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
-	sed -i -e "s/%ENGINE%/"${engine}"/" ${configurationPath}
-	sed -i -e "s/%PATHTOCONFIG%/"${pathToAssistantConfig}"/" ${configurationPath}
-	sed -i -e "s/%DEVICE%/"${device}"/" ${configurationPath}
-	sed -i -e "s/%PATTERN%/"${pattern}"/" ${configurationPath}
-	sed -i -e "s/%DOA%/"${doaConfigValue}"/" ${configurationPath}
-
-    sed -i -e "s/%EXECSTART%/"${escaped}"\/hermesLedControl_"${VERSION}"\/venv\/bin\/python3 main.py --hermesLedControlConfig="${escapedConfigurationPath}"/" /etc/systemd/system/hermesledcontrol.service
+    sed -i -e "s/%EXECSTART%/"${escaped}"\/hermesLedControl_"${VERSION}"\/venv\/bin\/python3 main.py --hermesLedControlConfig="${escapedConfigurationFile}"/" /etc/systemd/system/hermesledcontrol.service
 fi
 
 if [[ -d "/var/lib/hermes/skills/snips-skill-respeaker" ]]; then
