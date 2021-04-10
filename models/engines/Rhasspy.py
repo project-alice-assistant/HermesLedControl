@@ -40,20 +40,28 @@ class Rhasspy:
 		if path.exists():
 			with path.open() as confFile:
 				conf = json.load(confFile)
+				if 'mqtt' in conf:
+					try:
+						configs['mqttServer'] = conf['mqtt'].get('host', 'localhost')
+						configs['mqttPort'] = conf['mqtt'].get('port', 12183)
+						configs['mqttUsername'] = conf['mqtt'].get('username', '')
+						configs['mqttPassword'] = conf['mqtt'].get('password', '')
+						configs['mqttTLSCAFile'] = ''
+						siteId = conf['mqtt'].get('site_id', 'default')
+						configs['deviceName'] = siteId.split(',')[0]
 
-				try:
-					configs['mqttServer'] = conf['mqtt'].get('host', 'localhost')
-					configs['mqttPort'] = conf['mqtt'].get('port', 1883)
-					configs['mqttUsername'] = conf['mqtt'].get('username', '')
-					configs['mqttPassword'] = conf['mqtt'].get('password', '')
+						return configs
+					except Exception as e:
+						self._logger.info('Error loading configurations: {}'.format(e))
+						return None
+				else:
+					self._logger.warn('\'mqtt\' not present in Rhasspy config file. Attempting to continue with default values.')
+					configs['mqttServer'] = 'localhost'
+					configs['mqttPort'] = 12183
+					configs['mqttUsername'] = ''
+					configs['mqttPassword'] = ''
 					configs['mqttTLSCAFile'] = ''
-					siteId = conf['mqtt'].get('site_id', 'default')
-					configs['deviceName'] = siteId.split(',')[0]
-
-					return configs
-				except Exception as e:
-					self._logger.info('Error loading configurations: {}'.format(e))
-					return None
+					configs['deviceName'] = 'default'
 		else:
 			if params.debug:
 				self._logger.info('No Rhasspy config found but debug mode, allow to continue')
