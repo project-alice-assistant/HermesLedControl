@@ -49,8 +49,6 @@ class Rhasspy:
 						configs['mqttTLSCAFile'] = ''
 						siteId = conf['mqtt'].get('site_id', 'default')
 						configs['deviceName'] = siteId.split(',')[0]
-
-						return configs
 					except Exception as e:
 						self._logger.info('Error loading configurations: {}'.format(e))
 						return None
@@ -62,6 +60,7 @@ class Rhasspy:
 					configs['mqttPassword'] = ''
 					configs['mqttTLSCAFile'] = ''
 					configs['deviceName'] = 'default'
+				return configs
 		else:
 			if params.debug:
 				self._logger.info('No Rhasspy config found but debug mode, allow to continue')
