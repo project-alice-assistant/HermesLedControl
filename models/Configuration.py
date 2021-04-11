@@ -9,7 +9,7 @@ logger = logging.getLogger('HermesLedControl')
 defaultValues = {
 	'engine': 'projectalice',
 	'pathToConfig': '/etc/snips.toml',
-	'hardware': 'respeaker2',
+	'hardware': 'respeaker2Mics',
 	'pattern': 'google',
 	'offListener': 'hermes/hotword/toggleOn',
 	'enableDoA': False,
@@ -24,7 +24,11 @@ defaultValues = {
 }
 
 choices = {
-	'engine': ['projectalice', 'rhasspy', 'snips'],
+	'engine': [
+		'projectalice',
+		'rhasspy',
+		'snips'
+	],
 	'hardware': [
 		'respeaker2Mics',
 		'respeaker4MicArray',
@@ -39,7 +43,7 @@ choices = {
 		'neoPixelsWS2812RGB',
 		'googleAIY',
 		'puregpio',
-		'dummy',
+		'dummy'
 	],
 	'pattern': [
 		'google',
@@ -52,7 +56,7 @@ choices = {
 	'offListener': [
 		'hermes/hotword/toggleOn',
 		'hermes/tts/sayFinished',
-		'hermes/audioServer/playFinished',
+		'hermes/audioServer/playFinished'
 	],
 	'defaultState': [
 		'on',
