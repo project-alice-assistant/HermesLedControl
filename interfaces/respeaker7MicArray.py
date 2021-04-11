@@ -38,10 +38,10 @@ class respeaker7MicArray(Interface):
 		self.show()
 
 	def show(self):
-		pass
+		pass # Prevent super method call
 
 	def onStop(self):
-		pass
+		pass # Prevent super method call
 
 	def _newArray(self):
 		return [0] * self._numLeds

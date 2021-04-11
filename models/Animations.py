@@ -19,8 +19,8 @@ class Animations:
 			self._image = image
 		else:
 			self._image = [[0, 0, 0, 0] for _ in range(self._numLeds)]
-			
-			
+
+
 	def newCardinalImage(self, colors, trail=0, trailAttenuation=0):
 		if trailAttenuation > 1:
 			trailAttenuation = 1
@@ -128,6 +128,8 @@ class Animations:
 	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10, new=True, duration=0):
 		"""
 		Fills the strip from both sides
+		:param duration:
+		:param new:
 		:param startAt: int
 		:param color: array RBGW
 		:param direction: 1 or -1
@@ -150,13 +152,13 @@ class Animations:
 		if new:
 			self.new()
 
-		r = range(int(round(self._numLeds / 2)) + 1)
+		ranged = range(int(round(self._numLeds / 2)) + 1)
 		if direction <= 0:
-			r = reversed(r)
+			ranged = reversed(ranged)
 
 		index = startAt
 		oppositeLed = self._oppositeLed(startAt)
-		for i in r:
+		for i in ranged:
 			positive = self._normalizeIndex(index + i)
 			negative = self._normalizeIndex(index - i)
 
@@ -173,13 +175,14 @@ class Animations:
 	def breath(self, color, minBrightness, maxBrightness, speed=10, duration=0):
 		"""
 		Breathes the leds, from min to max brightness
+		:param duration:
 		:param color: array RBGW
 		:param speed: float, in l/s or led per second
 		:param minBrightness: int
 		:param maxBrightness: int
 		:return:
 		"""
-			
+
 		if duration:
 			return self._controller.putStickyPattern(
 				pattern=self.breath,
@@ -189,7 +192,7 @@ class Animations:
 				maxBrightness=maxBrightness,
 				speed=speed
 			)
-    
+
 		if len(color) > 3:
 			color[3] = maxBrightness if color[3] > maxBrightness else color[3]
 			color[3] = minBrightness if color[3] < minBrightness else color[3]
@@ -219,6 +222,7 @@ class Animations:
 	def rotateImage(self, step, preventDisplay=False):
 		"""
 		Rotates an image by step number of led
+		:param preventDisplay:
 		:param step: int Positive for clockwise, negative for anti clockwise
 		"""
 		if step == 0:
@@ -264,6 +268,7 @@ class Animations:
 	def rotate(self, color, speed=10, trail=0, startAt=0, duration=0):
 		"""
 		Makes a light circulate your strip
+		:param duration:
 		:param color: list, an array containing RGB or RGBW informations
 		:param speed: float, in l/s or led per second
 		:param trail: int, if greater than 0, leave a trail behind the moving light, with decreased brightness
@@ -311,6 +316,7 @@ class Animations:
 
 	def relayRace(self, color, relayColor, backgroundColor=None, speed=10, startAt=0, duration=0):
 		"""
+		:param duration:
 		:param color: array RGBW
 		:param relayColor: array RGBW
 		:param backgroundColor: array RGBW
@@ -361,6 +367,7 @@ class Animations:
 	def doublePingPong(self, color, speed=10, backgroundColor=None, startAt=0, duration=0):
 		"""
 		Makes two balls ping pong
+		:param duration:
 		:param color: array RBGW
 		:param speed: float, in l/s or led per second
 		:param backgroundColor: array RGBW
@@ -418,6 +425,7 @@ class Animations:
 	def waitWheel(self, color, speed=10, backgroundColor=None, startAt=0, duration=0):
 		"""
 		Makes two balls ping pong
+		:param duration:
 		:param color: array RBGW
 		:param speed: float, in l/s or led per second
 		:param backgroundColor: array RGBW
@@ -457,6 +465,8 @@ class Animations:
 
 	def blink(self, color, minBrightness, maxBrightness, speed=200, repeat=-1, smooth=True, duration=0):
 		"""
+		:param duration:
+		:param smooth:
 		:param color: array RBGW
 		:param minBrightness: int
 		:param maxBrightness: int
@@ -480,7 +490,7 @@ class Animations:
 		if len(color) > 3:
 			color[3] = maxBrightness if color[3] > maxBrightness else color[3]
 			color[3] = minBrightness if color[3] < minBrightness else color[3]
-    
+
 		if repeat == -1 and smooth:
 			self.breath(color=color, maxBrightness=maxBrightness, minBrightness=minBrightness, speed=speed, duration=duration)
 			return

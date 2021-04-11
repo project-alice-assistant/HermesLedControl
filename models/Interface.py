@@ -23,12 +23,18 @@ class Interface(object):
 	def doa(self):
 		return self._doa
 
-	def setPixel(self, ledNum, red, green, blue, brightness)	: pass
-	def setPixelRgb(self, ledNum, color, brightness)			: pass
-	def clearStrip(self)										: pass
-	def show(self)												: self._leds.show()
-	def setVolume(self, volume)									: pass
-	def setVadLed(self, state) 									: pass
+	def setPixel(self, ledNum, red, green, blue, brightness):
+		pass # Superseeded
+	def setPixelRgb(self, ledNum, color, brightness):
+		pass # Superseeded
+	def clearStrip(self):
+		pass # Superseeded
+	def show(self):
+		self._leds.show()
+	def setVolume(self, volume):
+		pass # Superseeded
+	def setVadLed(self, state):
+		pass # Superseeded
 
 	def onStart(self):
 		if self._power is not None:

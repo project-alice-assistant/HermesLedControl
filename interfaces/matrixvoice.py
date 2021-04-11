@@ -1,5 +1,4 @@
 from matrix_lite import led
-from models.Exceptions import InterfaceInitError
 from models.Interface import Interface
 
 

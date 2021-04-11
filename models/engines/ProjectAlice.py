@@ -1,9 +1,5 @@
 import logging
-from pathlib import Path
 from typing import Optional
-import importlib.util
-
-import toml
 import json
 
 
@@ -35,7 +31,6 @@ class ProjectAlice:
 		try:
 			#params.pathToConfig or
 			with open('/home/pi/ProjectAlice/config.json') as jsonContent:
-				print(params)
 				conf = json.load(jsonContent)
 				configs['mqttServer'] = conf['mqttHost']
 				configs['mqttPort'] = conf['mqttPort']

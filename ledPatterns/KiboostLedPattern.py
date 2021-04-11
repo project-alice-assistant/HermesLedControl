@@ -97,7 +97,7 @@ class KiboostLedPattern(LedPattern):
 		for _ in range(self._numLeds):
 			if not self._animation.isSet():
 				break
-			
+
 			self._setLedLoop(color, refs, invert)
 			refs.pop()
 			refs.insert(0, 0)
@@ -139,7 +139,8 @@ class KiboostLedPattern(LedPattern):
 				self._controller.show()
 			if invert:
 				refs = list(reversed(refs))
-			if self._animation.isSet(): time.sleep(pause)
+			if self._animation.isSet():
+				time.sleep(pause)
 			refs.pop()
 			refs.insert(0, 0)
 

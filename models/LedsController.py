@@ -154,13 +154,13 @@ class LedsController:
 		except InterfaceInitError as e:
 			self._logger.error('{}'.format(e))
 			return False
-	
-	
+
+
 	def setVolume(self, volume):
 		"""
 		Some hardware such as respeaker mic array have onboard volume control that can be set
 		:type volume: int
-		:return: 
+		:return:
 		"""
 		if 'extras' in self._hardware and 'volume' in self._hardware['extras']:
 			try:

@@ -50,7 +50,7 @@ echo "Path: $pathToAssistantConfig"
 pathToAssistantConfig=${pathToAssistantConfig//\//\\/}
 
 echo "What device do you wish to control with SLC?"
-select device in "respeaker2" "respeaker4" "respeakerMicArrayV2" "respeakerMicArrayV1" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
+select device in "respeaker2Mics" "respeaker4MicArray" "respeakerMicArrayV2" "respeakerMicArrayV1" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
     case "$device" in
         "I'm using simple leds on GPIOs")
             device=puregpio
@@ -79,7 +79,7 @@ if [[ "$device" != "don't overwrite existing parameters" ]]; then
 fi
 
 doaConfigValue="false"
-if [[ "$device" == "respeaker4" || "$device" == "respeakerMicArrayV2" || "$device" == "respeakerMicArrayV1" || "$device" == "respeaker6MicArray" || "$device" == "respeakerCoreV2" ]]; then
+if [[ "$device" == "respeaker4MicArray" || "$device" == "respeakerMicArrayV2" || "$device" == "respeakerMicArrayV1" || "$device" == "respeaker6MicArray" || "$device" == "respeakerCoreV2" ]]; then
 	echo "Your device supports Direction of Arrival (DoA). Do you want to enable DoA now?"
 	select enableDoA in "yes" "no" "install dependencies only" "cancel"; do
 		case "$enableDoA" in
@@ -193,11 +193,11 @@ select answer in "yes" "no" "cancel"; do
                     ./installers/matrixVoiceCreator.sh ${USER} ${FVENV}
                     break
                     ;;
-                respeaker2)
+                respeaker2Mics)
                     ./installers/respeakers.sh ${USER} ${FVENV}
                     break
                     ;;
-                respeaker4)
+                respeaker4MicArray)
                     ./installers/respeakers.sh ${USER} ${FVENV}
                     break
                     ;;

@@ -4,8 +4,6 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-import toml
-
 
 class Rhasspy:
 
@@ -53,7 +51,7 @@ class Rhasspy:
 						self._logger.info('Error loading configurations: {}'.format(e))
 						return None
 				else:
-					self._logger.warn('\'mqtt\' not present in Rhasspy config file. Attempting to continue with default values.')
+					self._logger.warning('\'mqtt\' not present in Rhasspy config file. Attempting to continue with default values.')
 					configs['mqttServer'] = 'localhost'
 					configs['mqttPort'] = 12183
 					configs['mqttUsername'] = ''

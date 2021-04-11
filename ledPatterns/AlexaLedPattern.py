@@ -46,7 +46,8 @@ class AlexaLedPattern(LedPattern):
 		self._animation.set()
 		while self._animation.isSet():
 			for i in range(1, self._numLeds + 1):
-				if not self._animation.isSet(): break
+				if not self._animation.isSet():
+					break
 
 				if i % 2 == 0:
 					self._controller.setLedRGB(i - 1, first)
@@ -76,7 +77,8 @@ class AlexaLedPattern(LedPattern):
 		self._animation.set()
 		while self._animation.isSet():
 			for i in range(self._numLeds):
-				if not self._animation.isSet(): break
+				if not self._animation.isSet():
+					break
 				self._controller.setLed(i, red=red, green=green, blue=255)
 			self._controller.show()
 

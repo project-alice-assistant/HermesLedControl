@@ -94,14 +94,5 @@ class PgasPattern(LedPattern):
 		self._animator.blink(color=[255, 0, 0, 2], minBrightness=2, maxBrightness=20, speed=300, repeat=3)
 
 
-	def onSuccess(self, *args):
-		pass
-
-
 	def onStart(self, *args):
 		self._animator.rainbow(brightness=255, speed=500, duration=3)
-
-
-
-	def onButton1(self, *args):
-		pass

@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 import importlib
-
-from gpiozero import LED
 
 from libraries import usb_pixel_ring_v2    as pixel_ring
 from models.Exceptions import InterfaceInitError

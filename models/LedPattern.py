@@ -28,30 +28,54 @@ class LedPattern:
 		return self._numLeds
 
 
-	def nothing(self, *args) 	: pass
-	def wakeup(self, *args)		: pass
-	def listen(self, *args)		: pass
-	def think(self, *args)		: pass
-	def speak(self, *args)		: pass
-	def idle(self, *args)		: pass
-	def off(self, *args)		: self._controller.clearLeds()
-	def onError(self, *args)	: pass
-	def onSuccess(self, *args)	: pass
-	def updating(self, *args)	: pass
-	def call(self, *args)		: pass
-	def setupMode(self, *args)	: pass
-	def conError(self, *args)	: pass
-	def message(self, *args)	: pass
-	def dnd(self, *args)		: pass
-	def onVolumeSet(self, *args): pass
-	def onButton1(self, *args)	: self._logger.warning('Button 1 not implemented, override it in CustomLedPattern')
-	def onButton2(self, *args)	: self._logger.warning('Button 2 not implemented, override it in CustomLedPattern')
-	def onButton3(self, *args)	: self._logger.warning('Button 3 not implemented, override it in CustomLedPattern')
-	def onButton4(self, *args)	: self._logger.warning('Button 4 not implemented, override it in CustomLedPattern')
-	def onButton5(self, *args)	: self._logger.warning('Button 5 not implemented, override it in CustomLedPattern')
-	def onButton6(self, *args)	: self._logger.warning('Button 6 not implemented, override it in CustomLedPattern')
-	def onStart(self, *args)	: pass
-	def onStop(self, *args)		: self.off()
+	def nothing(self, *args):
+		pass # Superseeded
+	def wakeup(self, *args):
+		pass # Superseeded
+	def listen(self, *args):
+		pass # Superseeded
+	def think(self, *args):
+		pass # Superseeded
+	def speak(self, *args):
+		pass # Superseeded
+	def idle(self, *args):
+		pass # Superseeded
+	def off(self, *args):
+		self._controller.clearLeds()
+	def onError(self, *args):
+		pass # Superseeded
+	def onSuccess(self, *args):
+		pass # Superseeded
+	def updating(self, *args):
+		pass # Superseeded
+	def call(self, *args):
+		pass # Superseeded
+	def setupMode(self, *args):
+		pass # Superseeded
+	def conError(self, *args):
+		pass # Superseeded
+	def message(self, *args):
+		pass # Superseeded
+	def dnd(self, *args):
+		pass # Superseeded
+	def onVolumeSet(self, *args):
+		pass # Superseeded
+	def onButton1(self, *args): #NOSONAR
+		self._logger.warning('Button 1 not implemented, override it in CustomLedPattern')
+	def onButton2(self, *args): #NOSONAR
+		self._logger.warning('Button 2 not implemented, override it in CustomLedPattern')
+	def onButton3(self, *args): #NOSONAR
+		self._logger.warning('Button 3 not implemented, override it in CustomLedPattern')
+	def onButton4(self, *args): #NOSONAR
+		self._logger.warning('Button 4 not implemented, override it in CustomLedPattern')
+	def onButton5(self, *args): #NOSONAR
+		self._logger.warning('Button 5 not implemented, override it in CustomLedPattern')
+	def onButton6(self, *args): #NOSONAR
+		self._logger.warning('Button 6 not implemented, override it in CustomLedPattern')
+	def onStart(self, *args):
+		pass # Superseeded
+	def onStop(self, *args):
+		self.off()
 
 
 	@staticmethod

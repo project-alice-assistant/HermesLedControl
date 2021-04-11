@@ -1,6 +1,6 @@
 {
-	"respeaker2": {
-		"name": "ReSpeaker 2",
+	"respeaker2Mics": {
+		"name": "ReSpeaker 2-Mics",
 		"numberOfLeds": 3,
 		"interface": "apa102",
 		"endFrame": 255,
@@ -14,8 +14,8 @@
 			}
 		}
 	},
-	"respeaker4": {
-		"name": "ReSpeaker 4",
+	"respeaker4MicArray": {
+		"name": "ReSpeaker 4-Mic Array",
 		"numberOfLeds": 12,
 		"interface": "apa102",
 		"doa": "doa_respeaker_4mic_array",
