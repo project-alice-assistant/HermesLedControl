@@ -67,9 +67,6 @@ class HermesLedControl:
 		elif params.engine == 'rhasspy':
 			from models.engines.Rhasspy import Rhasspy
 			engine = Rhasspy()
-		elif params.engine == 'snips':
-			from models.engines.Snips import Snips
-			engine = Snips()
 		else:
 			self._logger.error('Unsupported assistant engine "{}"'.format(params.engine))
 			self.onStop()
