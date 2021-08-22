@@ -1,9 +1,9 @@
 import argparse
 import logging
-import yaml
 import sys
-
 from pathlib import Path
+
+import yaml
 
 logger = logging.getLogger('HermesLedControl')
 defaultValues = {
@@ -51,6 +51,7 @@ choices = {
 		'kiboost',
 		'projectalice',
 		'pgas',
+		'fake-name',
 		'custom'
 	],
 	'offListener': [

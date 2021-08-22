@@ -1,8 +1,8 @@
 import logging
-from logging import handlers
 import signal
 import time
 from datetime import datetime
+from logging import handlers
 
 from models.Configuration import readConfiguration
 from models.HermesLedControl import HermesLedControl
@@ -38,7 +38,7 @@ def onStop():
 
 
 def main():
-	_logger.info('Starting Hermes Led Control v. 2.0.14')
+	_logger.info('Starting Hermes Led Control v. 2.0.15')
 
 	signal.signal(signal.SIGINT, stopHandler)
 	signal.signal(signal.SIGTERM, stopHandler)
