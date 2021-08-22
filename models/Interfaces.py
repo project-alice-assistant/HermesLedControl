@@ -1,4 +1,3 @@
-#!/usr/bin/python
 class Interfaces:
 	APA102 					= 'apa102'
 	NEOPIXELS 				= 'neopixels'

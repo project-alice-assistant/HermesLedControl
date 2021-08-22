@@ -4,19 +4,20 @@ from models.LedPattern import LedPattern
 
 
 class AlexaLedPattern(LedPattern):
+
 	def __init__(self, controller):
 		super(AlexaLedPattern, self).__init__(controller)
 
 		self._colors = {
-			'blank' 	: (0, 0, 0),
-			'blue'		: (0, 0, 255),
-			'red'		: (60, 0, 0),
-			'yellow'	: (255, 255, 0),
-			'white'		: (255, 255, 255)
+			'blank' : (0, 0, 0),
+			'blue'  : (0, 0, 255),
+			'red'   : (60, 0, 0),
+			'yellow': (255, 255, 0),
+			'white' : (255, 255, 255)
 		}
 
 
-	def wakeup(self, direction=0):
+	def wakeup(self, direction = 0):
 		brightness = max(5, self._controller.defaultBrightness - 50)
 		for i in range(int(round(self._numLeds / 2)) + 1):
 			brightness += 5
@@ -37,6 +38,7 @@ class AlexaLedPattern(LedPattern):
 
 	def listen(self):
 		""" there is no listen animation for this led pattern """
+		return
 
 
 	def think(self):

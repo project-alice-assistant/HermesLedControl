@@ -1,19 +1,25 @@
 import logging
 import math
+import threading
 import time
+from typing import List, Optional
+
+from models.LedsController import LedsController
+
 
 class Animations:
-	def __init__(self, animationFlag, controller):
-		self._logger 		= logging.getLogger('HermesLedControl')
-		self._animationFlag = animationFlag
-		self._controller 	= controller
-		self._numLeds 		= self._controller.hardware['numberOfLeds']
 
-		self._image 		= list()
+	def __init__(self, animationFlag: threading.Event, controller: LedsController):
+		self._logger = logging.getLogger('HermesLedControl')
+		self._animationFlag = animationFlag
+		self._controller = controller
+		self._numLeds = self._controller.hardware['numberOfLeds']
+
+		self._image = list()
 		self.new()
 
 
-	def new(self, image=None):
+	def new(self, image: List = None):
 		self._controller.clearLeds()
 		if image is not None:
 			self._image = image
@@ -21,13 +27,13 @@ class Animations:
 			self._image = [[0, 0, 0, 0] for _ in range(self._numLeds)]
 
 
-	def newCardinalImage(self, colors, trail=0, trailAttenuation=0):
+	def newCardinalImage(self, colors: List, trail: int = 0, trailAttenuation: int = 0):
 		if trailAttenuation > 1:
 			trailAttenuation = 1
 		elif trailAttenuation < 0:
 			trailAttenuation = 0
 
-		maxTrail = 0 if len(colors) == 0 else (self._numLeds - len(colors)) /  len(colors)
+		maxTrail = 0 if len(colors) == 0 else (self._numLeds - len(colors)) / len(colors)
 
 		if trail > maxTrail:
 			trail = maxTrail
@@ -52,7 +58,7 @@ class Animations:
 				interColor = [0, 0, 0, 0]
 
 				if t > 0:
-					interColor = colors[j-1] if len(colors[j-1]) > 3 else colors[j-1] + [255]
+					interColor = colors[j - 1] if len(colors[j - 1]) > 3 else colors[j - 1] + [255]
 					trailBri *= trailAttenuation
 					interColor[3] = int(trailBri)
 					t -= 1
@@ -60,7 +66,7 @@ class Animations:
 				self._image.append(interColor)
 
 
-	def windmill(self, colors, speed=20, smooth=True, trail=0, trailAttenuation=1, duration=0):
+	def windmill(self, colors: List, speed: int = 20, smooth: bool = True, trail: int = 0, trailAttenuation: int = 1, duration: float = 0):
 		if duration:
 			return self._controller.putStickyPattern(
 				pattern=self.windmill,
@@ -75,12 +81,12 @@ class Animations:
 		degreesPerLed = 360 / (self._numLeds if smooth else len(colors))
 		self._animationFlag.set()
 
-		while self._animationFlag.isSet():
+		while self._animationFlag.is_set():
 			self.rotateImageByAngle(degreesPerLed)
 			time.sleep(1 / abs(speed))
 
 
-	def wheelOverlap(self, colors, brightness=255, speed=100, duration=0):
+	def wheelOverlap(self, colors: List, brightness: int = 255, speed: float = 100, duration: float = 0):
 		if duration:
 			return self._controller.putStickyPattern(
 				pattern=self.wheelOverlap,
@@ -92,7 +98,7 @@ class Animations:
 
 		self._animationFlag.set()
 
-		while self._animationFlag.isSet():
+		while self._animationFlag.is_set():
 			for color in colors:
 				for ledX in range(0, self._numLeds):
 					self._controller.setLedRGB(ledX, [color[0], color[1], color[2]], brightness)
@@ -100,7 +106,7 @@ class Animations:
 					self._controller.show()
 
 
-	def rainbow(self, brightness=255, speed=100, duration=0):
+	def rainbow(self, brightness: int = 255, speed: float = 100, duration: float = 0):
 		if duration:
 			return self._controller.putStickyPattern(
 				pattern=self.rainbow,
@@ -110,22 +116,22 @@ class Animations:
 			)
 
 		rainbowColors = [
-			[255, 0, 0], 	# RED
-			[255, 127, 0], 	# ORANGE
-			[255, 255, 0],	# YELLOW
-			[0, 255, 0], 	# GREEN
-			[0, 255, 127], 	# LIME
-			[0, 255, 255],	# CYAN
-			[0, 0, 255],	# BLUE
-			[127, 0, 255],	# PURPLE
-			[255, 0, 255], 	# PINK
-			[255, 0, 127],	# FUCHSIA
+			[255, 0, 0],  # RED
+			[255, 127, 0],  # ORANGE
+			[255, 255, 0],  # YELLOW
+			[0, 255, 0],  # GREEN
+			[0, 255, 127],  # LIME
+			[0, 255, 255],  # CYAN
+			[0, 0, 255],  # BLUE
+			[127, 0, 255],  # PURPLE
+			[255, 0, 255],  # PINK
+			[255, 0, 127],  # FUCHSIA
 		]
 
 		self.wheelOverlap(colors=rainbowColors, brightness=brightness, speed=speed)
 
 
-	def doubleSidedFilling(self, color, startAt=0, direction=1, speed=10, new=True, duration=0):
+	def doubleSidedFilling(self, color: List, startAt: int = 0, direction: int = 1, speed: float = 10, new: bool = True, duration: float = 0):
 		"""
 		Fills the strip from both sides
 		:param duration:
@@ -172,7 +178,7 @@ class Animations:
 			time.sleep(1.0 / abs(speed))
 
 
-	def breath(self, color, minBrightness, maxBrightness, speed=10, duration=0):
+	def breath(self, color: List, minBrightness: int, maxBrightness: int, speed: float = 10, duration: float = 0):
 		"""
 		Breathes the leds, from min to max brightness
 		:param duration:
@@ -203,7 +209,7 @@ class Animations:
 
 		direction = 1
 		self._animationFlag.set()
-		while self._animationFlag.isSet():
+		while self._animationFlag.is_set():
 			bri = self._image[0][3]
 
 			if bri >= maxBrightness:
@@ -219,7 +225,7 @@ class Animations:
 			time.sleep(1.0 / abs(speed))
 
 
-	def rotateImage(self, step, preventDisplay=False):
+	def rotateImage(self, step: int, preventDisplay: bool = False):
 		"""
 		Rotates an image by step number of led
 		:param preventDisplay:
@@ -242,7 +248,7 @@ class Animations:
 			self._displayImage()
 
 
-	def rotateImageByAngle(self, angle, preventDisplay=False):
+	def rotateImageByAngle(self, angle: int, preventDisplay: bool = False):
 		angle = round(angle)
 
 		if angle == 0:
@@ -265,7 +271,7 @@ class Animations:
 			self._displayImage()
 
 
-	def rotate(self, color, speed=10, trail=0, startAt=0, duration=0):
+	def rotate(self, color: List, speed: float = 10, trail: int = 0, startAt: int = 0, duration: float = 0):
 		"""
 		Makes a light circulate your strip
 		:param duration:
@@ -298,7 +304,7 @@ class Animations:
 		# Create an image
 		index = startAt
 		self._setPixel(index, color)
-		rotationSign = 1 if speed >=0 else -1
+		rotationSign = 1 if speed >= 0 else -1
 		if trail > 0:
 			fullBrightness = self._controller.defaultBrightness if len(color) < 4 else color[3]
 			for i in range(1, trail + 1):
@@ -309,12 +315,12 @@ class Animations:
 		self._displayImage()
 
 		self._animationFlag.set()
-		while self._animationFlag.isSet():
+		while self._animationFlag.is_set():
 			time.sleep(1.0 / abs(speed))
 			self.rotateImage(rotationSign)
 
 
-	def relayRace(self, color, relayColor, backgroundColor=None, speed=10, startAt=0, duration=0):
+	def relayRace(self, color: List, relayColor: List, backgroundColor: Optional[List] = None, speed: float = 10, startAt: int = 0, duration: float = 0):
 		"""
 		:param duration:
 		:param color: array RGBW
@@ -345,14 +351,14 @@ class Animations:
 		index = startAt
 		self._animationFlag.set()
 
-		speedIncrement = 1 if speed >=0 else -1
-		while self._animationFlag.isSet():
+		speedIncrement = 1 if speed >= 0 else -1
+		while self._animationFlag.is_set():
 			self._setPixel(index, color)
 			relayIndex = self._normalizeIndex(index + speedIncrement)
 
 			self._setPixel(relayIndex, relayColor)
 			self._displayImage()
-			while self._animationFlag.isSet() and relayIndex != index:
+			while self._animationFlag.is_set() and relayIndex != index:
 				time.sleep(1.0 / abs(speed))
 				self._setPixel(relayIndex, backgroundColor)
 				relayIndex = self._normalizeIndex(relayIndex + speedIncrement)
@@ -364,7 +370,7 @@ class Animations:
 			index = self._normalizeIndex(index + speedIncrement)
 
 
-	def doublePingPong(self, color, speed=10, backgroundColor=None, startAt=0, duration=0):
+	def doublePingPong(self, color: List, speed: float = 10, backgroundColor: Optional[List] = None, startAt: int = 0, duration: float = 0):
 		"""
 		Makes two balls ping pong
 		:param duration:
@@ -397,10 +403,10 @@ class Animations:
 
 		index = startAt
 		self._animationFlag.set()
-		while self._animationFlag.isSet():
+		while self._animationFlag.is_set():
 			self._displayImage()
 			step = 0
-			while self._animationFlag.isSet() and step != round(self._numLeds / 2):
+			while self._animationFlag.is_set() and step != round(self._numLeds / 2):
 				step += 1
 				leftIndex = self._normalizeIndex(index - step)
 				rightIndex = self._normalizeIndex(index + step)
@@ -410,7 +416,7 @@ class Animations:
 				time.sleep(1.0 / abs(speed))
 				self._setPixel(leftIndex, backgroundColor)
 				self._setPixel(rightIndex, backgroundColor)
-			while self._animationFlag.isSet() and step >= 0:
+			while self._animationFlag.is_set() and step >= 0:
 				step -= 1
 				leftIndex = self._normalizeIndex(index + step)
 				rightIndex = self._normalizeIndex(index - step)
@@ -422,7 +428,7 @@ class Animations:
 				self._setPixel(rightIndex, backgroundColor)
 
 
-	def waitWheel(self, color, speed=10, backgroundColor=None, startAt=0, duration=0):
+	def waitWheel(self, color: List, speed: float = 10, backgroundColor: Optional[List] = None, startAt: int = 0, duration: float = 0):
 		"""
 		Makes two balls ping pong
 		:param duration:
@@ -451,7 +457,7 @@ class Animations:
 
 		index = startAt
 		self._animationFlag.set()
-		while self._animationFlag.isSet():
+		while self._animationFlag.is_set():
 			time.sleep(1.0 / abs(speed))
 			self._displayImage()
 			index += 1
@@ -463,7 +469,7 @@ class Animations:
 				self._setPixel(index, color)
 
 
-	def blink(self, color, minBrightness, maxBrightness, speed=200, repeat=-1, smooth=True, duration=0):
+	def blink(self, color: List, minBrightness: int, maxBrightness: int, speed: float = 200, repeat: int = -1, smooth: bool = True, duration: float = 0):
 		"""
 		:param duration:
 		:param smooth:
@@ -500,10 +506,10 @@ class Animations:
 		self._animationFlag.set()
 		turn = 0
 
-		while self._animationFlag.isSet() and (turn < repeat or repeat == -1):
+		while self._animationFlag.is_set() and (turn < repeat or repeat == -1):
 			bri = self._image[0][3]
 
-			while self._animationFlag.isSet() and bri < maxBrightness:
+			while self._animationFlag.is_set() and bri < maxBrightness:
 				bri = self._image[0][3]
 
 				if not smooth:
@@ -515,7 +521,7 @@ class Animations:
 				self._displayImage()
 				time.sleep(1.0 / abs(speed))
 
-			while self._animationFlag.isSet() and bri > minBrightness:
+			while self._animationFlag.is_set() and bri > minBrightness:
 				bri = self._image[0][3]
 
 				if not smooth:
@@ -527,12 +533,12 @@ class Animations:
 				self._displayImage()
 				time.sleep(1.0 / abs(speed))
 
-			turn +=1
+			turn += 1
 
 		self.new()
 
 
-	def _setPixel(self, index, color):
+	def _setPixel(self, index: int, color: List):
 		if index >= len(self._image) or index < 0:
 			self._logger.error("Cannot assign led index {}, out of bound".format(index))
 			return
@@ -546,7 +552,7 @@ class Animations:
 		self._controller.show()
 
 
-	def _normalizeIndex(self, index):
+	def _normalizeIndex(self, index: int) -> int:
 		"""
 		Makes sure the given index is valid in the led strip or returns the one on the other side of the loop
 		:param int index:
@@ -560,5 +566,5 @@ class Animations:
 			return index
 
 
-	def _oppositeLed(self, index):
+	def _oppositeLed(self, index: int) -> int:
 		return self._normalizeIndex(index + int(round(self._numLeds / 2)))

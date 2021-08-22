@@ -17,11 +17,12 @@ from models.Interfaces import Interfaces
 class LedsController:
 	INSTANCE = None
 
+
 	def __init__(self, mainClass):
 		self._logger = logging.getLogger('HermesLedControl')
 		self._logger.info('Initializing leds controller')
 
-		self._mainClass = mainClass # type: HermesLedControl
+		self._mainClass = mainClass  # type: HermesLedControl
 
 		if self.INSTANCE is None:
 			self.INSTANCE = self
@@ -29,13 +30,13 @@ class LedsController:
 			self._logger.fatal('Trying to instanciate LedsController but instance already exists')
 			self._mainClass.onStop()
 
-		self._params 			= self._mainClass.params
-		self._hardware 			= self._mainClass.hardware
-		self._interface 		= None
-		self._running 			= False
+		self._params = self._mainClass.params
+		self._hardware = self._mainClass.hardware
+		self._interface = None
+		self._running = False
 		self._defaultBrightness = self._params.defaultBrightness
-		self._stickyAnimation 	= None
-		self._runningRequestId 	= None
+		self._stickyAnimation = None
+		self._runningRequestId = None
 
 		if not self._params.enableDoA and 'doa' in self._hardware:
 			self._hardware['doa'] = False
@@ -46,12 +47,10 @@ class LedsController:
 		else:
 			self._active.clear()
 
-
 		if not self.initHardware():
 			self._logger.fatal("Couldn't start hardware")
 			self._mainClass.onStop()
 			return
-
 
 		if self._params.pattern == 'google':
 			self._pattern = GoogleHomeLedPattern(self)
@@ -68,10 +67,10 @@ class LedsController:
 		else:
 			self._pattern = CustomLedPattern(self)
 
-
 		self._buttonsThread = None
 		if 'extras' in self._hardware and 'buttons' in self.hardware['extras']:
 			import RPi.GPIO
+
 			RPi.GPIO.setmode(RPi.GPIO.BCM)
 			for button in self._hardware['extras']['buttons']:
 				RPi.GPIO.setup(int(self._hardware['extras']['buttons'][button]['bcm_gpio']), RPi.GPIO.IN)
@@ -100,7 +99,7 @@ class LedsController:
 
 	@property
 	def active(self):
-		return self._active.isSet()
+		return self._active.is_set()
 
 
 	@property
@@ -127,26 +126,32 @@ class LedsController:
 		try:
 			if self._hardware['interface'] == Interfaces.APA102:
 				from interfaces.apa102 import APA102
+
 				self._interface = APA102(hardware=self._hardware, endFrame=self._hardware['endFrame'])
 
 			elif self._hardware['interface'] == Interfaces.NEOPIXELS:
 				from interfaces.neopixels import Neopixels
+
 				self._interface = Neopixels(numLeds=self._hardware['numberOfLeds'], stripType=self._hardware['type'], pin=self._hardware['gpioPin'])
 
 			elif self._hardware['interface'] == Interfaces.RESPEAKER_MIC_ARRAY_V2:
 				from interfaces.respeakerMicArrayV2 import RespeakerMicArrayV2
+
 				self._interface = RespeakerMicArrayV2(hardware=self._hardware, vid=self._hardware['vid'], pid=self._hardware['pid'])
 
 			elif self._hardware['interface'] == Interfaces.RESPEAKER_MIC_ARRAY_V1:
 				from interfaces.respeakerMicArrayV1 import RespeakerMicArrayV1
+
 				self._interface = RespeakerMicArrayV1(hardware=self._hardware, vid=self._hardware['vid'], pid=self._hardware['pid'])
 
 			elif self._hardware['interface'] == Interfaces.MATRIX_VOICE:
 				from interfaces.matrixvoice import MatrixVoice
+
 				self._interface = MatrixVoice(numLeds=self._hardware['numberOfLeds'])
 
 			elif self._hardware['interface'] == Interfaces.PURE_GPIO:
 				from interfaces.pureGPIO import PureGPIO
+
 				self._interface = PureGPIO(numLeds=self._hardware['numberOfLeds'], pinout=self._hardware['gpios'], activeHigh=self._hardware['activeHigh'])
 
 			if self._interface is None:
@@ -193,7 +198,7 @@ class LedsController:
 			self._logger.warning('Tried to set vad led on an unsupported device')
 
 
-	def putStickyPattern(self, pattern, patternMethod = None, sticky: bool = False, flush: bool = False, duration:int = 0, **kwargs):
+	def putStickyPattern(self, pattern, patternMethod = None, sticky: bool = False, flush: bool = False, duration: float = 0, **kwargs):
 		if sticky:
 			self._stickyAnimation = {"func": pattern, "args": kwargs, "duration": duration}
 
@@ -330,7 +335,7 @@ class LedsController:
 			self.toggleStateOn()
 
 
-	def _put(self, func, flush=False, duration: int = 0, noTimeout: bool = False, **kwargs):
+	def _put(self, func, flush = False, duration: float = 0, noTimeout: bool = False, **kwargs):
 		self._pattern.animation.clear()
 
 		if not self.active:
@@ -359,13 +364,14 @@ class LedsController:
 			self._runningRequestId = funcRecipe["requestId"]
 			funcRecipe['func'](**funcRecipe['args'])
 
+
 	def scheduledEndAnimation(self, requestId):
 		if self._runningRequestId == requestId:
 			self._logger.debug(f'Request {requestId} animation ended or timed out')
 			self.idle()
 
 
-	def setLed(self, ledNum, red, green, blue, brightness=-1):
+	def setLed(self, ledNum, red, green, blue, brightness = -1):
 		if ledNum < 0 or ledNum > self._interface.numLeds:
 			self._logger.warning("Tried to access a led number that doesn't exist: {} / {}".format(ledNum, self._interface.numLeds))
 			return
@@ -375,7 +381,7 @@ class LedsController:
 		self._interface.setPixel(ledNum, red, green, blue, brightness)
 
 
-	def setLedRGB(self, ledNum, color, brightness=-1):
+	def setLedRGB(self, ledNum, color, brightness = -1):
 		if len(color) > 3:
 			brightness = color[3]
 		elif brightness == -1:

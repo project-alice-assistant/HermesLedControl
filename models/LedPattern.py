@@ -1,4 +1,5 @@
 import colorsys
+from typing import Tuple
 
 from models.Animations import Animations
 from models.LedsController import *
@@ -6,26 +7,26 @@ from models.LedsController import *
 
 class LedPattern:
 
-	def __init__(self, controller):
-		self._logger 				= logging.getLogger('HermesLedControl')
-		self._controller 			= controller # type: LedsController
-		self._numLeds 				= self._controller.interface.numLeds
-		self._animation 			= threading.Event()
-		self._animator 				= Animations(self._animation, controller)
+	def __init__(self, controller: LedsController):
+		self._logger = logging.getLogger('HermesLedControl')
+		self._controller: LedsController = controller
+		self._numLeds = self._controller.interface.numLeds
+		self._animation	= threading.Event()
+		self._animator = Animations(self._animation, controller)
 
 
 	@property
-	def animator(self):
+	def animator(self) -> Animations:
 		return self._animator
 
 
 	@property
-	def animation(self):
+	def animation(self) -> threading.Event:
 		return self._animation
 
 
 	@property
-	def numLeds(self):
+	def numLeds(self) -> int:
 		return self._numLeds
 
 
@@ -41,12 +42,6 @@ class LedPattern:
 		pass # Superseeded
 	def idle(self, *args):
 		pass # Superseeded
-	def off(self, *args):
-		self._controller.clearLeds()
-	def onError(self, *args):
-		pass # Superseeded
-	def onSuccess(self, *args):
-		pass # Superseeded
 	def updating(self, *args):
 		pass # Superseeded
 	def call(self, *args):
@@ -58,6 +53,12 @@ class LedPattern:
 	def message(self, *args):
 		pass # Superseeded
 	def dnd(self, *args):
+		pass # Superseeded
+	def off(self, *args):
+		self._controller.clearLeds()
+	def onError(self, *args):
+		pass # Superseeded
+	def onSuccess(self, *args):
 		pass # Superseeded
 	def onVolumeSet(self, *args):
 		pass # Superseeded
@@ -84,7 +85,7 @@ class LedPattern:
 		return (white << 24) | (red << 16) | (green << 8) | blue
 
 
-	def _normalizeIndex(self, index):
+	def _normalizeIndex(self, index: int):
 		"""
 		Makes sure the given index is valid in the led strip or returns the one on the other side of the loop
 		:param int index:
@@ -99,17 +100,22 @@ class LedPattern:
 
 
 	@staticmethod
-	def _hueAngleToRgb(angle, saturation = 1, value = 1):
+	def _hueAngleToRgb(angle, saturation: int = 1, value: float = 1.0) -> Tuple[int, int, int]:
 		"""
 		Given an hue angle, return the RGB triplet
 		that represents the 100% saturated rgb value
 		for that Hue from the HSV color model.
+		:param int saturation:
+		:param float value:
+		:return: int
+		"""
+		"""
+
 
 		Input value is 0-1.
 		Return value is normalized to 0-255 integer range
 
 		"""
-		# Get fully saturated HSV value
 		r, g, b = colorsys.hsv_to_rgb(angle % 1, saturation, value)
 		ret = int(r * 255), int(g * 255), int(b * 255)
 		return ret

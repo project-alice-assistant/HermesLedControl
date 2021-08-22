@@ -1,6 +1,9 @@
-import logging
-from typing import Optional
+import argparse
 import json
+import logging
+import os
+from pathlib import Path
+from typing import Dict, Optional
 
 
 class ProjectAlice:
@@ -10,7 +13,7 @@ class ProjectAlice:
 		self._logger.info('Initializing ProjectAlice settings')
 
 
-	def loadConfig(self, params) -> Optional[dict]:
+	def loadConfig(self, params: argparse.Namespace) -> Optional[Dict]:
 
 		"""
 		Load assistant configuration
@@ -27,17 +30,19 @@ class ProjectAlice:
 
 		self._logger.info('Loading configurations')
 
+		userHomePath = os.path.expanduser('~')
+		configPath = userHomePath + '/ProjectAlice/config.json'
+		path = Path(params.pathToConfig or configPath)
+
 		configs = dict()
 		try:
-			#params.pathToConfig or
-			with open('/home/pi/ProjectAlice/config.json') as jsonContent:
+			with path.open() as jsonContent:
 				conf = json.load(jsonContent)
 				configs['mqttServer'] = conf['mqttHost']
 				configs['mqttPort'] = conf['mqttPort']
 				configs['mqttUsername'] = conf['mqttUser']
 				configs['mqttPassword'] = conf['mqttPassword']
 				configs['mqttTLSCAFile'] = conf['mqttTLSFile']
-
 				configs['deviceName'] = conf['uuid']
 
 			return configs

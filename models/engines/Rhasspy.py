@@ -1,8 +1,9 @@
-import os
+import argparse
 import json
 import logging
+import os
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional
 
 
 class Rhasspy:
@@ -12,7 +13,7 @@ class Rhasspy:
 		self._logger.info('Initializing Rhasspy settings')
 
 
-	def loadConfig(self, params) -> Optional[dict]:
+	def loadConfig(self, params: argparse.Namespace) -> Optional[Dict]:
 
 		"""
 		Load assistant configuration

@@ -16,6 +16,7 @@ import time
 
 from models.LedPattern import LedPattern
 
+
 class ProjectAlicePattern(LedPattern):
 
 	def __init__(self, controller):
@@ -76,7 +77,7 @@ class ProjectAlicePattern(LedPattern):
 
 		self._animator.new(image=image)
 		self.animation.set()
-		while self.animation.isSet():
+		while self.animation.is_set():
 			self._animator.rotateImage(-1)
 			time.sleep(0.05)
 
@@ -105,7 +106,7 @@ class ProjectAlicePattern(LedPattern):
 
 		self._animator.new(image=image)
 		self.animation.set()
-		while self.animation.isSet():
+		while self.animation.is_set():
 			self._animator.rotateImage(1)
 			time.sleep(0.085)
 
@@ -116,7 +117,7 @@ class ProjectAlicePattern(LedPattern):
 
 	def call(self, *args):
 		self.animation.set()
-		while self.animation.isSet():
+		while self.animation.is_set():
 			self._animator.blink(color=[255, 255, 0, 2], minBrightness=2, maxBrightness=8, speed=40, repeat=5)
 			time.sleep(1)
 

@@ -7,28 +7,28 @@ import yaml
 
 logger = logging.getLogger('HermesLedControl')
 defaultValues = {
-	'engine': 'projectalice',
-	'pathToConfig': '~/ProjectAlice/config.json',
-	'hardware': 'respeaker2Mics',
-	'pattern': 'google',
-	'offListener': 'hermes/hotword/toggleOn',
-	'enableDoA': False,
-	'defaultState': 'on',
-	'matrixIp': '127.0.0.1',
+	'engine'           : 'projectalice',
+	'pathToConfig'     : '~/ProjectAlice/config.json',
+	'hardware'         : 'respeaker2Mics',
+	'pattern'          : 'google',
+	'offListener'      : 'hermes/hotword/toggleOn',
+	'enableDoA'        : False,
+	'defaultState'     : 'on',
+	'matrixIp'         : '127.0.0.1',
 	'defaultBrightness': 50,
-	'pureGpioPinout': [],
-	'everloopPort': 20021,
-	'activeHigh': True,
-	'debug': False,
-	'timeout': 120
+	'pureGpioPinout'   : [],
+	'everloopPort'     : 20021,
+	'activeHigh'       : True,
+	'debug'            : False,
+	'timeout'          : 120
 }
 
 choices = {
-	'engine': [
+	'engine'      : [
 		'projectalice',
 		'rhasspy'
 	],
-	'hardware': [
+	'hardware'    : [
 		'respeaker2Mics',
 		'respeaker4MicArray',
 		'respeakerMicArrayV2',
@@ -44,7 +44,7 @@ choices = {
 		'puregpio',
 		'dummy'
 	],
-	'pattern': [
+	'pattern'     : [
 		'projectalice',
 		'google',
 		'alexa',
@@ -53,7 +53,7 @@ choices = {
 		'fake-name',
 		'custom'
 	],
-	'offListener': [
+	'offListener' : [
 		'hermes/hotword/toggleOn',
 		'hermes/tts/sayFinished',
 		'hermes/audioServer/playFinished'
@@ -65,18 +65,18 @@ choices = {
 }
 
 
-def readConfiguration():
-	logger.debug("Reading command line arguments")
+def readConfiguration() -> argparse.Namespace:
+	logger.debug('Reading command line arguments')
 	args = parseArguments()
-	logger.debug("Applying configuration file")
+	logger.debug('Applying configuration file')
 	applyConfigFile(args)
-	logger.debug("Applying default values")
+	logger.debug('Applying default values')
 	applyDefaultValues(args)
 	logger.debug(args)
 	return args
 
 
-def applyConfigFile(args):
+def applyConfigFile(args: argparse.Namespace):
 	path = Path(args.hermesLedControlConfig).expanduser().resolve()
 	logger.info(f"Trying to load configuration from '{str(path)}'")
 	if path.exists():
@@ -100,13 +100,13 @@ def applyConfigFile(args):
 		logger.warning(f"Configuration file '{str(path)}' not found")
 
 
-def applyDefaultValues(args):
+def applyDefaultValues(args: argparse.Namespace):
 	for key, value in defaultValues.items():
 		if getattr(args, key) is None:
 			setattr(args, key, value)
 
 
-def parseArguments():
+def parseArguments() -> argparse.Namespace:
 	parser = argparse.ArgumentParser(prog='Hermes Led Control')
 	parser.add_argument(
 		'--engine',
@@ -141,8 +141,8 @@ def parseArguments():
 	)
 	parser.add_argument(
 		'--clientId',
-	    help='Defines a client id. Overrides any config file',
-	    type=str
+		help='Defines a client id. Overrides any config file',
+		type=str
 	)
 	parser.add_argument(
 		'--hardware',
@@ -152,13 +152,13 @@ def parseArguments():
 	)
 	parser.add_argument(
 		'--leds',
-	    help='Override the amount of leds on your hardware',
-	    type=int
+		help='Override the amount of leds on your hardware',
+		type=int
 	)
 	parser.add_argument(
 		'--defaultBrightness',
-	    help='Set a default brightness for your leds',
-	    type=int
+		help='Set a default brightness for your leds',
+		type=int
 	)
 	parser.add_argument(
 		'--endFrame',
@@ -167,9 +167,9 @@ def parseArguments():
 	)
 	parser.add_argument(
 		'--pattern',
-	    help='The pattern to be used',
-	    type=str,
-	    choices=choices['pattern']
+		help='The pattern to be used',
+		type=str,
+		choices=choices['pattern']
 	)
 	parser.add_argument(
 		'--offListener',
@@ -184,83 +184,83 @@ def parseArguments():
 	)
 	parser.add_argument(
 		'--startPattern',
-	    help='Define a program start led pattern',
-	    type=str
+		help='Define a program start led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--stopPattern',
-	    help='Define a prorgam stop led pattern',
-	    type=str
+		help='Define a prorgam stop led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--offPattern',
-	    help='Define an off led pattern',
-	    type=str
+		help='Define an off led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--idlePattern',
-	    help='Define an idle led pattern',
-	    type=str
+		help='Define an idle led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--wakeupPattern',
-	    help='Define a wakeup led pattern',
-	    type=str
+		help='Define a wakeup led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--speakPattern',
-	    help='Define a speak led pattern',
-	    type=str
+		help='Define a speak led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--thinkPattern',
-	    help='Define a think led pattern',
-	    type=str
+		help='Define a think led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--listenPattern',
-	    help='Define a listen led pattern',
-	    type=str
+		help='Define a listen led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--errorPattern',
-	    help='Define an error led pattern',
-	    type=str
+		help='Define an error led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--successPattern',
-	    help='Define a success led pattern',
-	    type=str
+		help='Define a success led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--updatingPattern',
-	    help='Define an updating led pattern',
-	    type=str
+		help='Define an updating led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--callPattern',
-	    help='Define a call led pattern',
-	    type=str
+		help='Define a call led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--setupModePattern',
-	    help='Define a setup mode led pattern',
-	    type=str
+		help='Define a setup mode led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--conErrorPattern',
-	    help='Define a connection error led pattern',
-	    type=str
+		help='Define a connection error led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--messagePattern',
-	    help='Define a message led pattern',
-	    type=str
+		help='Define a message led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--dndPattern',
-	    help='Define a do not disturb led pattern',
-	    type=str
+		help='Define a do not disturb led pattern',
+		type=str
 	)
 	parser.add_argument(
 		'--defaultState',

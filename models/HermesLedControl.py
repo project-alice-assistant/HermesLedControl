@@ -1,71 +1,74 @@
+import argparse
 import json
 import logging
+import re
 import sys
 import time
+from typing import Dict, List, Optional, Union
 
 import paho.mqtt.client as mqtt
-import re
 from paho.mqtt.client import MQTTMessage
 
 from models.LedsController import LedsController
 
 
 class HermesLedControl:
-	
 	ALL_SITE_ID = 'all'
 
-	_SUB_ON_HOTWORD 				= 'hermes/hotword/+/detected'
-	_SUB_ON_SAY 					= 'hermes/tts/say'
-	_SUB_ON_THINK 					= 'hermes/asr/textCaptured'
-	_SUB_ON_LISTENING 				= 'hermes/asr/startListening'
-	_SUB_ON_HOTWORD_TOGGLE_ON 		= 'hermes/hotword/toggleOn'
-	_SUB_LEDS_ON_ERROR 				= 'hermes/nlu/intentNotRecognized'
-	_SUB_LEDS_ON_SUCCESS 			= 'hermes/nlu/intentParsed'
-	_SUB_ON_PLAY_FINISHED 			= 'hermes/audioServer/{}/playFinished'
-	_SUB_ON_TTS_FINISHED 			= 'hermes/tts/sayFinished'
+	_SUB_ON_HOTWORD = 'hermes/hotword/+/detected'
+	_SUB_ON_SAY = 'hermes/tts/say'
+	_SUB_ON_THINK = 'hermes/asr/textCaptured'
+	_SUB_ON_LISTENING = 'hermes/asr/startListening'
+	_SUB_ON_HOTWORD_TOGGLE_ON = 'hermes/hotword/toggleOn'
+	_SUB_LEDS_ON_ERROR = 'hermes/nlu/intentNotRecognized'
+	_SUB_LEDS_ON_SUCCESS = 'hermes/nlu/intentParsed'
+	_SUB_ON_PLAY_FINISHED = 'hermes/audioServer/{}/playFinished'
+	_SUB_ON_TTS_FINISHED = 'hermes/tts/sayFinished'
 
-	_SUB_ON_LEDS_TOGGLE 			= 'hermes/leds/toggle'
-	_SUB_ON_LEDS_TOGGLE_ON 			= 'hermes/leds/toggleOn'
-	_SUB_ON_LEDS_TOGGLE_OFF 		= 'hermes/leds/toggleOff'
-	_SUB_ON_LEDS_CLEAR 				= 'hermes/leds/clear'
-	_SUB_ON_LEDS_IDLE 				= 'hermes/leds/idle'
-	_SUB_UPDATING 					= 'hermes/leds/systemUpdate'
-	_SUB_ON_CALL 					= 'hermes/leds/onCall'
-	_SUB_SETUP_MODE 				= 'hermes/leds/setupMode'
-	_SUB_CON_ERROR 					= 'hermes/leds/connectionError'
-	_SUB_ON_MESSAGE 				= 'hermes/leds/onMessage'
-	_SUB_ON_DND 					= 'hermes/leds/doNotDisturb'
-	_SUB_ON_START 					= 'hermes/leds/onStart'
-	_SUB_ON_STOP 					= 'hermes/leds/onStop'
+	_SUB_ON_LEDS_TOGGLE = 'hermes/leds/toggle'
+	_SUB_ON_LEDS_TOGGLE_ON = 'hermes/leds/toggleOn'
+	_SUB_ON_LEDS_TOGGLE_OFF = 'hermes/leds/toggleOff'
+	_SUB_ON_LEDS_CLEAR = 'hermes/leds/clear'
+	_SUB_ON_LEDS_IDLE = 'hermes/leds/idle'
+	_SUB_UPDATING = 'hermes/leds/systemUpdate'
+	_SUB_ON_CALL = 'hermes/leds/onCall'
+	_SUB_SETUP_MODE = 'hermes/leds/setupMode'
+	_SUB_CON_ERROR = 'hermes/leds/connectionError'
+	_SUB_ON_MESSAGE = 'hermes/leds/onMessage'
+	_SUB_ON_DND = 'hermes/leds/doNotDisturb'
+	_SUB_ON_START = 'hermes/leds/onStart'
+	_SUB_ON_STOP = 'hermes/leds/onStop'
 
-	_SUB_VOLUME_SET 				= 'hermes/volume/set'
-	_SUB_VADLED_SET 				= 'hermes/leds/vadLed'
-	_SUB_MANUAL_ANIMATIONS_SET		= 'hermes/leds/manual/animations'
+	_SUB_VOLUME_SET = 'hermes/volume/set'
+	_SUB_VADLED_SET = 'hermes/leds/vadLed'
+	_SUB_MANUAL_ANIMATIONS_SET = 'hermes/leds/manual/animations'
 
 
-	def __init__(self, params):
+	def __init__(self, params: argparse.Namespace):
 		self._logger = logging.getLogger('HermesLedControl')
 		self._logger.info('Initializing HermesLedControl')
 
-		self._mqttClient 			= None
-		self._hardwareReference 	= None
-		self._ledsController 		= None
-		self._params 				= params
+		self._mqttClient = None
+		self._hardwareReference = None
+		self._ledsController = None
+		self._params = params
 
-		self._mqttServer 			= 'localhost'
-		self._me 					= 'default'
-		self._mqttPort 				= 1883
-		self._mqttUsername 			= ''
-		self._mqttPassword 			= ''
-		self._tlsFile 				= ''
+		self._mqttServer = 'localhost'
+		self._me = 'default'
+		self._mqttPort = 1883
+		self._mqttUsername = ''
+		self._mqttPassword = ''
+		self._tlsFile = ''
 
-		self._hotwordRegex          = re.compile(self._SUB_ON_HOTWORD.replace('+', '(.*)'))
+		self._hotwordRegex = re.compile(self._SUB_ON_HOTWORD.replace('+', '(.*)'))
 
 		if params.engine == 'projectalice':
 			from models.engines.ProjectAlice import ProjectAlice
+
 			engine = ProjectAlice()
 		elif params.engine == 'rhasspy':
 			from models.engines.Rhasspy import Rhasspy
+
 			engine = Rhasspy()
 		else:
 			self._logger.error('Unsupported assistant engine "{}"'.format(params.engine))
@@ -126,7 +129,6 @@ class HermesLedControl:
 
 		if 'endFrame' in self._hardware and params.endFrame is not None:
 			self._hardware['endFrame'] = params.endFrame
-
 
 		self._ledsController = LedsController(self)
 		self._mqttClient = self.connectMqtt()
@@ -217,10 +219,10 @@ class HermesLedControl:
 			payload = json.loads(message.payload.decode('UTF-8'))
 
 		noLeds = payload.get('noLeds', False)
-		
+
 		if noLeds:
 			return False
-		
+
 		siteId = payload.get('siteId')
 		sticky = payload.get('sticky', False)
 		isForMe = siteId == self._me or siteId == self.ALL_SITE_ID
@@ -428,7 +430,7 @@ class HermesLedControl:
 			else:
 				if self._params.debug:
 					self._logger.debug("On vad led set received but it wasn't for me")
-	
+
 		elif message.topic == self._SUB_ON_LEDS_IDLE:
 			if isForMe:
 				if self._params.debug:
@@ -580,7 +582,7 @@ class HermesLedControl:
 					self._logger.debug("On manual animation leds received but it wasn't for me")
 
 
-	def safePayloadColor(self, payload, attributeName, default=None):
+	def safePayloadColor(self, payload: Dict, attributeName: str, default: Optional[List] = None) -> List:
 		color = payload.get(attributeName, [255, 255, 255, 2] if not default else default)
 
 		if type(color) == str and ',' in color:
@@ -595,7 +597,8 @@ class HermesLedControl:
 
 		return color
 
-	def safePayloadNumber(self, payload, attributeName, default=None, isFloat=False):
+
+	def safePayloadNumber(self, payload: Dict, attributeName: str, default: Optional[Union[int, float]] = None, isFloat: bool = False) -> Union[int, float]:
 		number = payload.get(attributeName, default)
 
 		try:
@@ -611,7 +614,7 @@ class HermesLedControl:
 
 
 	@property
-	def params(self):
+	def params(self) -> argparse.Namespace:
 		return self._params
 
 

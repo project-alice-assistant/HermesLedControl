@@ -43,18 +43,18 @@ class FakeNamePattern(LedPattern):
 			self._image.append([r, g, b, self._controller.defaultBrightness])
 
 
-	def _newSingleColor(self, hue_angle):
+	def _newSingleColor(self, hueAngle: float):
 		# Generate a nice full-brightness-off-full-brightness cycle of a
 		# specific color across the available LEDs
 		self._image = []
 		step = math.pi / self._numLeds
 		for i in range(self._numLeds):
 
-			r, g, b = self._hueAngleToRgb(hue_angle, value=math.sin(i * step))
+			r, g, b = self._hueAngleToRgb(hueAngle, value=math.sin(i * step))
 			self._image.append([r, g, b, self._controller.defaultBrightness])
 
 
-	def _rotateImage(self, steps):
+	def _rotateImage(self, steps: int):
 		if steps < 0:
 			for _ in range(0, steps, -1):
 				insertBack = self._image.pop(0)

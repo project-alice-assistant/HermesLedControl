@@ -14,11 +14,13 @@
 ###########################################################################################################
 
 from models.LedPattern import LedPattern
+from models.LedsController import LedsController
+
 
 class CustomLedPattern(LedPattern):
 
-	def __init__(self, controller):
-		super(CustomLedPattern, self).__init__(controller)
+	def __init__(self, controller: LedsController):
+		super().__init__(controller)
 
 
 	def onStart(self, *args):
