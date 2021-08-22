@@ -8,7 +8,7 @@ import yaml
 logger = logging.getLogger('HermesLedControl')
 defaultValues = {
 	'engine': 'projectalice',
-	'pathToConfig': '/etc/snips.toml',
+	'pathToConfig': '~/ProjectAlice/config.json',
 	'hardware': 'respeaker2Mics',
 	'pattern': 'google',
 	'offListener': 'hermes/hotword/toggleOn',
@@ -26,8 +26,7 @@ defaultValues = {
 choices = {
 	'engine': [
 		'projectalice',
-		'rhasspy',
-		'snips'
+		'rhasspy'
 	],
 	'hardware': [
 		'respeaker2Mics',
@@ -46,10 +45,10 @@ choices = {
 		'dummy'
 	],
 	'pattern': [
+		'projectalice',
 		'google',
 		'alexa',
 		'kiboost',
-		'projectalice',
 		'pgas',
 		'fake-name',
 		'custom'
