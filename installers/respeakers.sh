@@ -13,7 +13,7 @@ EOF
 cd /home/${USER}
 rm -rf /home/${USER}/seeed-voicecard
 
-git clone https://github.com/respeaker/seeed-voicecard.git
+git clone https://github.com/HinTak/seeed-voicecard.git
 cd seeed-voicecard
 chmod +x ./install.sh
 ./install.sh

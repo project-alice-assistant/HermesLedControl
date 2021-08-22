@@ -1,7 +1,8 @@
+import colorsys
+
 from models.Animations import Animations
 from models.LedsController import *
-import logging
-import threading
+
 
 class LedPattern:
 
@@ -95,3 +96,20 @@ class LedPattern:
 			return index - self._numLeds
 		else:
 			return index
+
+
+	@staticmethod
+	def _hueAngleToRgb(angle, saturation = 1, value = 1):
+		"""
+		Given an hue angle, return the RGB triplet
+		that represents the 100% saturated rgb value
+		for that Hue from the HSV color model.
+
+		Input value is 0-1.
+		Return value is normalized to 0-255 integer range
+
+		"""
+		# Get fully saturated HSV value
+		r, g, b = colorsys.hsv_to_rgb(angle % 1, saturation, value)
+		ret = int(r * 255), int(g * 255), int(b * 255)
+		return ret

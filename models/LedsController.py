@@ -1,18 +1,18 @@
 import queue as Queue
-import logging
 import threading
-import time
 import uuid
 
 from ledPatterns.AlexaLedPattern import AlexaLedPattern
 from ledPatterns.CustomLedPattern import CustomLedPattern
+from ledPatterns.FakeNamePattern import FakeNamePattern
 from ledPatterns.GoogleLedPattern import GoogleHomeLedPattern
 from ledPatterns.KiboostLedPattern import KiboostLedPattern
-from ledPatterns.ProjectAlicePattern import ProjectAlicePattern
 from ledPatterns.PgasPattern import PgasPattern
+from ledPatterns.ProjectAlicePattern import ProjectAlicePattern
 from models.Exceptions import InterfaceInitError
-from models.Interfaces import Interfaces
 from models.HermesLedControl import *
+from models.Interfaces import Interfaces
+
 
 class LedsController:
 	INSTANCE = None
@@ -63,6 +63,8 @@ class LedsController:
 			self._pattern = ProjectAlicePattern(self)
 		elif self._params.pattern == 'pgas':
 			self._pattern = PgasPattern(self)
+		elif self._params.pattern == 'fake-name':
+			self._pattern = FakeNamePattern(self)
 		else:
 			self._pattern = CustomLedPattern(self)
 

@@ -1,8 +1,8 @@
 import logging
-from logging import handlers
 import signal
 import time
 from datetime import datetime
+from logging import handlers
 
 from models.Configuration import readConfiguration
 from models.HermesLedControl import HermesLedControl
