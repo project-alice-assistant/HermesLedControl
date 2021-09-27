@@ -1,6 +1,7 @@
 import queue as Queue
 import threading
 import uuid
+import logging
 
 from ledPatterns.AlexaLedPattern import AlexaLedPattern
 from ledPatterns.CustomLedPattern import CustomLedPattern
