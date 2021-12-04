@@ -5,6 +5,7 @@ from pathlib import Path
 
 import yaml
 
+
 logger = logging.getLogger('HermesLedControl')
 defaultValues = {
 	'engine'           : 'projectalice',
@@ -66,8 +67,13 @@ choices = {
 
 
 def readConfiguration() -> argparse.Namespace:
-	logger.debug('Reading command line arguments')
+	logger.setLevel('INFO')
+	logger.info('Reading command line arguments')
 	args = parseArguments()
+
+	if args.debug:
+		logger.setLevel('DEBUG')
+
 	logger.debug('Applying configuration file')
 	applyConfigFile(args)
 	logger.debug('Applying default values')
@@ -317,7 +323,7 @@ def parseArguments() -> argparse.Namespace:
 	)
 	parser.add_argument(
 		'--debug',
-		help='Enable the debug mode for the console to return more informations',
+		help='Enable the debug mode for the console to return more information',
 		type=bool
 	)
 	args = parser.parse_args()
