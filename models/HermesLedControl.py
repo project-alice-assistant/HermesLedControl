@@ -71,7 +71,7 @@ class HermesLedControl(object):
 
 			engine = Rhasspy()
 		else:
-			self._logger.error('Unsupported assistant engine "{}"'.format(params.engine))
+			self._logger.error(f'Unsupported assistant engine "{params.engine}"')
 			self.onStop()
 			return
 
@@ -81,7 +81,7 @@ class HermesLedControl(object):
 
 		with open('hardware.json') as f:
 			self._hardwareReference = json.load(f)
-			self._logger.info('Loaded {} hardware references'.format(len(self._hardwareReference)))
+			self._logger.info(f'Loaded {len(self._hardwareReference)} hardware references')
 
 		if params.hardware not in self._hardwareReference:
 			self._logger.fatal('Trying to use an unsupported hardware')
@@ -98,25 +98,25 @@ class HermesLedControl(object):
 
 		self._SUB_ON_PLAY_FINISHED = self._SUB_ON_PLAY_FINISHED.format(self._me)
 
-		self._logger.info('- Mqtt server set to {}'.format(self._mqttServer))
-		self._logger.info('- Mqtt port set to {}'.format(self._mqttPort))
+		self._logger.info(f'- Mqtt server set to {self._mqttServer}')
+		self._logger.info(f'- Mqtt port set to {self._mqttPort}')
 
 		if self._mqttUsername:
-			self._logger.info('- Mqtt username set to {}'.format(self._mqttUsername))
+			self._logger.info(f'- Mqtt username set to {self._mqttUsername}')
 		if self._mqttPassword:
-			self._logger.info('- Mqtt password set to "hidden"')
+			self._logger.info('- Mqtt password set!')
 
-		self._logger.info('- Client id set to {}'.format(self._me))
-		self._logger.info('- Hardware set to {}'.format(self._hardware['name']))
+		self._logger.info(f'- Client id set to {self._me}')
+		self._logger.info(f'- Hardware set to {self._hardware["name"]}')
 
 		if params.leds is not None:
 			self._hardware['numberOfLeds'] = params.leds
-		self._logger.info('- Using {} as pattern with {} leds'.format(params.pattern, self._hardware['numberOfLeds']))
+		self._logger.info(f'- Using {params.pattern} as pattern with {self._hardware["numberOfLeds"]} leds')
 
 		if 'gpioPin' in self._hardware:
 			if params.gpioPin is not None:
 				self._hardware['gpioPin'] = params.gpioPin
-			self._logger.info('Using pin #{}'.format(self._hardware['gpioPin']))
+			self._logger.info(f'Using pin #{self._hardware["gpioPin"]}')
 
 		if 'vid' in self._hardware and params.vid is not None:
 			self._hardware['vid'] = params.vid

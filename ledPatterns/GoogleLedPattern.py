@@ -38,7 +38,7 @@ class GoogleHomeLedPattern(LedPattern):
 	def _rotateImage(self, angle: int):
 		angle = round(angle)
 		if angle == 0:
-			self._logger.error('Cannot rotate by {}'.format(angle))
+			self._logger.error(f'Cannot rotate by {angle}')
 			return
 
 		degreesPerLed = 360 / self._numLeds

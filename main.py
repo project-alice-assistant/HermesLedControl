@@ -7,6 +7,7 @@ from logging import handlers
 from models.Configuration import readConfiguration
 from models.HermesLedControl import HermesLedControl
 
+
 formatter = logging.Formatter('%(asctime)s [%(threadName)s] - [%(levelname)s] - %(message)s')
 
 _logger = logging.getLogger('HermesLedControl')
@@ -16,7 +17,7 @@ _logger.setLevel(logging.DEBUG)
 date = int(datetime.now().strftime('%Y%m%d'))
 
 handler = logging.FileHandler(filename='logs.log', mode='w')
-rotatingHandler = handlers.RotatingFileHandler(filename='./logs/{}-logs.log'.format(date), mode='a', maxBytes=100000, backupCount=5)
+rotatingHandler = handlers.RotatingFileHandler(filename=f'./logs/{date}-logs.log', mode='a', maxBytes=100000, backupCount=5)
 streamHandler = logging.StreamHandler()
 
 handler.setFormatter(formatter)
@@ -38,7 +39,7 @@ def onStop():
 
 
 def main():
-	_logger.info('Starting Hermes Led Control veersion 3.0.0')
+	_logger.info('Starting Hermes Led Control version 3.0.0')
 
 	signal.signal(signal.SIGINT, stopHandler)
 	signal.signal(signal.SIGTERM, stopHandler)

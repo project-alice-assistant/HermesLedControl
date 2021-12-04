@@ -26,7 +26,7 @@ class APA102(Interface):
 				self._power = mraa.Gpio(5)
 				self._power.dir(mraa.DIR_OUT)
 			except Exception as e:
-				self._logger.info('Device not using gpiozero or mraa, ignore power: {}'.format(e))
+				self._logger.info(f'Device not using gpiozero or mraa, ignore power: {e}')
 
 		self._hardware = hardware
 		self._src = None

@@ -47,5 +47,5 @@ class ProjectAlice(object):
 
 			return configs
 		except Exception as e:
-			self._logger.info('Error loading configurations: {}'.format(e))
+			self._logger.info(f'Error loading configurations: {e}')
 			return None

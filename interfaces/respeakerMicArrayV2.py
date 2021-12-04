@@ -1,6 +1,6 @@
 import importlib
 
-from libraries import usb_pixel_ring_v2    as pixel_ring
+from libraries import usb_pixel_ring_v2 as pixel_ring
 from models.Exceptions import InterfaceInitError
 from models.Interface import Interface
 
@@ -14,7 +14,7 @@ class RespeakerMicArrayV2(Interface):
 		self._leds = pixel_ring.find(vid=int(vid, 16), pid=int(pid, 16))
 
 		if self._leds is None:
-			raise InterfaceInitError('Respeaker Mic Array V2 not found using pid={} and vid={}'.format(pid, vid))
+			raise InterfaceInitError(f'Respeaker Mic Array V2 not found using pid={pid} and vid={vid}')
 
 		self._colors = self._newArray()
 

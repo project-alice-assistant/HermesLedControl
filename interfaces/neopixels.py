@@ -4,6 +4,7 @@ from libraries.neopixel import *
 from models.Exceptions import InterfaceInitError
 from models.Interface import Interface
 
+
 try:
 	import rpi_ws281x as ws
 except ImportError:
@@ -35,7 +36,7 @@ class Neopixels(Interface):
 		super(Neopixels, self).__init__(numLeds)
 
 		if stripType not in self._STRIP_TYPES:
-			raise InterfaceInitError('Unsupported neopixel type "{}"'.format(stripType))
+			raise InterfaceInitError(f'Unsupported neopixel type "{stripType}"')
 
 		self._type = stripType
 		self._pin = pin

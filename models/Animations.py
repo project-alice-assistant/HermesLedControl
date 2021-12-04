@@ -252,7 +252,7 @@ class Animations(object):
 		angle = round(angle)
 
 		if angle == 0:
-			self._logger.error('Cannot rotate by {}'.format(angle))
+			self._logger.error(f'Cannot rotate by {angle}°')
 			return
 
 		degreesPerLed = 360 / self._numLeds
@@ -296,7 +296,7 @@ class Animations(object):
 			return
 
 		if startAt > self._numLeds - 1:
-			self._logger.error("Cannot start at index {}, max index is {}".format(startAt, self._numLeds - 1))
+			self._logger.error(f"Cannot start at index {startAt}, max index is {self._numLeds - 1}")
 			return
 
 		self.new()
@@ -540,7 +540,7 @@ class Animations(object):
 
 	def _setPixel(self, index: int, color: List):
 		if index >= len(self._image) or index < 0:
-			self._logger.error("Cannot assign led index {}, out of bound".format(index))
+			self._logger.error(f'Cannot assign led index {index}, out of bound')
 			return
 		self._image[index] = [color[0], color[1], color[2], color[3]]
 

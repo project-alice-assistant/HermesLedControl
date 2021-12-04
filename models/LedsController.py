@@ -1,6 +1,7 @@
 import queue as Queue
 import threading
 import uuid
+from typing import Callable
 
 from models.Exceptions import InterfaceInitError
 from models.HermesLedControl import *
@@ -159,7 +160,7 @@ class LedsController(object):
 			else:
 				return True
 		except InterfaceInitError as e:
-			self._logger.error('{}'.format(e))
+			self._logger.error(f'Interface init error: {e}')
 			return False
 
 
@@ -209,7 +210,7 @@ class LedsController(object):
 				func = getattr(self._pattern, patternMethod)
 				self._put(func, flush=flush, duration=duration, **kwargs)
 			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(patternMethod))
+				self._logger.error(f"Can't find {patternMethod} method in pattern")
 				self._put(pattern, flush=flush, duration=duration, **kwargs)
 
 
@@ -240,7 +241,7 @@ class LedsController(object):
 					func = getattr(self._pattern, self._params.idlePattern)
 					self._put(func, noTimeout=True)
 				except AttributeError:
-					self._logger.error("Can't find {} method in pattern".format(self._params.idlePattern))
+					self._logger.error(f"Can't find {self._params.idlePattern} method in pattern")
 					self._put(self._pattern.idle, noTimeout=True)
 
 
@@ -284,7 +285,7 @@ class LedsController(object):
 				func = getattr(self._pattern, self._params.offPattern)
 				self._put(func, True)
 			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.offPattern))
+				self._logger.error(f"Can't find {self._params.offPattern} method in pattern")
 				self._put(self._pattern.off, True)
 
 
@@ -296,7 +297,7 @@ class LedsController(object):
 				func = getattr(self._pattern, self._params.startPattern)
 				self._put(func, True)
 			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.startPattern))
+				self._logger.error(f"Can't find {self._params.startPattern} method in pattern")
 				self._put(self._pattern.onStart, True)
 
 
@@ -308,7 +309,7 @@ class LedsController(object):
 				func = getattr(self._pattern, self._params.stopPattern)
 				self._put(func, True)
 			except AttributeError:
-				self._logger.error("Can't find {} method in pattern".format(self._params.stopPattern))
+				self._logger.error(f"Can't find {self._params.stopPattern} method in pattern")
 				self._put(self._pattern.onStart, True)
 
 
@@ -335,7 +336,7 @@ class LedsController(object):
 			self.toggleStateOn()
 
 
-	def _put(self, func, flush = False, duration: float = 0, noTimeout: bool = False, **kwargs):
+	def _put(self, func: Callable, flush = False, duration: float = 0, noTimeout: bool = False, **kwargs):
 		self._pattern.animation.clear()
 
 		if not self.active:
@@ -345,7 +346,7 @@ class LedsController(object):
 			self._queue.empty()
 
 		requestId = str(uuid.uuid4())
-		self._logger.debug(f'New animation {func} has id {requestId}')
+		self._logger.debug(f'New animation "{func.__name__}" has id {requestId}')
 
 		if not noTimeout and self._timeout and (not duration or duration > self._timeout):
 			self._logger.debug(f'Timeout is setting duration from {duration} to {self._timeout}')
@@ -373,7 +374,7 @@ class LedsController(object):
 
 	def setLed(self, ledNum, red, green, blue, brightness = -1):
 		if ledNum < 0 or ledNum > self._interface.numLeds:
-			self._logger.warning("Tried to access a led number that doesn't exist: {} / {}".format(ledNum, self._interface.numLeds))
+			self._logger.warning(f"Tried to access a led number that doesn't exist: {ledNum} / {self._interface.numLeds}")
 			return
 
 		if brightness == -1:
