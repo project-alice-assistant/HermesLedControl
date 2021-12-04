@@ -4,7 +4,7 @@ import usb.core
 import usb.util
 
 
-class PixelRing:
+class PixelRing(object):
 	TIMEOUT = 8000
 
 	def __init__(self, dev):

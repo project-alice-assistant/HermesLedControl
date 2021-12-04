@@ -12,7 +12,7 @@ from paho.mqtt.client import MQTTMessage
 from models.LedsController import LedsController
 
 
-class HermesLedControl:
+class HermesLedControl(object):
 	ALL_SITE_ID = 'all'
 
 	_SUB_ON_HOTWORD = 'hermes/hotword/+/detected'

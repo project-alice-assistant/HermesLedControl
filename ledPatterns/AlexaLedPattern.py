@@ -1,11 +1,12 @@
 import time
 
 from models.LedPattern import LedPattern
+from models.LedsController import LedsController
 
 
 class AlexaLedPattern(LedPattern):
 
-	def __init__(self, controller):
+	def __init__(self, controller: LedsController):
 		super(AlexaLedPattern, self).__init__(controller)
 
 		self._colors = {
@@ -46,9 +47,9 @@ class AlexaLedPattern(LedPattern):
 		second = self._colors['white']
 
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			for i in range(1, self._numLeds + 1):
-				if not self._animation.isSet():
+				if not self._animation.is_set():
 					break
 
 				if i % 2 == 0:
@@ -77,9 +78,9 @@ class AlexaLedPattern(LedPattern):
 			self._controller.setLedRGB(i, self._colors['white'])
 
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			for i in range(self._numLeds):
-				if not self._animation.isSet():
+				if not self._animation.is_set():
 					break
 				self._controller.setLed(i, red=red, green=green, blue=255)
 			self._controller.show()

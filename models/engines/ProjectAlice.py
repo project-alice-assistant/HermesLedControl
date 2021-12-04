@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, Optional
 
 
-class ProjectAlice:
+class ProjectAlice(object):
 
 	def __init__(self):
 		self._logger = logging.getLogger('HermesLedControl')

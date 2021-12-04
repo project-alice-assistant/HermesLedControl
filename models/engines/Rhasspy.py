@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, Optional
 
 
-class Rhasspy:
+class Rhasspy(object):
 
 	def __init__(self):
 		self._logger = logging.getLogger('HermesLedControl')

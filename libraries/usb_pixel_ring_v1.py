@@ -2,7 +2,7 @@ import usb.core
 import usb.util
 
 
-class HidDevice:
+class HidDevice(object):
 	"""
 	This class provides basic functions to access
 	a USB HID device to write an endpoint
@@ -59,7 +59,7 @@ class HidDevice:
 			return hid
 
 
-class UsbPixelRing:
+class UsbPixelRing(object):
 	PIXELS_N = 12
 
 	MONO = 1

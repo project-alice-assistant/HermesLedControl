@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import math
 import time
 
@@ -81,7 +83,7 @@ class GoogleHomeLedPattern(LedPattern):
 		direction = 1
 		brightness = self._controller.defaultBrightness
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			brightness -= direction
 			for i in range(self._numLeds):
 				self._image[i][3] = brightness
@@ -113,7 +115,7 @@ class GoogleHomeLedPattern(LedPattern):
 		degreesPerLed = 360 / self._numLeds
 
 		angle = 0
-		while self._animation.isSet():
+		while self._animation.is_set():
 			self._rotateImage(degreesPerLed)
 			self._displayImage()
 			angle += degreesPerLed
@@ -139,7 +141,7 @@ class GoogleHomeLedPattern(LedPattern):
 		direction = 1
 		brightness = self._controller.defaultBrightness
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			brightness -= direction
 			for i, led in enumerate(self._image):
 				self._image[i][3] = brightness

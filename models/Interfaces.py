@@ -1,4 +1,4 @@
-class Interfaces:
+class Interfaces(object):
 	APA102 					= 'apa102'
 	NEOPIXELS 				= 'neopixels'
 	RESPEAKER_MIC_ARRAY_V2 	= 'respeakerMicArrayV2'

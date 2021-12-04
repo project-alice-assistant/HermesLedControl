@@ -7,12 +7,12 @@ from typing import List, Optional
 from models.LedsController import LedsController
 
 
-class Animations:
+class Animations(object):
 
 	def __init__(self, animationFlag: threading.Event, controller: LedsController):
 		self._logger = logging.getLogger('HermesLedControl')
 		self._animationFlag = animationFlag
-		self._controller = controller
+		self._controller: LedsController = controller
 		self._numLeds = self._controller.hardware['numberOfLeds']
 
 		self._image = list()

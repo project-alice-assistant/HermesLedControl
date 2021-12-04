@@ -2,19 +2,12 @@ import queue as Queue
 import threading
 import uuid
 
-from ledPatterns.AlexaLedPattern import AlexaLedPattern
-from ledPatterns.CustomLedPattern import CustomLedPattern
-from ledPatterns.FakeNamePattern import FakeNamePattern
-from ledPatterns.GoogleLedPattern import GoogleHomeLedPattern
-from ledPatterns.KiboostLedPattern import KiboostLedPattern
-from ledPatterns.PgasPattern import PgasPattern
-from ledPatterns.ProjectAlicePattern import ProjectAlicePattern
 from models.Exceptions import InterfaceInitError
 from models.HermesLedControl import *
 from models.Interfaces import Interfaces
 
 
-class LedsController:
+class LedsController(object):
 	INSTANCE = None
 
 
@@ -53,18 +46,25 @@ class LedsController:
 			return
 
 		if self._params.pattern == 'google':
+			from ledPatterns.GoogleLedPattern import GoogleHomeLedPattern
 			self._pattern = GoogleHomeLedPattern(self)
 		elif self._params.pattern == 'alexa':
+			from ledPatterns.AlexaLedPattern import AlexaLedPattern
 			self._pattern = AlexaLedPattern(self)
 		elif self._params.pattern == 'kiboost':
+			from ledPatterns.KiboostLedPattern import KiboostLedPattern
 			self._pattern = KiboostLedPattern(self)
 		elif self._params.pattern == 'projectalice':
+			from ledPatterns.ProjectAlicePattern import ProjectAlicePattern
 			self._pattern = ProjectAlicePattern(self)
 		elif self._params.pattern == 'pgas':
+			from ledPatterns.PgasPattern import PgasPattern
 			self._pattern = PgasPattern(self)
 		elif self._params.pattern == 'fake-name':
+			from ledPatterns.FakeNamePattern import FakeNamePattern
 			self._pattern = FakeNamePattern(self)
 		else:
+			from ledPatterns.CustomLedPattern import CustomLedPattern
 			self._pattern = CustomLedPattern(self)
 
 		self._buttonsThread = None

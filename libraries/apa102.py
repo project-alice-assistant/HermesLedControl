@@ -6,10 +6,11 @@ from math import ceil
 
 import spidev
 
+
 RGB_MAP = { 'rgb': [3, 2, 1], 'rbg': [3, 1, 2], 'grb': [2, 3, 1],
             'gbr': [2, 1, 3], 'brg': [1, 3, 2], 'bgr': [1, 2, 3] }
 
-class APA102:
+class APA102(object):
     """
     Driver for APA102 LEDS (aka "DotStar").
 

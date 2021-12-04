@@ -1,7 +1,7 @@
 ###########################################################################################################
 # SUBMIT YOUR OWN CUSTOM PATTERN AND SHARE WITH THE WORLD YOUR LED ANIMATIONS!
 # Visit https://github.com/project-alice-assistant/HermesLedControl/issues/new?template=custom-pattern-proposal.md
-# for more informations
+# for more information
 #
 # Check models/LedPattern.py for the available functions
 # Do NEVER have a function call a super class function directly!!

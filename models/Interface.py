@@ -2,7 +2,7 @@ import logging
 from typing import List
 
 
-class Interface:
+class Interface(object):
 
 	def __init__(self, numLeds: int):
 		self._numLeds = numLeds
