@@ -5,8 +5,11 @@ if [[ "$EUID" -ne 0 ]]
   exit
 fi
 
-url=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep -Po '"tarball_url": "\K.*?(?=")')
+apt-get install git
 latest=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+
+url=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep -Po '"tarball_url": "\K.*?(?=")')
+
 
 path='/home/'$(logname)
 dest=${path}/hermesLedControl_${latest}
