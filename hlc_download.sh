@@ -13,9 +13,10 @@ dest="$HOME/HermesLedControl"
 rm -rf "$dest"
 git clone https://github.com/project-alice-assistant/HermesLedControl.git "$dest"
 cd "$dest" || exit
-git checkout "$latest"
+git fetch
+git checkout tags/"$latest"
 git pull
 chown -R "$(logname)" "$dest"
 
 chmod +x install.sh
-./install.sh "$latest"
+./install.sh

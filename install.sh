@@ -19,13 +19,6 @@ if [[ -z "$PYTHON" ]]; then
     fi
 fi
 
-if [[ -z "$1" ]]; then
-    echo "No version supplied"
-    exit
-else
-    VERSION=$1
-fi
-
 USER=$(logname)
 USERDIR='/home/'${USER}
 
@@ -221,5 +214,5 @@ systemctl daemon-reload
 systemctl enable hermesledcontrol
 systemctl start hermesledcontrol
 
-echo "Finished installing Hermes Led Control ${VERSION}"
+echo "Finished installing Hermes Led Control"
 echo "You may want to copy over your custom led patterns to the new version"
