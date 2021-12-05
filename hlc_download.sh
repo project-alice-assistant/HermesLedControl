@@ -6,22 +6,16 @@ if [[ "$EUID" -ne 0 ]]
 fi
 
 apt-get install git
-latest=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 
-url=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep -Po '"tarball_url": "\K.*?(?=")')
+latest=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+dest='~/HermesLedControl'
 
+rm -rf $dest
+git clone https://github.com/project-alice-assistant/HermesLedControl.git $dest
+cd $dest
+git checkout $latest
+git pull
+chown -R $(logname) $dest
 
-path='/home/'$(logname)
-dest=${path}/hermesLedControl_${latest}
-rm ${latest}
-rm -rf ${dest}
-mkdir -p ${dest}
-
-wget ${url}
-tar -xzf ${latest} -C ${dest} --strip-components=1
-rm ${latest}
-
-chown -R $(logname) ${dest}
-cd ${dest}
 chmod +x install.sh
-./install.sh ${latest}
+./install.sh $latest

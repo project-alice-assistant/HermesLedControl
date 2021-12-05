@@ -69,7 +69,7 @@ if [[ "$device" != "don't overwrite existing parameters" ]]; then
         esac
     done
 
-	defaultConfigurationPath=${USERDIR}'/.config/hermesLedControl'
+	defaultConfigurationPath=${USERDIR}'/.config/HermesLedControl'
 	echo "Where should the configuration be saved to?"
 	read -p "Path (${defaultConfigurationPath})" configurationPath
 	configurationPath=${configurationPath:-$defaultConfigurationPath}
@@ -99,7 +99,7 @@ systemctl is-active -q hermesledcontrol && systemctl stop hermesledcontrol
 apt-get update
 apt-get install -y git mosquitto mosquitto-clients portaudio19-dev python3-numpy
 
-FVENV=${USERDIR}'/hermesLedControl/'${VENV}
+FVENV=${USERDIR}'/HermesLedControl/'${VENV}
 
 apt-get install -y python3-pip
 
@@ -109,7 +109,7 @@ fi
 
 systemctl is-active -q pixel_ring_server && systemctl disable pixel_ring_server
 
-chown -R "${USER}" "${USERDIR}/hermesLedControl"
+chown -R "${USER}" "${USERDIR}/HermesLedControl"
 
 pip3 install virtualenv
 pip3 uninstall -y pixel_ring
@@ -148,11 +148,11 @@ if [[ "$device" != "don't overwrite existing parameters" && ! -f ${configuration
 fi
 
 escaped=${USERDIR//\//\\/}
-sed -i -e "s/%WORKING_DIR%/${escaped}\/hermesLedControl/" /etc/systemd/system/hermesledcontrol.service
+sed -i -e "s/%WORKING_DIR%/${escaped}\/HermesLedControl/" /etc/systemd/system/hermesledcontrol.service
 sed -i -e "s/%USER%/${USER}/" /etc/systemd/system/hermesledcontrol.service
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
-    sed -i -e "s/%EXECSTART%/${escaped}\/hermesLedControl\/venv\/bin\/python main.py --hermesLedControlConfig=${escapedConfigurationFile}/" /etc/systemd/system/hermesledcontrol.service
+    sed -i -e "s/%EXECSTART%/${escaped}\/HermesLedControl\/venv\/bin\/python main.py --HermesLedControlConfig=${escapedConfigurationFile}/" /etc/systemd/system/hermesledcontrol.service
 fi
 
 echo "Do you need to install / configure your \"${device}\"? This is strongly suggested as it does turn off services that might conflict as well!"
