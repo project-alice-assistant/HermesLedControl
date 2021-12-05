@@ -13,34 +13,35 @@ from models.LedsController import LedsController
 
 
 class HermesLedControl(object):
-	ALL_SITE_ID = 'all'
 
-	_SUB_ON_HOTWORD = 'hermes/hotword/+/detected'
-	_SUB_ON_SAY = 'hermes/tts/say'
-	_SUB_ON_THINK = 'hermes/asr/textCaptured'
-	_SUB_ON_LISTENING = 'hermes/asr/startListening'
-	_SUB_ON_HOTWORD_TOGGLE_ON = 'hermes/hotword/toggleOn'
-	_SUB_LEDS_ON_ERROR = 'hermes/nlu/intentNotRecognized'
-	_SUB_LEDS_ON_SUCCESS = 'hermes/nlu/intentParsed'
-	_SUB_ON_PLAY_FINISHED = 'hermes/audioServer/{}/playFinished'
-	_SUB_ON_TTS_FINISHED = 'hermes/tts/sayFinished'
+	ALL_SITE_ID                = 'all'
 
-	_SUB_ON_LEDS_TOGGLE = 'hermes/leds/toggle'
-	_SUB_ON_LEDS_TOGGLE_ON = 'hermes/leds/toggleOn'
-	_SUB_ON_LEDS_TOGGLE_OFF = 'hermes/leds/toggleOff'
-	_SUB_ON_LEDS_CLEAR = 'hermes/leds/clear'
-	_SUB_ON_LEDS_IDLE = 'hermes/leds/idle'
-	_SUB_UPDATING = 'hermes/leds/systemUpdate'
-	_SUB_ON_CALL = 'hermes/leds/onCall'
-	_SUB_SETUP_MODE = 'hermes/leds/setupMode'
-	_SUB_CON_ERROR = 'hermes/leds/connectionError'
-	_SUB_ON_MESSAGE = 'hermes/leds/onMessage'
-	_SUB_ON_DND = 'hermes/leds/doNotDisturb'
-	_SUB_ON_START = 'hermes/leds/onStart'
-	_SUB_ON_STOP = 'hermes/leds/onStop'
+	_SUB_ON_HOTWORD            = 'hermes/hotword/+/detected'
+	_SUB_ON_SAY                = 'hermes/tts/say'
+	_SUB_ON_THINK              = 'hermes/asr/textCaptured'
+	_SUB_ON_LISTENING          = 'hermes/asr/startListening'
+	_SUB_ON_HOTWORD_TOGGLE_ON  = 'hermes/hotword/toggleOn'
+	_SUB_LEDS_ON_ERROR         = 'hermes/nlu/intentNotRecognized'
+	_SUB_LEDS_ON_SUCCESS       = 'hermes/nlu/intentParsed'
+	_SUB_ON_PLAY_FINISHED      = 'hermes/audioServer/{}/playFinished'
+	_SUB_ON_TTS_FINISHED       = 'hermes/tts/sayFinished'
 
-	_SUB_VOLUME_SET = 'hermes/volume/set'
-	_SUB_VADLED_SET = 'hermes/leds/vadLed'
+	_SUB_ON_LEDS_TOGGLE        = 'hermes/leds/toggle'
+	_SUB_ON_LEDS_TOGGLE_ON     = 'hermes/leds/toggleOn'
+	_SUB_ON_LEDS_TOGGLE_OFF    = 'hermes/leds/toggleOff'
+	_SUB_ON_LEDS_CLEAR         = 'hermes/leds/clear'
+	_SUB_ON_LEDS_IDLE          = 'hermes/leds/idle'
+	_SUB_UPDATING              = 'hermes/leds/systemUpdate'
+	_SUB_ON_CALL               = 'hermes/leds/onCall'
+	_SUB_SETUP_MODE            = 'hermes/leds/setupMode'
+	_SUB_CON_ERROR             = 'hermes/leds/connectionError'
+	_SUB_ON_MESSAGE            = 'hermes/leds/onMessage'
+	_SUB_ON_DND                = 'hermes/leds/doNotDisturb'
+	_SUB_ON_START              = 'hermes/leds/onStart'
+	_SUB_ON_STOP               = 'hermes/leds/onStop'
+
+	_SUB_VOLUME_SET            = 'hermes/volume/set'
+	_SUB_VADLED_SET            = 'hermes/leds/vadLed'
 	_SUB_MANUAL_ANIMATIONS_SET = 'hermes/leds/manual/animations'
 
 
@@ -48,17 +49,17 @@ class HermesLedControl(object):
 		self._logger = logging.getLogger('HermesLedControl')
 		self._logger.info('Initializing HermesLedControl')
 
-		self._mqttClient = None
-		self._hardwareReference = None
-		self._ledsController = None
-		self._params = params
+		self._mqttClient: Optional[mqtt.Client]        = None
+		self._hardwareReference: Optional[Dict]        = None
+		self._ledsController: Optional[LedsController] = None
+		self._params                                   = params
+		self._mqttServer                               = 'localhost'
+		self._me                                       = 'default'
+		self._mqttPort                                 = 1883
+		self._mqttUsername                             = ''
+		self._mqttPassword                             = ''
+		self._tlsFile                                  = ''
 
-		self._mqttServer = 'localhost'
-		self._me = 'default'
-		self._mqttPort = 1883
-		self._mqttUsername = ''
-		self._mqttPassword = ''
-		self._tlsFile = ''
 
 		self._hotwordRegex = re.compile(self._SUB_ON_HOTWORD.replace('+', '(.*)'))
 
@@ -89,12 +90,13 @@ class HermesLedControl(object):
 		else:
 			self._hardware = self._hardwareReference[self._params.hardware]
 
-		self._mqttServer = params.mqttServer or self._configs['mqttServer']
-		self._mqttPort = int(params.mqttPort or self._configs['mqttPort'])
+		self._mqttServer   = params.mqttServer or self._configs['mqttServer']
+		self._mqttPort     = int(params.mqttPort or self._configs['mqttPort'])
 		self._mqttUsername = params.mqttUsername or self._configs['mqttUsername']
 		self._mqttPassword = params.mqttPassword or self._configs['mqttPassword']
-		self._tlsFile = self._configs['mqttTLSCAFile']
-		self._me = params.clientId or self._configs['deviceName']
+		self._tlsFile      = self._configs['mqttTLSCAFile']
+		self._me           = params.clientId or self._configs['deviceName']
+
 
 		self._SUB_ON_PLAY_FINISHED = self._SUB_ON_PLAY_FINISHED.format(self._me)
 
@@ -131,7 +133,7 @@ class HermesLedControl(object):
 			self._hardware['endFrame'] = params.endFrame
 
 		self._ledsController = LedsController(self)
-		self._mqttClient = self.connectMqtt()
+		self._mqttClient     = self.connectMqtt()
 
 
 	def onStart(self):

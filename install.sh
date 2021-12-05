@@ -87,7 +87,6 @@ if [[ "$device" == "respeaker4MicArray" || "$device" == "respeakerMicArrayV2" ||
 			"install dependencies only")
 				apt-get update
 				apt-get install -y libatlas-base-dev
-				pipNumpy="pip3 --no-cache-dir install numpy"
 				break;;
 			cancel) exit;;
 			*) break;;
@@ -100,7 +99,7 @@ systemctl is-active -q hermesledcontrol && systemctl stop hermesledcontrol
 apt-get update
 apt-get install -y git mosquitto mosquitto-clients portaudio19-dev python3-numpy
 
-FVENV=${USERDIR}'/hermesLedControl_'${VERSION}'/'${VENV}
+FVENV=${USERDIR}'/hermesLedControl/'${VENV}
 
 apt-get install -y python3-pip
 
@@ -110,24 +109,16 @@ fi
 
 systemctl is-active -q pixel_ring_server && systemctl disable pixel_ring_server
 
-chown -R "${USER}" "${USERDIR}/hermesLedControl_${VERSION}"
+chown -R "${USER}" "${USERDIR}/hermesLedControl"
 
 pip3 install virtualenv
+pip3 uninstall -y pixel_ring
 
 sudo -u "${USER}" bash <<EOF
     virtualenv -p ${PYTHON} ${FVENV}
     source ${FVENV}/bin/activate
-
-    pip3 --no-cache-dir install RPi.GPIO
-    pip3 --no-cache-dir install spidev
-    pip3 --no-cache-dir install gpiozero
-    pip3 --no-cache-dir install paho-mqtt
-    pip3 --no-cache-dir install pyyaml
-    ${pipNumpy}
-    pip3 uninstall -y pixel_ring
+    pip install -r requirements.txt --no-cache-dir
 EOF
-
-pip3 uninstall -y pixel_ring
 
 mkdir -p logs
 chown "${USER}" logs
@@ -157,11 +148,11 @@ if [[ "$device" != "don't overwrite existing parameters" && ! -f ${configuration
 fi
 
 escaped=${USERDIR//\//\\/}
-sed -i -e "s/%WORKING_DIR%/${escaped}\/hermesLedControl_${VERSION}/" /etc/systemd/system/hermesledcontrol.service
+sed -i -e "s/%WORKING_DIR%/${escaped}\/hermesLedControl/" /etc/systemd/system/hermesledcontrol.service
 sed -i -e "s/%USER%/${USER}/" /etc/systemd/system/hermesledcontrol.service
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
-    sed -i -e "s/%EXECSTART%/${escaped}\/hermesLedControl_${VERSION}\/venv\/bin\/python3 main.py --hermesLedControlConfig=${escapedConfigurationFile}/" /etc/systemd/system/hermesledcontrol.service
+    sed -i -e "s/%EXECSTART%/${escaped}\/hermesLedControl\/venv\/bin\/python main.py --hermesLedControlConfig=${escapedConfigurationFile}/" /etc/systemd/system/hermesledcontrol.service
 fi
 
 echo "Do you need to install / configure your \"${device}\"? This is strongly suggested as it does turn off services that might conflict as well!"
@@ -224,7 +215,7 @@ select answer in "yes" "no" "cancel"; do
     esac
 done
 
-chown -R "${USER}" "${USERDIR}/hermesLedControl_${VERSION}"
+chown -R "${USER}" "${USERDIR}/HermesLedControl"
 
 systemctl daemon-reload
 systemctl enable hermesledcontrol
