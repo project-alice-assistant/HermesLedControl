@@ -8,7 +8,7 @@ fi
 apt-get install git
 
 latest=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-dest="$HOME/HermesLedControl"
+dest="/home/$(logname)/HermesLedControl"
 
 rm -rf "$dest"
 git clone https://github.com/project-alice-assistant/HermesLedControl.git "$dest"
