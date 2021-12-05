@@ -55,7 +55,7 @@ done
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
     echo "What pattern do you want to use?"
-    select pattern in "google" "alexa" "projectalice" "pgas" "kiboost" "custom" "cancel"; do
+    select pattern in "projectalice" "google" "alexa" "pgas" "kiboost" "fake-name" "custom" "cancel"; do
         case "$pattern" in
             cancel) exit;;
             *) break;;
@@ -145,7 +145,7 @@ sed -i -e "s/%WORKING_DIR%/${escaped}\/HermesLedControl/" /etc/systemd/system/he
 sed -i -e "s/%USER%/${USER}/" /etc/systemd/system/hermesledcontrol.service
 
 if [[ "$device" != "don't overwrite existing parameters" ]]; then
-    sed -i -e "s/%EXECSTART%/${escaped}\/HermesLedControl\/venv\/bin\/python main.py --HermesLedControlConfig=${escapedConfigurationFile}/" /etc/systemd/system/hermesledcontrol.service
+    sed -i -e "s/%EXECSTART%/${escaped}\/HermesLedControl\/venv\/bin\/python main.py --hermesLedControlConfig=${escapedConfigurationFile}/" /etc/systemd/system/hermesledcontrol.service
 fi
 
 echo "Do you need to install / configure your \"${device}\"? This is strongly suggested as it does turn off services that might conflict as well!"
