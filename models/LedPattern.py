@@ -1,31 +1,34 @@
 import colorsys
 import logging
+from threading import Event
+from typing import Tuple
+
 from models.Animations import Animations
-from models.LedsController import *
+from models.LedsController import LedsController
 
 
-class LedPattern:
+class LedPattern(object):
 
-	def __init__(self, controller):
-		self._logger 				= logging.getLogger('HermesLedControl')
-		self._controller 			= controller # type: LedsController
-		self._numLeds 				= self._controller.interface.numLeds
-		self._animation 			= threading.Event()
-		self._animator 				= Animations(self._animation, controller)
+	def __init__(self, controller: LedsController):
+		self._logger = logging.getLogger('HermesLedControl')
+		self._controller: LedsController = controller
+		self._numLeds = self._controller.interface.numLeds
+		self._animation: Event= Event()
+		self._animator: Animations = Animations(self._animation, controller)
 
 
 	@property
-	def animator(self):
+	def animator(self) -> Animations:
 		return self._animator
 
 
 	@property
-	def animation(self):
+	def animation(self) -> Event:
 		return self._animation
 
 
 	@property
-	def numLeds(self):
+	def numLeds(self) -> int:
 		return self._numLeds
 
 
@@ -41,12 +44,6 @@ class LedPattern:
 		pass # Superseeded
 	def idle(self, *args):
 		pass # Superseeded
-	def off(self, *args):
-		self._controller.clearLeds()
-	def onError(self, *args):
-		pass # Superseeded
-	def onSuccess(self, *args):
-		pass # Superseeded
 	def updating(self, *args):
 		pass # Superseeded
 	def call(self, *args):
@@ -59,23 +56,29 @@ class LedPattern:
 		pass # Superseeded
 	def dnd(self, *args):
 		pass # Superseeded
-	def onVolumeSet(self, *args):
+	def off(self, *args):
+		self._controller.clearLeds()
+	def onError(self, *_args):
+		pass # Superseeded
+	def onSuccess(self, *_args):
+		pass # Superseeded
+	def onVolumeSet(self, *_args):
 		pass # Superseeded
 	def onButton1(self, *args): #NOSONAR
 		self._logger.warning('Button 1 not implemented, override it in CustomLedPattern')
-	def onButton2(self, *args): #NOSONAR
+	def onButton2(self, *_args): #NOSONAR
 		self._logger.warning('Button 2 not implemented, override it in CustomLedPattern')
-	def onButton3(self, *args): #NOSONAR
+	def onButton3(self, *_args): #NOSONAR
 		self._logger.warning('Button 3 not implemented, override it in CustomLedPattern')
-	def onButton4(self, *args): #NOSONAR
+	def onButton4(self, *_args): #NOSONAR
 		self._logger.warning('Button 4 not implemented, override it in CustomLedPattern')
-	def onButton5(self, *args): #NOSONAR
+	def onButton5(self, *_args): #NOSONAR
 		self._logger.warning('Button 5 not implemented, override it in CustomLedPattern')
-	def onButton6(self, *args): #NOSONAR
+	def onButton6(self, *_args): #NOSONAR
 		self._logger.warning('Button 6 not implemented, override it in CustomLedPattern')
-	def onStart(self, *args):
+	def onStart(self, *_args):
 		pass # Superseeded
-	def onStop(self, *args):
+	def onStop(self, *_args):
 		self.off()
 
 
@@ -84,9 +87,9 @@ class LedPattern:
 		return (white << 24) | (red << 16) | (green << 8) | blue
 
 
-	def _normalizeIndex(self, index):
+	def _normalizeIndex(self, index: int):
 		"""
-		Makes sure the given index is valid in the led strip or returns the one on the other side of the loop
+		Makes sure the given index is valid in the LED strip or returns the one on the other side of the loop
 		:param int index:
 		:return: int
 		"""
@@ -99,17 +102,18 @@ class LedPattern:
 
 
 	@staticmethod
-	def _hueAngleToRgb(angle, saturation = 1, value = 1):
+	def _hueAngleToRgb(angle, saturation: int = 1, value: float = 1.0) -> Tuple[int, int, int]:
 		"""
-		Given an hue angle, return the RGB triplet
+		Given a hue angle, return the RGB triplet
 		that represents the 100% saturated rgb value
 		for that Hue from the HSV color model.
-
 		Input value is 0-1.
 		Return value is normalized to 0-255 integer range
-
+		:param int saturation:
+		:param float value:
+		:return: int
 		"""
-		# Get fully saturated HSV value
-		r, g, b = colorsys.hsv_to_rgb(angle % 1, saturation, value)
-		ret = int(r * 255), int(g * 255), int(b * 255)
+
+		red, green, blue = colorsys.hsv_to_rgb(angle % 1, saturation, value)
+		ret = int(red * 255), int(green * 255), int(blue * 255)
 		return ret

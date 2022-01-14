@@ -1,40 +1,56 @@
-#!/usr/bin/python
 import logging
+from typing import List
+
 
 class Interface(object):
 
-	def __init__(self, numLeds):
-		self._numLeds 	= numLeds
+	def __init__(self, numLeds: int):
+		self._numLeds = numLeds
 
-		self._logger 	= logging.getLogger('HermesLedControl')
-		self._leds 		= None
-		self._power 	= None
-		self._doa 		= False
+		self._logger = logging.getLogger('HermesLedControl')
+		self._leds = None
+		self._power = None
+		self._doa = False
+
 
 	@property
 	def leds(self):
 		return self._leds
 
+
 	@property
-	def numLeds(self):
+	def numLeds(self) -> int:
 		return self._numLeds
 
+
 	@property
-	def doa(self):
+	def doa(self) -> bool:
 		return self._doa
 
-	def setPixel(self, ledNum, red, green, blue, brightness):
-		pass # Superseeded
-	def setPixelRgb(self, ledNum, color, brightness):
-		pass # Superseeded
+
+	def setPixel(self, ledNum: int, red: int, green: int, blue: int, brightness: int):
+		pass  # Superseeded
+
+
+	def setPixelRgb(self, ledNum: int, color: List, brightness: int):
+		pass  # Superseeded
+
+
 	def clearStrip(self):
-		pass # Superseeded
+		pass  # Superseeded
+
+
 	def show(self):
 		self._leds.show()
-	def setVolume(self, volume):
-		pass # Superseeded
-	def setVadLed(self, state):
-		pass # Superseeded
+
+
+	def setVolume(self, volume: int):
+		pass  # Superseeded
+
+
+	def setVadLed(self, state: int):
+		pass  # Superseeded
+
 
 	def onStart(self):
 		if self._power is not None:
@@ -45,6 +61,7 @@ class Interface(object):
 					self._power.write(0)
 				except:
 					pass
+
 
 	def onStop(self):
 		if self._power is not None:

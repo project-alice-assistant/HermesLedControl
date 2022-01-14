@@ -1,10 +1,11 @@
 from matrix_lite import led
+
 from models.Interface import Interface
 
 
 class MatrixVoice(Interface):
 
-	def __init__(self, numLeds):
+	def __init__(self, numLeds: int):
 		super(MatrixVoice, self).__init__(numLeds)
 		self._colors = self._newArray()
 

@@ -1,18 +1,19 @@
-import os
+import argparse
 import json
 import logging
+import os
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional
 
 
-class Rhasspy:
+class Rhasspy(object):
 
 	def __init__(self):
 		self._logger = logging.getLogger('HermesLedControl')
 		self._logger.info('Initializing Rhasspy settings')
 
 
-	def loadConfig(self, params) -> Optional[dict]:
+	def loadConfig(self, params: argparse.Namespace) -> Optional[Dict]:
 
 		"""
 		Load assistant configuration
@@ -48,7 +49,7 @@ class Rhasspy:
 						siteId = conf['mqtt'].get('site_id', 'default')
 						configs['deviceName'] = siteId.split(',')[0]
 					except Exception as e:
-						self._logger.info('Error loading configurations: {}'.format(e))
+						self._logger.info(f'Error loading configurations: {e}')
 						return None
 				else:
 					self._logger.warning('\'mqtt\' not present in Rhasspy config file. Attempting to continue with default values.')

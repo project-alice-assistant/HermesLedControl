@@ -1,0 +1,6 @@
+RPi.GPIO
+spidev
+gpiozero
+paho-mqtt
+pyyaml
+numpy

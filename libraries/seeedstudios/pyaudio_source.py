@@ -9,6 +9,7 @@ import pyaudio
 
 from .element import Element
 
+
 logger = logging.getLogger(__file__)
 
 
@@ -39,16 +40,16 @@ class Source(Element):
             for i in range(self.pyaudio_instance.get_device_count()):
                 dev = self.pyaudio_instance.get_device_info_by_index(i)
                 name = dev['name'].encode('utf-8')
-                logger.info('{}:{} with {} input channels'.format(i, name, dev['maxInputChannels']))
+                logger.info(f'{i}:{name} with {dev["maxInputChannels"]} input channels')
                 if name.find(device_name) >= 0:
-                    logger.info('Use {}'.format(name))
+                    logger.info(f'Use {name}')
                     device_index = i
                     break
         else:
             device_index = self.pyaudio_instance.get_default_input_device_info()['index']
 
         if device_index is None:
-            raise ValueError('Can not find an input device {}'.format(device_name))
+            raise ValueError(f'Cannot find any input device named {device_name}')
 
         self.stream = self.pyaudio_instance.open(
             start=False,

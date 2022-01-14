@@ -1,23 +1,26 @@
+from __future__ import annotations
+
 import math
 import time
 
 from models.LedPattern import LedPattern
+from models.LedsController import LedsController
 
 
 class GoogleHomeLedPattern(LedPattern):
 
-	def __init__(self, controller):
+	def __init__(self, controller: LedsController):
 		super(GoogleHomeLedPattern, self).__init__(controller)
 
-		self._cardinalSteps 	= int(math.ceil(self._numLeds / 4.00))
-		self._colors 			= {
-			'blue'		: [0, 0, 255, self._controller.defaultBrightness],
-			'red'		: [255, 0, 0, self._controller.defaultBrightness],
-			'yellow'	: [255, 255, 0, self._controller.defaultBrightness],
-			'green'		: [0, 255, 0, self._controller.defaultBrightness]
+		self._cardinalSteps = int(math.ceil(self._numLeds / 4.00))
+		self._colors = {
+			'blue'  : [0, 0, 255, self._controller.defaultBrightness],
+			'red'   : [255, 0, 0, self._controller.defaultBrightness],
+			'yellow': [255, 255, 0, self._controller.defaultBrightness],
+			'green' : [0, 255, 0, self._controller.defaultBrightness]
 		}
-		self._colorRefs 		= ('blue', 'red', 'yellow', 'green')
-		self._image 			= []
+		self._colorRefs = ('blue', 'red', 'yellow', 'green')
+		self._image = []
 
 
 	def _newImage(self):
@@ -32,10 +35,10 @@ class GoogleHomeLedPattern(LedPattern):
 				self._image.append([0, 0, 0, 0])
 
 
-	def _rotateImage(self, angle):
+	def _rotateImage(self, angle: int):
 		angle = round(angle)
 		if angle == 0:
-			self._logger.error('Cannot rotate by {}'.format(angle))
+			self._logger.error(f'Cannot rotate by {angle}')
 			return
 
 		degreesPerLed = 360 / self._numLeds
@@ -80,7 +83,7 @@ class GoogleHomeLedPattern(LedPattern):
 		direction = 1
 		brightness = self._controller.defaultBrightness
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			brightness -= direction
 			for i in range(self._numLeds):
 				self._image[i][3] = brightness
@@ -112,7 +115,7 @@ class GoogleHomeLedPattern(LedPattern):
 		degreesPerLed = 360 / self._numLeds
 
 		angle = 0
-		while self._animation.isSet():
+		while self._animation.is_set():
 			self._rotateImage(degreesPerLed)
 			self._displayImage()
 			angle += degreesPerLed
@@ -138,7 +141,7 @@ class GoogleHomeLedPattern(LedPattern):
 		direction = 1
 		brightness = self._controller.defaultBrightness
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			brightness -= direction
 			for i, led in enumerate(self._image):
 				self._image[i][3] = brightness

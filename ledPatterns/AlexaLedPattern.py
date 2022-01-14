@@ -1,22 +1,24 @@
 import time
 
 from models.LedPattern import LedPattern
+from models.LedsController import LedsController
 
 
 class AlexaLedPattern(LedPattern):
-	def __init__(self, controller):
+
+	def __init__(self, controller: LedsController):
 		super(AlexaLedPattern, self).__init__(controller)
 
 		self._colors = {
-			'blank' 	: (0, 0, 0),
-			'blue'		: (0, 0, 255),
-			'red'		: (60, 0, 0),
-			'yellow'	: (255, 255, 0),
-			'white'		: (255, 255, 255)
+			'blank' : (0, 0, 0),
+			'blue'  : (0, 0, 255),
+			'red'   : (60, 0, 0),
+			'yellow': (255, 255, 0),
+			'white' : (255, 255, 255)
 		}
 
 
-	def wakeup(self, direction=0):
+	def wakeup(self, direction = 0):
 		brightness = max(5, self._controller.defaultBrightness - 50)
 		for i in range(int(round(self._numLeds / 2)) + 1):
 			brightness += 5
@@ -37,6 +39,7 @@ class AlexaLedPattern(LedPattern):
 
 	def listen(self):
 		""" there is no listen animation for this led pattern """
+		return
 
 
 	def think(self):
@@ -44,9 +47,9 @@ class AlexaLedPattern(LedPattern):
 		second = self._colors['white']
 
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			for i in range(1, self._numLeds + 1):
-				if not self._animation.isSet():
+				if not self._animation.is_set():
 					break
 
 				if i % 2 == 0:
@@ -75,9 +78,9 @@ class AlexaLedPattern(LedPattern):
 			self._controller.setLedRGB(i, self._colors['white'])
 
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			for i in range(self._numLeds):
-				if not self._animation.isSet():
+				if not self._animation.is_set():
 					break
 				self._controller.setLed(i, red=red, green=green, blue=255)
 			self._controller.show()

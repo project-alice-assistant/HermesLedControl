@@ -1,7 +1,7 @@
 ###########################################################################################################
 # SUBMIT YOUR OWN CUSTOM PATTERN AND SHARE WITH THE WORLD YOUR LED ANIMATIONS!
 # Visit https://github.com/project-alice-assistant/HermesLedControl/issues/new?template=custom-pattern-proposal.md
-# for more informations
+# for more information
 #
 # Check models/LedPattern.py for the available functions
 # Do NEVER have a function call a super class function directly!!
@@ -14,11 +14,13 @@
 ###########################################################################################################
 
 from models.LedPattern import LedPattern
+from models.LedsController import LedsController
+
 
 class CustomLedPattern(LedPattern):
 
-	def __init__(self, controller):
-		super(CustomLedPattern, self).__init__(controller)
+	def __init__(self, controller: LedsController):
+		super().__init__(controller)
 
 
 	def onStart(self, *args):

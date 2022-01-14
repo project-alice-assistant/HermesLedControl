@@ -5,20 +5,27 @@ if [[ "$EUID" -ne 0 ]]
   exit
 fi
 
-url=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep -Po '"tarball_url": "\K.*?(?=")')
-latest=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+apt-get install git
 
-path='/home/'$(logname)
-dest=${path}/hermesLedControl_${latest}
-rm ${latest}
-rm -rf ${dest}
-mkdir -p ${dest}
+if [[ -z "$1" ]]; then
+    echo "No version supplied"
+    latest=$(curl --silent "https://api.github.com/repos/project-alice-assistant/HermesLedControl/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    echo "Will download $latest"
+    VERSION=$latest
+else
+    VERSION=$1
+    echo "Supplied version $VERSION"
+fi
 
-wget ${url}
-tar -xzf ${latest} -C ${dest} --strip-components=1
-rm ${latest}
+dest="/home/$(logname)/HermesLedControl"
 
-chown -R $(logname) ${dest}
-cd ${dest}
+rm -rf "$dest"
+git clone https://github.com/project-alice-assistant/HermesLedControl.git "$dest"
+cd "$dest" || exit
+git fetch
+git checkout "$VERSION"
+git pull
+chown -R "$(logname)" "$dest"
+
 chmod +x install.sh
-./install.sh ${latest}
+./install.sh

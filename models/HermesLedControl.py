@@ -1,77 +1,77 @@
+import argparse
 import json
 import logging
-import sys
-import time
-
 import paho.mqtt.client as mqtt
 import re
+import sys
+import time
 from paho.mqtt.client import MQTTMessage
+from typing import Dict, List, Optional, Union
 
 from models.LedsController import LedsController
 
 
-class HermesLedControl:
-	
-	ALL_SITE_ID = 'all'
+class HermesLedControl(object):
 
-	_SUB_ON_HOTWORD 				= 'hermes/hotword/+/detected'
-	_SUB_ON_SAY 					= 'hermes/tts/say'
-	_SUB_ON_THINK 					= 'hermes/asr/textCaptured'
-	_SUB_ON_LISTENING 				= 'hermes/asr/startListening'
-	_SUB_ON_HOTWORD_TOGGLE_ON 		= 'hermes/hotword/toggleOn'
-	_SUB_LEDS_ON_ERROR 				= 'hermes/nlu/intentNotRecognized'
-	_SUB_LEDS_ON_SUCCESS 			= 'hermes/nlu/intentParsed'
-	_SUB_ON_PLAY_FINISHED 			= 'hermes/audioServer/{}/playFinished'
-	_SUB_ON_TTS_FINISHED 			= 'hermes/tts/sayFinished'
+	ALL_SITE_ID                = 'all'
 
-	_SUB_ON_LEDS_TOGGLE 			= 'hermes/leds/toggle'
-	_SUB_ON_LEDS_TOGGLE_ON 			= 'hermes/leds/toggleOn'
-	_SUB_ON_LEDS_TOGGLE_OFF 		= 'hermes/leds/toggleOff'
-	_SUB_ON_LEDS_CLEAR 				= 'hermes/leds/clear'
-	_SUB_ON_LEDS_IDLE 				= 'hermes/leds/idle'
-	_SUB_UPDATING 					= 'hermes/leds/systemUpdate'
-	_SUB_ON_CALL 					= 'hermes/leds/onCall'
-	_SUB_SETUP_MODE 				= 'hermes/leds/setupMode'
-	_SUB_CON_ERROR 					= 'hermes/leds/connectionError'
-	_SUB_ON_MESSAGE 				= 'hermes/leds/onMessage'
-	_SUB_ON_DND 					= 'hermes/leds/doNotDisturb'
-	_SUB_ON_START 					= 'hermes/leds/onStart'
-	_SUB_ON_STOP 					= 'hermes/leds/onStop'
+	_SUB_ON_HOTWORD            = 'hermes/hotword/+/detected'
+	_SUB_ON_SAY                = 'hermes/tts/say'
+	_SUB_ON_THINK              = 'hermes/asr/textCaptured'
+	_SUB_ON_LISTENING          = 'hermes/asr/startListening'
+	_SUB_ON_HOTWORD_TOGGLE_ON  = 'hermes/hotword/toggleOn'
+	_SUB_LEDS_ON_ERROR         = 'hermes/nlu/intentNotRecognized'
+	_SUB_LEDS_ON_SUCCESS       = 'hermes/nlu/intentParsed'
+	_SUB_ON_PLAY_FINISHED      = 'hermes/audioServer/{}/playFinished'
+	_SUB_ON_TTS_FINISHED       = 'hermes/tts/sayFinished'
 
-	_SUB_VOLUME_SET 				= 'hermes/volume/set'
-	_SUB_VADLED_SET 				= 'hermes/leds/vadLed'
-	_SUB_MANUAL_ANIMATIONS_SET		= 'hermes/leds/manual/animations'
+	_SUB_ON_LEDS_TOGGLE        = 'hermes/leds/toggle'
+	_SUB_ON_LEDS_TOGGLE_ON     = 'hermes/leds/toggleOn'
+	_SUB_ON_LEDS_TOGGLE_OFF    = 'hermes/leds/toggleOff'
+	_SUB_ON_LEDS_CLEAR         = 'hermes/leds/clear'
+	_SUB_ON_LEDS_IDLE          = 'hermes/leds/idle'
+	_SUB_UPDATING              = 'hermes/leds/systemUpdate'
+	_SUB_ON_CALL               = 'hermes/leds/onCall'
+	_SUB_SETUP_MODE            = 'hermes/leds/setupMode'
+	_SUB_CON_ERROR             = 'hermes/leds/connectionError'
+	_SUB_ON_MESSAGE            = 'hermes/leds/onMessage'
+	_SUB_ON_DND                = 'hermes/leds/doNotDisturb'
+	_SUB_ON_START              = 'hermes/leds/onStart'
+	_SUB_ON_STOP               = 'hermes/leds/onStop'
+
+	_SUB_VOLUME_SET            = 'hermes/volume/set'
+	_SUB_VADLED_SET            = 'hermes/leds/vadLed'
+	_SUB_MANUAL_ANIMATIONS_SET = 'hermes/leds/manual/animations'
 
 
-	def __init__(self, params):
+	def __init__(self, params: argparse.Namespace):
 		self._logger = logging.getLogger('HermesLedControl')
 		self._logger.info('Initializing HermesLedControl')
 
-		self._mqttClient 			= None
-		self._hardwareReference 	= None
-		self._ledsController 		= None
-		self._params 				= params
+		self._mqttClient: Optional[mqtt.Client]        = None
+		self._hardwareReference: Optional[Dict]        = None
+		self._ledsController: Optional[LedsController] = None
+		self._params                                   = params
+		self._mqttServer                               = 'localhost'
+		self._me                                       = 'default'
+		self._mqttPort                                 = 1883
+		self._mqttUsername                             = ''
+		self._mqttPassword                             = ''
+		self._tlsFile                                  = ''
 
-		self._mqttServer 			= 'localhost'
-		self._me 					= 'default'
-		self._mqttPort 				= 1883
-		self._mqttUsername 			= ''
-		self._mqttPassword 			= ''
-		self._tlsFile 				= ''
 
-		self._hotwordRegex          = re.compile(self._SUB_ON_HOTWORD.replace('+', '(.*)'))
+		self._hotwordRegex = re.compile(self._SUB_ON_HOTWORD.replace('+', '(.*)'))
 
 		if params.engine == 'projectalice':
 			from models.engines.ProjectAlice import ProjectAlice
+
 			engine = ProjectAlice()
 		elif params.engine == 'rhasspy':
 			from models.engines.Rhasspy import Rhasspy
+
 			engine = Rhasspy()
-		elif params.engine == 'snips':
-			from models.engines.Snips import Snips
-			engine = Snips()
 		else:
-			self._logger.error('Unsupported assistant engine "{}"'.format(params.engine))
+			self._logger.error(f'Unsupported assistant engine "{params.engine}"')
 			self.onStop()
 			return
 
@@ -81,7 +81,7 @@ class HermesLedControl:
 
 		with open('hardware.json') as f:
 			self._hardwareReference = json.load(f)
-			self._logger.info('Loaded {} hardware references'.format(len(self._hardwareReference)))
+			self._logger.info(f'Loaded {len(self._hardwareReference)} hardware references')
 
 		if params.hardware not in self._hardwareReference:
 			self._logger.fatal('Trying to use an unsupported hardware')
@@ -89,34 +89,35 @@ class HermesLedControl:
 		else:
 			self._hardware = self._hardwareReference[self._params.hardware]
 
-		self._mqttServer = params.mqttServer or self._configs['mqttServer']
-		self._mqttPort = int(params.mqttPort or self._configs['mqttPort'])
+		self._mqttServer   = params.mqttServer or self._configs['mqttServer']
+		self._mqttPort     = int(params.mqttPort or self._configs['mqttPort'])
 		self._mqttUsername = params.mqttUsername or self._configs['mqttUsername']
 		self._mqttPassword = params.mqttPassword or self._configs['mqttPassword']
-		self._tlsFile = self._configs['mqttTLSCAFile']
-		self._me = params.clientId or self._configs['deviceName']
+		self._tlsFile      = self._configs['mqttTLSCAFile']
+		self._me           = params.clientId or self._configs['deviceName']
+
 
 		self._SUB_ON_PLAY_FINISHED = self._SUB_ON_PLAY_FINISHED.format(self._me)
 
-		self._logger.info('- Mqtt server set to {}'.format(self._mqttServer))
-		self._logger.info('- Mqtt port set to {}'.format(self._mqttPort))
+		self._logger.info(f'- Mqtt server set to {self._mqttServer}')
+		self._logger.info(f'- Mqtt port set to {self._mqttPort}')
 
 		if self._mqttUsername:
-			self._logger.info('- Mqtt username set to {}'.format(self._mqttUsername))
+			self._logger.info(f'- Mqtt username set to {self._mqttUsername}')
 		if self._mqttPassword:
-			self._logger.info('- Mqtt password set to "hidden"')
+			self._logger.info('- Mqtt password set!')
 
-		self._logger.info('- Client id set to {}'.format(self._me))
-		self._logger.info('- Hardware set to {}'.format(self._hardware['name']))
+		self._logger.info(f'- Client id set to {self._me}')
+		self._logger.info(f'- Hardware set to {self._hardware["name"]}')
 
 		if params.leds is not None:
 			self._hardware['numberOfLeds'] = params.leds
-		self._logger.info('- Using {} as pattern with {} leds'.format(params.pattern, self._hardware['numberOfLeds']))
+		self._logger.info(f'- Using {params.pattern} as pattern with {self._hardware["numberOfLeds"]} leds')
 
 		if 'gpioPin' in self._hardware:
 			if params.gpioPin is not None:
 				self._hardware['gpioPin'] = params.gpioPin
-			self._logger.info('Using pin #{}'.format(self._hardware['gpioPin']))
+			self._logger.info(f'Using pin #{self._hardware["gpioPin"]}')
 
 		if 'vid' in self._hardware and params.vid is not None:
 			self._hardware['vid'] = params.vid
@@ -130,9 +131,8 @@ class HermesLedControl:
 		if 'endFrame' in self._hardware and params.endFrame is not None:
 			self._hardware['endFrame'] = params.endFrame
 
-
 		self._ledsController = LedsController(self)
-		self._mqttClient = self.connectMqtt()
+		self._mqttClient     = self.connectMqtt()
 
 
 	def onStart(self):
@@ -220,10 +220,10 @@ class HermesLedControl:
 			payload = json.loads(message.payload.decode('UTF-8'))
 
 		noLeds = payload.get('noLeds', False)
-		
+
 		if noLeds:
 			return False
-		
+
 		siteId = payload.get('siteId')
 		sticky = payload.get('sticky', False)
 		isForMe = siteId == self._me or siteId == self.ALL_SITE_ID
@@ -431,7 +431,7 @@ class HermesLedControl:
 			else:
 				if self._params.debug:
 					self._logger.debug("On vad led set received but it wasn't for me")
-	
+
 		elif message.topic == self._SUB_ON_LEDS_IDLE:
 			if isForMe:
 				if self._params.debug:
@@ -583,7 +583,7 @@ class HermesLedControl:
 					self._logger.debug("On manual animation leds received but it wasn't for me")
 
 
-	def safePayloadColor(self, payload, attributeName, default=None):
+	def safePayloadColor(self, payload: Dict, attributeName: str, default: Optional[List] = None) -> List:
 		color = payload.get(attributeName, [255, 255, 255, 2] if not default else default)
 
 		if type(color) == str and ',' in color:
@@ -598,7 +598,8 @@ class HermesLedControl:
 
 		return color
 
-	def safePayloadNumber(self, payload, attributeName, default=None, isFloat=False):
+
+	def safePayloadNumber(self, payload: Dict, attributeName: str, default: Optional[Union[int, float]] = None, isFloat: bool = False) -> Union[int, float]:
 		number = payload.get(attributeName, default)
 
 		try:
@@ -614,7 +615,7 @@ class HermesLedControl:
 
 
 	@property
-	def params(self):
+	def params(self) -> argparse.Namespace:
 		return self._params
 
 

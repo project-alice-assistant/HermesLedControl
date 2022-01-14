@@ -1,4 +1,5 @@
 import importlib
+from typing import Dict, List
 
 try:
 	from gpiozero import LED
@@ -8,15 +9,15 @@ except:
 	except:
 		pass
 
+from libraries.apa102 import APA102 as AAPA102
+from models.Interface import Interface
 
-from libraries.apa102   import APA102 as AAPA102
-from models.Interface 	import Interface
 
 class APA102(Interface):
 
-	def __init__(self, hardware, global_brightness=AAPA102.MAX_BRIGHTNESS, order='rgb', bus=0, device=1, max_speed_hz=8000000, endFrame=255):
+	def __init__(self, hardware: Dict, global_brightness: int = AAPA102.MAX_BRIGHTNESS, order: str = 'rgb', bus: int = 0, device: int = 1, max_speed_hz: int = 8000000, endFrame: int = 255):
 		super(APA102, self).__init__(hardware['numberOfLeds'])
-		self._leds  = AAPA102(hardware['numberOfLeds'], global_brightness=global_brightness, order=order, bus=bus, device=device, max_speed_hz=max_speed_hz, endFrame=endFrame)
+		self._leds = AAPA102(hardware['numberOfLeds'], global_brightness=global_brightness, order=order, bus=bus, device=device, max_speed_hz=max_speed_hz, endFrame=endFrame)
 
 		try:
 			self._power = LED(5)
@@ -25,7 +26,7 @@ class APA102(Interface):
 				self._power = mraa.Gpio(5)
 				self._power.dir(mraa.DIR_OUT)
 			except Exception as e:
-				self._logger.info('Device not using gpiozero or mraa, ignore power: {}'.format(e))
+				self._logger.info(f'Device not using gpiozero or mraa, ignore power: {e}')
 
 		self._hardware = hardware
 		self._src = None
@@ -45,11 +46,11 @@ class APA102(Interface):
 			self._src.link(self._doa)
 
 
-	def setPixel(self, ledNum, red, green, blue, brightness):
+	def setPixel(self, ledNum: int, red: int, green: int, blue: int, brightness: int):
 		self._leds.set_pixel(ledNum, red, green, blue, brightness)
 
 
-	def setPixelRgb(self, ledNum, color, brightness):
+	def setPixelRgb(self, ledNum: int, color: List, brightness: int):
 		self._leds.set_pixel_rgb(ledNum, color, brightness)
 
 
@@ -72,7 +73,7 @@ class APA102(Interface):
 			self._src.recursive_stop()
 
 
-	def doa(self):
+	def doa(self) -> int:
 		if self._doa:
 			try:
 				return self._doa.get_direction()

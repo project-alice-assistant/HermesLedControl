@@ -1,7 +1,7 @@
 ###########################################################################################################
 # SUBMIT YOUR OWN CUSTOM PATTERN AND SHARE WITH THE WORLD YOUR LED ANIMATIONS!
 # Visit https://github.com/project-alice-assistant/HermesLedControl/issues/new?template=custom-pattern-proposal.md
-# for more informations
+# for more information
 #
 # Check models/LedPattern.py for the available functions
 # Do NEVER have a function call a super class function directly!!
@@ -17,6 +17,7 @@ import math
 import time
 
 from models.LedPattern import LedPattern
+from models.LedsController import LedsController
 
 
 class FakeNamePattern(LedPattern):
@@ -29,7 +30,7 @@ class FakeNamePattern(LedPattern):
 	BLUE_THETA = 240.0 / 360
 	MAGENTA_THETA = 300.0 / 360
 
-	def __init__(self, controller):
+	def __init__(self, controller: LedsController):
 		super().__init__(controller)
 		self._image = []
 
@@ -39,22 +40,22 @@ class FakeNamePattern(LedPattern):
 		# LEDs.
 		self._image = []
 		for i in range(self._numLeds):
-			r, g, b = self._hueAngleToRgb((i - 1) / self._numLeds)
-			self._image.append([r, g, b, self._controller.defaultBrightness])
+			red, green, blue = self._hueAngleToRgb((i - 1) / self._numLeds)
+			self._image.append([red, green, blue, self._controller.defaultBrightness])
 
 
-	def _newSingleColor(self, hue_angle):
+	def _newSingleColor(self, hueAngle: float):
 		# Generate a nice full-brightness-off-full-brightness cycle of a
 		# specific color across the available LEDs
 		self._image = []
 		step = math.pi / self._numLeds
 		for i in range(self._numLeds):
 
-			r, g, b = self._hueAngleToRgb(hue_angle, value=math.sin(i * step))
+			r, g, b = self._hueAngleToRgb(hueAngle, value=math.sin(i * step))
 			self._image.append([r, g, b, self._controller.defaultBrightness])
 
 
-	def _rotateImage(self, steps):
+	def _rotateImage(self, steps: int):
 		if steps < 0:
 			for _ in range(0, steps, -1):
 				insertBack = self._image.pop(0)
@@ -83,7 +84,7 @@ class FakeNamePattern(LedPattern):
 	def listen(self):
 		self._newSingleColor(self.ORANGE_THETA)
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			self._rotateImage(1)
 			self._displayImage()
 			time.sleep(0.05)
@@ -92,7 +93,7 @@ class FakeNamePattern(LedPattern):
 	def think(self):
 		self._newSingleColor(self.BLUE_THETA)
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			self._rotateImage(-1)
 			self._displayImage()
 			time.sleep(0.05)
@@ -101,7 +102,7 @@ class FakeNamePattern(LedPattern):
 	def speak(self):
 		self._newSingleColor(self.YELLOW_THETA)
 		self._animation.set()
-		while self._animation.isSet():
+		while self._animation.is_set():
 			self._rotateImage(1)
 			self._displayImage()
 			time.sleep(0.05)

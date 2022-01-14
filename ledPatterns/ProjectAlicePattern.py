@@ -1,7 +1,7 @@
 ###########################################################################################################
 # SUBMIT YOUR OWN CUSTOM PATTERN AND SHARE WITH THE WORLD YOUR LED ANIMATIONS!
 # Visit https://github.com/project-alice-assistant/HermesLedControl/issues/new?template=custom-pattern-proposal.md
-# for more informations
+# for more information
 #
 # Check models/LedPattern.py for the available functions
 # Do NEVER have a function call a super class function directly!!
@@ -15,10 +15,12 @@
 import time
 
 from models.LedPattern import LedPattern
+from models.LedsController import LedsController
+
 
 class ProjectAlicePattern(LedPattern):
 
-	def __init__(self, controller):
+	def __init__(self, controller: LedsController):
 		super().__init__(controller)
 		self._dnd = False
 
@@ -76,7 +78,7 @@ class ProjectAlicePattern(LedPattern):
 
 		self._animator.new(image=image)
 		self.animation.set()
-		while self.animation.isSet():
+		while self.animation.is_set():
 			self._animator.rotateImage(-1)
 			time.sleep(0.05)
 
@@ -105,7 +107,7 @@ class ProjectAlicePattern(LedPattern):
 
 		self._animator.new(image=image)
 		self.animation.set()
-		while self.animation.isSet():
+		while self.animation.is_set():
 			self._animator.rotateImage(1)
 			time.sleep(0.085)
 
@@ -116,7 +118,7 @@ class ProjectAlicePattern(LedPattern):
 
 	def call(self, *args):
 		self.animation.set()
-		while self.animation.isSet():
+		while self.animation.is_set():
 			self._animator.blink(color=[255, 255, 0, 2], minBrightness=2, maxBrightness=8, speed=40, repeat=5)
 			time.sleep(1)
 
