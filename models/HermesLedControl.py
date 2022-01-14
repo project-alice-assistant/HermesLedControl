@@ -1,13 +1,12 @@
 import argparse
 import json
 import logging
+import paho.mqtt.client as mqtt
 import re
 import sys
 import time
-from typing import Dict, List, Optional, Union
-
-import paho.mqtt.client as mqtt
 from paho.mqtt.client import MQTTMessage
+from typing import Dict, List, Optional, Union
 
 from models.LedsController import LedsController
 

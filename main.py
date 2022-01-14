@@ -1,8 +1,9 @@
+from logging import handlers
+
 import logging
 import signal
 import time
 from datetime import datetime
-from logging import handlers
 
 from models.Configuration import readConfiguration
 from models.HermesLedControl import HermesLedControl
@@ -29,7 +30,7 @@ _logger.addHandler(rotatingHandler)
 _logger.addHandler(streamHandler)
 
 
-def stopHandler(signum, frame):
+def stopHandler(_signum, frame):
 	onStop()
 
 

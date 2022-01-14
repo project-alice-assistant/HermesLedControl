@@ -1,9 +1,8 @@
 import argparse
 import logging
 import sys
-from pathlib import Path
-
 import yaml
+from pathlib import Path
 
 
 logger = logging.getLogger('HermesLedControl')

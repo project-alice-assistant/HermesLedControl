@@ -5,7 +5,6 @@ Audio source using pyaudio
 """
 
 import logging
-
 import pyaudio
 
 from .element import Element
