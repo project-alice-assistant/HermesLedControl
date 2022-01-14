@@ -2,6 +2,7 @@ import queue as Queue
 import threading
 import uuid
 from typing import Callable
+import logging
 
 from models.Exceptions import InterfaceInitError
 from models.HermesLedControl import *

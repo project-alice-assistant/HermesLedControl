@@ -111,7 +111,6 @@ sudo -u "${USER}" bash <<EOF
     virtualenv -p ${PYTHON} ${FVENV}
     source ${FVENV}/bin/activate
     pip install -r requirements.txt --no-cache-dir
-EOF
 
 mkdir -p logs
 chown "${USER}" logs
