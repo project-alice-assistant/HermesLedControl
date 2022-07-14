@@ -62,7 +62,7 @@ if [[ "$device" != "don't overwrite existing parameters" ]]; then
         esac
     done
 
-	defaultConfigurationPath=${USERDIR}'/.config/HermesLedControl'
+	defaultConfigurationPath=${USERDIR}'/.config/hermesLedControl'
 	echo "Where should the configuration be saved to?"
 	read -p "Path (${defaultConfigurationPath})" configurationPath
 	configurationPath=${configurationPath:-$defaultConfigurationPath}
