@@ -3,4 +3,5 @@ spidev
 gpiozero
 paho-mqtt
 pyyaml
+types-PyYAML
 #numpy

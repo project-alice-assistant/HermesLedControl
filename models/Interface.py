@@ -1,16 +1,16 @@
 import logging
-from typing import List
+from typing import List, Any
 
 
 class Interface(object):
 
 	def __init__(self, numLeds: int):
-		self._numLeds = numLeds
+		self._numLeds: int = numLeds
 
 		self._logger = logging.getLogger('HermesLedControl')
-		self._leds = None
-		self._power = None
-		self._doa = False
+		self._leds: Any = None
+		self._power: Any = None
+		self._doa: bool = False
 
 
 	@property
