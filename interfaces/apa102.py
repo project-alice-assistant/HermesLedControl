@@ -78,6 +78,6 @@ class APA102(Interface):
 			try:
 				return self._doa.get_direction()
 			except:
-				pass
+				return 0
 
 		return 0

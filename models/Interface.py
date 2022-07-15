@@ -1,5 +1,5 @@
 import logging
-from typing import List, Any
+from typing import List, Any, Union
 
 
 class Interface(object):
@@ -10,7 +10,7 @@ class Interface(object):
 		self._logger = logging.getLogger('HermesLedControl')
 		self._leds: Any = None
 		self._power: Any = None
-		self._doa: bool = False
+		self._doa: Union[bool, int] = False
 
 
 	@property

@@ -65,11 +65,11 @@ class HermesLedControl(object):
 		if params.engine == 'projectalice':
 			from models.engines.ProjectAlice import ProjectAlice
 
-			engine = ProjectAlice()
+			engine: ProjectAlice = ProjectAlice()
 		elif params.engine == 'rhasspy':
 			from models.engines.Rhasspy import Rhasspy
 
-			engine = Rhasspy()
+			engine: Rhasspy = Rhasspy()
 		else:
 			self._logger.error(f'Unsupported assistant engine "{params.engine}"')
 			self.onStop()
