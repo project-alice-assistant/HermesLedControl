@@ -110,6 +110,7 @@ pip3 uninstall -y pixel_ring
 sudo -u "${USER}" bash <<EOF
     virtualenv -p ${PYTHON} ${FVENV}
     source ${FVENV}/bin/activate
+    pip install https://www.piwheels.org/simple/numpy/numpy-1.21.4-cp39-cp39-linux_armv7l.whl
     pip install -r requirements.txt --no-cache-dir
 EOF
 

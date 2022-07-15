@@ -40,7 +40,7 @@ def onStop():
 
 
 def main():
-	_logger.info('Starting Hermes Led Control version 3.0.2')
+	_logger.info('Starting Hermes Led Control version 3.0.3')
 
 	signal.signal(signal.SIGINT, stopHandler)
 	signal.signal(signal.SIGTERM, stopHandler)
