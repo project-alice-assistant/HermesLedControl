@@ -42,7 +42,7 @@ class KiboostLedPattern(LedPattern):
 		direction = 1
 		brightness = 0
 
-		frame = 0
+		frame = 0.0
 		while frame < duration and self._animation.is_set():
 			for l in leds:
 				self._controller.setLed(l, color[0], color[1], color[2], brightness)

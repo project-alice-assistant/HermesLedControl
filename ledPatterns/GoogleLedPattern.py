@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import math
 import time
+from typing import List
 
 from models.LedPattern import LedPattern
 from models.LedsController import LedsController
@@ -20,7 +21,7 @@ class GoogleHomeLedPattern(LedPattern):
 			'green' : [0, 255, 0, self._controller.defaultBrightness]
 		}
 		self._colorRefs = ('blue', 'red', 'yellow', 'green')
-		self._image = []
+		self._image: List = []
 
 
 	def _newImage(self):

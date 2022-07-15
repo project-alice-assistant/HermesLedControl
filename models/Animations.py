@@ -15,7 +15,7 @@ class Animations(object):
 		self._controller: LedsController = controller
 		self._numLeds = self._controller.hardware['numberOfLeds']
 
-		self._image = list()
+		self._image: List = list()
 		self.new()
 
 

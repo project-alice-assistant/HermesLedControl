@@ -15,6 +15,7 @@
 
 import math
 import time
+from typing import List
 
 from models.LedPattern import LedPattern
 from models.LedsController import LedsController
@@ -32,7 +33,7 @@ class FakeNamePattern(LedPattern):
 
 	def __init__(self, controller: LedsController):
 		super().__init__(controller)
-		self._image = []
+		self._image: List = []
 
 
 	def _newRainbow(self):
