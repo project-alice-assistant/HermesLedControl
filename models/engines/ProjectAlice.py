@@ -1,7 +1,6 @@
 import argparse
 import json
 import logging
-import os
 from pathlib import Path
 from typing import Dict, Optional
 
@@ -30,8 +29,8 @@ class ProjectAlice(object):
 
 		self._logger.info('Loading configurations')
 
-		userHomePath = os.path.expanduser('~')
-		configPath = userHomePath + '/ProjectAlice/config.json'
+		userHomePath = Path.home()
+		configPath = userHomePath / 'ProjectAlice/config.json'
 		path = Path(params.pathToConfig or configPath)
 
 		configs = dict()

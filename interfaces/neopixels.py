@@ -8,7 +8,12 @@ from models.Interface import Interface
 try:
 	import rpi_ws281x as ws
 except ImportError:
-	import _rpi_ws281x as ws
+	try:
+		import _rpi_ws281x as ws
+	except ImportError:
+		subprocess.run(['./venv/bin/pip', 'install', 'rpi_ws281x'])
+		# noinspection PyUnresolvedReferences
+		import rpi_ws281x as ws
 
 
 class Neopixels(Interface):

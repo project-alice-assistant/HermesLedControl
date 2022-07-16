@@ -318,7 +318,7 @@ def parseArguments() -> argparse.Namespace:
 		'--hermesLedControlConfig',
 		help='Define the configuration.yml file location for hermes led control',
 		type=str,
-		default='~/.config/hermesLedControl/configuration.yml'
+		default='~/.config/HermesLedControl/configuration.yml'
 	)
 	parser.add_argument(
 		'--debug',
