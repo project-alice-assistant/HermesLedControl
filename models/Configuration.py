@@ -38,6 +38,8 @@ choices = {
 		'respeaker7MicArray',
 		'matrixvoice',
 		'matrixcreator',
+		'matrixvoiceZMQ',
+		'matrixcreatorZMQ',
 		'neoPixelsSK6812RGBW',
 		'neoPixelsWS2812RGB',
 		'googleAIY',

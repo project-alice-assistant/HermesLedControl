@@ -121,6 +121,16 @@
 		"numberOfLeds": 35,
 		"interface": "matrixvoice"
 	},
+	"matrixvoiceZMQ": {
+		"name": "Matrix Voice via ZeroMQ (Matrix Core)",
+		"numberOfLeds": 18,
+		"interface": "matrixcore"
+	},
+	"matrixcreatorZMQ": {
+		"name": "Matrix Creator via ZeroMQ (Matrix Core)",
+		"numberOfLeds": 35,
+		"interface": "matrixcore"
+	},
 	"googleAIY": {
 		"__comment__": "Use the broadcom gpio number, not the physical pin number!",
 		"name": "Google AIY",
