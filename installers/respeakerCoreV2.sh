@@ -12,7 +12,7 @@ sudo -u ${USER} bash <<EOF
     pip3 --no-cache-dir install numpy
 EOF
 
-apt-get install -y python-mraa
+# mraa is installed directly in install.sh before venv creation
 
 echo "############################## All done! ##############################"
 echo "################################ Enjoy! ###############################"

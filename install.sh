@@ -90,7 +90,8 @@ fi
 systemctl is-active -q hermesledcontrol && systemctl stop hermesledcontrol
 
 apt-get update
-apt-get install -y git mosquitto mosquitto-clients portaudio19-dev python3-numpy
+# mraa needs to be installed before venv creation that inherits system packages
+apt-get install -y git mosquitto mosquitto-clients portaudio19-dev python3-numpy python-mraa libmraa1
 
 FVENV=${USERDIR}'/HermesLedControl/'${VENV}
 
@@ -108,7 +109,7 @@ pip3 install virtualenv
 pip3 uninstall -y pixel_ring
 
 sudo -u "${USER}" bash <<EOF
-    virtualenv -p ${PYTHON} ${FVENV}
+    virtualenv -p ${PYTHON} ${FVENV} --system-site-packages
     source ${FVENV}/bin/activate
     pip install https://www.piwheels.org/simple/numpy/numpy-1.21.4-cp39-cp39-linux_armv7l.whl
     pip install -r requirements.txt --no-cache-dir
