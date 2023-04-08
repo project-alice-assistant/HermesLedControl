@@ -90,8 +90,7 @@ fi
 systemctl is-active -q hermesledcontrol && systemctl stop hermesledcontrol
 
 apt-get update
-# mraa needs to be installed before venv creation that inherits system packages
-apt-get install -y git mosquitto mosquitto-clients portaudio19-dev python3-numpy python-mraa libmraa1
+apt-get install -y git mosquitto mosquitto-clients portaudio19-dev python3-numpy
 
 FVENV=${USERDIR}'/HermesLedControl/'${VENV}
 
