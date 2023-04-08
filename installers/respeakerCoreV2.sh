@@ -17,16 +17,16 @@ if [[ -z "$PYTHON" ]]; then
     fi
 fi
 
+apt-get install -y python-mraa libmraa1
+cp -R /usr/lib/"${PYTHON}"/dist-packages/python-mraa "${FVENV}"/lib/"${PYTHON}"/site-packages/
+chown "${USER}" "${FVENV}"/lib/"${PYTHON}"/site-packages/python-mraa
+
 sudo -u ${USER} bash <<EOF
     source ${FVENV}/bin/activate
     pip3 uninstall -y gpiozero
     pip3 uninstall -y RPi.GPIO
     pip3 --no-cache-dir install numpy
 EOF
-
-apt-get install -y python-mraa libmraa1
-cp -R /usr/lib/"${PYTHON}"/dist-packages/python-mraa "${FVENV}"/lib/"${PYTHON}"/site-packages/
-chown "${USER}" "${FVENV}"/lib/"${PYTHON}"/site-packages/python-mraa
 
 echo "############################## All done! ##############################"
 echo "################################ Enjoy! ###############################"
