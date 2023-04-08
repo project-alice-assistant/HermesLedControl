@@ -149,65 +149,67 @@ if [[ "$device" != "don't overwrite existing parameters" ]]; then
     sed -i -e "s/%EXECSTART%/${escaped}\/HermesLedControl\/venv\/bin\/python main.py --hermesLedControlConfig=${escapedConfigurationFile}/" /etc/systemd/system/hermesledcontrol.service
 fi
 
+if [[ "$device" != "don't overwrite existing parameters" && "$device" != "puregpio" ]]; then
 echo "Do you need to install / configure your \"${device}\"? This is strongly suggested as it does turn off services that might conflict as well!"
-select answer in "yes" "no" "cancel"; do
-    case "$answer" in
-        yes)
-            case "$device" in
-                matrixvoice)
-                    ./installers/matrixVoiceCreator.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                matrixcreator)
-                    ./installers/matrixVoiceCreator.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                respeaker2Mics)
-                    ./installers/respeakers.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                respeaker4MicArray)
-                    ./installers/respeakers.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                respeaker6MicArray)
-                    ./installers/respeakers.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                neoPixelsSK6812RGBW)
-                    ./installers/neopixels.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                neoPixelsWS2812RGB)
-                    ./installers/neopixels.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                respeakerMicArrayV2)
-                    ./installers/respeakerMicArrayV2.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                respeakerMicArrayV1)
-                    ./installers/respeakerMicArrayV1.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                respeakerCoreV2)
-                    ./installers/respeakerCoreV2.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                respeaker7MicArray)
-                    ./installers/respeaker7MicArray.sh "${USER}" "${FVENV}"
-                    break
-                    ;;
-                *)
-                    echo "No installation needed / Installation not yet supported"
-                    break
-                    ;;
-            esac
-            break;;
-        cancel) exit;;
-        *) break;;
-    esac
-done
+	select answer in "yes" "no" "cancel"; do
+			case "$answer" in
+					yes)
+							case "$device" in
+									matrixvoice)
+											./installers/matrixVoiceCreator.sh "${USER}" "${FVENV}"
+											break
+											;;
+									matrixcreator)
+											./installers/matrixVoiceCreator.sh "${USER}" "${FVENV}"
+											break
+											;;
+									respeaker2Mics)
+											./installers/respeakers.sh "${USER}" "${FVENV}"
+											break
+											;;
+									respeaker4MicArray)
+											./installers/respeakers.sh "${USER}" "${FVENV}"
+											break
+											;;
+									respeaker6MicArray)
+											./installers/respeakers.sh "${USER}" "${FVENV}"
+											break
+											;;
+									neoPixelsSK6812RGBW)
+											./installers/neopixels.sh "${USER}" "${FVENV}"
+											break
+											;;
+									neoPixelsWS2812RGB)
+											./installers/neopixels.sh "${USER}" "${FVENV}"
+											break
+											;;
+									respeakerMicArrayV2)
+											./installers/respeakerMicArrayV2.sh "${USER}" "${FVENV}"
+											break
+											;;
+									respeakerMicArrayV1)
+											./installers/respeakerMicArrayV1.sh "${USER}" "${FVENV}"
+											break
+											;;
+									respeakerCoreV2)
+											./installers/respeakerCoreV2.sh "${USER}" "${FVENV}"
+											break
+											;;
+									respeaker7MicArray)
+											./installers/respeaker7MicArray.sh "${USER}" "${FVENV}"
+											break
+											;;
+									*)
+											echo "No installation needed / Installation not yet supported"
+											break
+											;;
+							esac
+							break;;
+					cancel) exit;;
+					*) break;;
+			esac
+	done
+fi
 
 chown -R "${USER}" "${USERDIR}/HermesLedControl"
 
