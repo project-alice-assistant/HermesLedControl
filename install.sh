@@ -43,7 +43,7 @@ echo "Path: $pathToAssistantConfig"
 pathToAssistantConfig=${pathToAssistantConfig//\//\\/}
 
 echo "What device do you wish to control with SLC?"
-select device in "respeaker2Mics" "respeaker4MicArray" "respeakerMicArrayV2" "respeakerMicArrayV1" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
+select device in "respeaker2Mics" "respeaker4MicArray" "respeakerMicArrayV2" "respeakerMicArrayV1" "neoPixelsSK6812RGBW" "neoPixelsWS2812RGB" "matrixvoice" "matrixcreator" "matrixvoiceZMQ" "matrixcreatorZMQ" "respeakerCoreV2" "respeaker6MicArray" "respeaker7MicArray" "googleAIY" "I'm using simple leds on GPIOs" "don't overwrite existing parameters" "cancel"; do
     case "$device" in
         "I'm using simple leds on GPIOs")
             device=puregpio
@@ -155,11 +155,13 @@ select answer in "yes" "no" "cancel"; do
         yes)
             case "$device" in
                 matrixvoice)
+                matrixcreator)
                     ./installers/matrixVoiceCreator.sh "${USER}" "${FVENV}"
                     break
                     ;;
-                matrixcreator)
-                    ./installers/matrixVoiceCreator.sh "${USER}" "${FVENV}"
+                matrixvoiceZMQ)
+                matrixcreatorZMQ)
+                    ./installers/matrixCore.sh "${USER}" "${FVENV}"
                     break
                     ;;
                 respeaker2Mics)
