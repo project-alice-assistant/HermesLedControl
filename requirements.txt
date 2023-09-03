@@ -4,4 +4,5 @@ gpiozero
 paho-mqtt
 pyyaml
 types-PyYAML
+pyusb
 #numpy
